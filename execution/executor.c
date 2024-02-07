@@ -8,11 +8,15 @@ void    child_process(t_cmd *cmd, int i, int *fd)
         dup2(fd[0], 0);
     close(fd[0]);
     close(fd[1]);
-    if (cmd->input)
-        input_redirection(cmd->input);
-    if (cmd->output)
-        output_redirection(cmd->output);
-    execve(cmd->cmd_path, cmd->cmd_arr, cmd->env);
+    if (cmd->input != NULL)
+        open_input_file(cmd->input);
+    if (cmd->output != NULL)
+        open_output_file(cmd->output);
+    if (execve(cmd->cmd_path, cmd->cmd_arr, cmd->env) == -1)
+    {
+        clean_up(cmd);
+        exit(1);
+    }
 }
 
 int    executor(t_cmd *cmd)
@@ -43,6 +47,8 @@ int    executor(t_cmd *cmd)
             return (1);
         cmd->processes--;
         i++;
+        if (cmd->next != NULL)
+            cmd = cmd->next;
     }
     return (0);
 }
