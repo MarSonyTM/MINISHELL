@@ -2,11 +2,8 @@
 
 int main(int argc, char **argv)
 {
-    if (argc != 1 || argv[1])
-    {
-        printf("This program takes no arguments\n");
-        exit (0);
-    }
+    if (argc != 1 || argv[1])     
+        exit(printf("This program takes no arguments\n"));
     t_cmd *cmd = malloc(sizeof(t_cmd));
     if (!cmd)
     {
