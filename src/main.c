@@ -7,16 +7,21 @@ int main(int argc, char **argv)
         printf("This program takes no arguments\n");
         exit (0);
     }
-    char *input;
+    t_cmd *cmd = malloc(sizeof(t_cmd));
+    if (!cmd)
+    {
+        printf("Error: malloc failed\n");
+        exit (1);
+    }
     while (1)
     {
-        input = readline(PROMPT);
-        if (!input)
+        cmd->input = readline(PROMPT);
+        if (!cmd->input)
             break ;
-        if (*input)
-            add_history(input);
-        printf("You entered: %s\n", input);
-        free(input);
+        if (cmd->input)
+            add_history(cmd->input);
+        printf("You entered: %s\n", cmd->input);
+        free(cmd->input);
     }
     return (0);
 }
