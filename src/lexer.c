@@ -1,11 +1,5 @@
 #include "../inc/minishell.h"
 
-// Helper function to check if a token is a special character
-int is_special_char(char c) 
-{
-    return (c == '<' || c == '>' || c == '|' || c == '&');
-}
-
 void free_lexer(t_lexer *head) 
 {
     while (head != NULL) {
@@ -16,51 +10,74 @@ void free_lexer(t_lexer *head)
     }
 }
 
+// Helper function to check if a character is a special character
+int is_special_char(char c)
+{
+    return (c == '<' || c == '>' || c == '|' || c == '&');
+}
+
+int get_special_char_type(char c)
+{
+    if (c == '<')
+        return INPUT;
+    else if (c == '>')
+        return OUTPUT;
+    else if (c == '|')
+        return PIPE;
+    // Add more special characters if needed
+    else
+        return CMD;
+}
+
+// Helper function to check if a character is a whitespace character
+int is_whitespace(char c)
+{
+    return (c == ' ' || c == '\t');
+}
 t_lexer *lex(const char *input)
- {
+{
     t_lexer *head = NULL;
     t_lexer *current = NULL;
+    int in_quote = 0;
 
-    // Tokenize based on spaces and special characters
-    char *input_copy = strdup(input);  // Duplicate the input to avoid modifying the original string
+    char *input_copy = strdup(input);
     char *token = strtok(input_copy, " ");
-    while (token != NULL) 
+    while (token != NULL)
     {
         // Create a new lexer node
         t_lexer *node = malloc(sizeof(t_lexer));
-        if (!node) {
-            // Handle malloc failure
+        if (!node)
+        {
             perror("Error: malloc failed");
             exit(1);
         }
 
         // Initialize the node
-        node->value = strdup(token);  // store the token value
+        node->value = strdup(token);
+        node->type = is_special_char(token[0]) ? get_special_char_type(token[0]) : CMD;
+        node->quoted = in_quote;
+        node->next = NULL;
 
-        // Check for special characters
-        if (strcmp(token, "<") == 0)
-        	node->type = INPUT;
-        else if (strcmp(token, ">") == 0)
-        	node->type = OUTPUT;
-        else if (strcmp(token, ">>") == 0)
-        	node->type = APPEND_OUTPUT;
-        else if (strcmp(token, "|") == 0)
-        	node->type = PIPE;
-        else 
-        	node->type = CMD;
-
-node->next = NULL;
+        // Handle quotes
+        if (token[0] == '"')
+        {
+            in_quote = !in_quote;
+            // Remove quotes from the token value
+            memmove(node->value, node->value + 1, strlen(node->value));
+            node->value[strlen(node->value) - 1] = '\0';
+        }
 
         // Link the node to the list
-        if (head == NULL) {
+        if (head == NULL)
+        {
             head = node;
             current = node;
-        } else {
+        }
+        else
+        {
             current->next = node;
             current = node;
         }
-
-        printf("Token: %s, Type: %d\n", node->value, node->type);
 
         // Move to the next token
         token = strtok(NULL, " ");
@@ -68,3 +85,29 @@ node->next = NULL;
 
     return head;
 }
+
+void print_command_structure(t_lexer *head)
+{
+    t_lexer *current = head;
+
+    printf("Command Structure:\n");
+    while (current != NULL)
+    {
+        if (current->type == CMD)
+        {
+            printf("Command: %s\n", current->value);
+        }
+        else if (current->type == INPUT || current->type == OUTPUT || current->type == APPEND_OUTPUT || current->type == PIPE)
+        {
+            printf("Command: %s\n", current->value);
+            current = current->next;
+            if (current != NULL && current->type == CMD)
+            {
+                printf("Command Structure:\n");
+            }
+        }
+        current = current->next;
+    }
+}
+
+
