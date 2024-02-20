@@ -17,13 +17,6 @@ int main(int argc, char **argv)
             break;
         }
         add_history(input); // Add input to history
-        t_lexer *tokens = lex(input);
-        (void)parse(tokens);
-        while (tokens) 
-        {
-            printf("Token: %s, Type: %d\n", tokens->cmd, tokens->type);
-            tokens = tokens->next;
-        }
         free(input);
     }
     return 0;
