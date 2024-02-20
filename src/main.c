@@ -11,9 +11,8 @@ int main(int argc, char **argv)
         if (!input)
             break;
         // check if user wants to exit
-        if (ft_strncmp(input, "exit", 4) == 0)
+        if (strcmp(input, "exit") == 0) 
         {
-            printf("exit\n");
             free(input);
             break;
         }

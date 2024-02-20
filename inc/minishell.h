@@ -10,9 +10,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-
 #define PROMPT "minishell> "
-
 
 /* holds information of each separate command / child process */
 typedef struct s_command {
