@@ -9,8 +9,27 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-
 #define PROMPT "minishell> "
+
+/* holds information of each separate token */
+typedef enum e_token_type {
+    TOKEN_COMMAND,
+    TOKEN_ARG,
+    TOKEN_PIPE,
+    TOKEN_REDIRECT_IN,
+    TOKEN_REDIRECT_OUT,
+    TOKEN_DOUBLE_REDIRECT_OUT,
+    TOKEN_WHITESPACE,
+    TOKEN_QUOTE,
+    TOKEN_DQUOTE
+    // Add more as needed
+} t_token_type;
+
+typedef struct s_token {
+    t_token_type type;
+    char *value;
+    struct s_token *next; // For linked list structure
+} t_token;
 
 /* holds information of each separate environment variable */
 typedef struct s_env
@@ -30,5 +49,8 @@ typedef struct s_cmd
     int             exit_status;
     struct s_cmd    *next;
 }   t_cmd;
+
+void lexer(char *input, t_token **tokens);
+void free_tokens(t_token **tokens);
 
 #endif

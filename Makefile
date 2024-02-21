@@ -6,7 +6,7 @@
 #    By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/02/20 15:56:30 by mafurnic         ###   ########.fr        #
+#    Updated: 2024/02/21 14:32:49 by mafurnic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SOURCES_PATH := src/
 LIBFT_PATH := libft/
 
 # Source and Object Files
-SOURCE_FILES := main.c #... (add your Minishell source files)
+SOURCE_FILES := main.c lexer.c #... (add your Minishell source files)
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)
 LIBFT := $(LIBFT_PATH)libft.a
 
