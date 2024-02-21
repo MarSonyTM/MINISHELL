@@ -15,7 +15,7 @@ ft_isalnum.c ft_isprint.c ft_memmove.c ft_strjoin.c ft_strncmp.c ft_substr.c ft_
 ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_atoi_base.c \
 ft_itoa_base.c ft_putnbr_base_fd.c ft_putnbr_unsigned_fd.c ft_uitoa.c ft_printf.c handle_char.c handle_hex_lower.c \
 handle_hex_upper.c handle_int.c handle_percent.c handle_pointer.c handle_specifier.c handle_string.c handle_uint.c ft_isnum.c \
-ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c ft_printlist.c ft_atoi_long.c ft_atoi_overflow.c
+ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c ft_printlist.c ft_atoi_long.c ft_atoi_overflow.c ft_strok.c
 
 OBJS := $(SRCS:%.c=$(OBJS_DIR)%.o)
 
