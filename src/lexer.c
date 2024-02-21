@@ -13,7 +13,8 @@ void free_tokens(t_token **tokens)
 }
 
 
-void add_token(t_token **tokens, t_token_type type, char *value) {
+void add_token(t_token **tokens, t_token_type type, char *value) 
+{
     t_token *new_token = malloc(sizeof(t_token));
     if (!new_token) return; // Always check malloc return
 
