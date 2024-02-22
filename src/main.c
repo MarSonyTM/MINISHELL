@@ -1,4 +1,5 @@
 #include "../inc/minishell.h"
+#include <stdio.h>
 
 int main(int argc, char **argv)
 {
@@ -13,6 +14,7 @@ int main(int argc, char **argv)
         // check if user wants to exit
         if (strcmp(input, "exit") == 0)
         {
+            printf("exit\n");
             free(input);
             break;
         }

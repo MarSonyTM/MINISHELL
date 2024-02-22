@@ -77,20 +77,7 @@ void lexer(char *input, t_token **tokens)
         }
         else if (!in_single_quote && !in_double_quote)
         {
-            if (input[i] == '$')
-            {
-                // Check if it's the special variable $?
-                if (input[i + 1] == '?')
-                {
-                    add_token(tokens, TOKEN_EXIT_STATUS, strdup("$?"));
-                    i++; // Skip the next character as it's part of the special variable
-                }
-                else
-                {
-                    add_token(tokens, TOKEN_ENV_VAR, strdup("$"));
-                }
-            }
-            else if (input[i] == ' ')
+            if (input[i] == ' ')
             {
                 if (token_start != NULL)
                 {
@@ -103,12 +90,69 @@ void lexer(char *input, t_token **tokens)
                         strcmp(token_start, "exit") == 0)
                     {
                         add_token(tokens, TOKEN_COMMAND, strdup(token_start));
+                        token_start = NULL;
                     }
                     else
                     {
                         add_token(tokens, TOKEN_ARG, strndup(token_start, &input[i] - token_start));
+                        token_start = NULL;
                     }
+                }
+            }
+            else if (input[i] == '|')
+            {
+                if (token_start != NULL)
+                {
+                    add_token(tokens, TOKEN_ARG, strndup(token_start, &input[i] - token_start));
                     token_start = NULL;
+                }
+                add_token(tokens, TOKEN_PIPE, strdup("|"));
+            }
+            else if (input[i] == '<')
+            {
+                if (token_start != NULL)
+                {
+                    add_token(tokens, TOKEN_ARG, strndup(token_start, &input[i] - token_start));
+                    token_start = NULL;
+                }
+                add_token(tokens, TOKEN_REDIRECT_IN, strdup("<"));
+            }
+            else if (input[i] == '>')
+            {
+                if (token_start != NULL)
+                {
+                    add_token(tokens, TOKEN_ARG, strndup(token_start, &input[i] - token_start));
+                    token_start = NULL;
+                }
+                if (input[i + 1] == '>')
+                {
+                    add_token(tokens, TOKEN_DOUBLE_REDIRECT_OUT, strdup(">>"));
+                    i++; // Skip the next character as it's part of the redirection operator
+                }
+                else
+                {
+                    add_token(tokens, TOKEN_REDIRECT_OUT, strdup(">"));
+                }
+            }
+            else if (input[i] == '$')
+            {
+                if (isalpha(input[i + 1]) || input[i + 1] == '?')
+                {
+                    // Environment variable or special variable $?
+                    if (input[i + 1] == '?')
+                    {
+                        add_token(tokens, TOKEN_EXIT_STATUS, strdup("$?"));
+                        i++; // Skip the next character as it's part of the special variable
+                    }
+                    else
+                    {
+                        add_token(tokens, TOKEN_ENV_VAR, strdup("$"));
+                    }
+                }
+                else
+                {
+                    // Just a dollar sign
+                    add_token(tokens, TOKEN_ARG, strdup("$"));
                 }
             }
             else if (input[i] != '\0' && token_start == NULL)
@@ -131,6 +175,14 @@ void lexer(char *input, t_token **tokens)
             strcmp(token_start, "exit") == 0)
         {
             add_token(tokens, TOKEN_COMMAND, strdup(token_start));
+        }
+        else if (strcmp(token_start, "$?") == 0)
+        {
+            add_token(tokens, TOKEN_EXIT_STATUS, strdup(token_start));
+        }
+        else if (token_start[0] == '$')
+        {
+            add_token(tokens, TOKEN_ENV_VAR, strdup(token_start));
         }
         else
         {
