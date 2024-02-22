@@ -23,6 +23,8 @@ typedef enum e_token_type
     TOKEN_WHITESPACE,
     TOKEN_QUOTE,
     TOKEN_DQUOTE,
+    TOKEN_ENV_VAR,
+    TOKEN_EXIT_STATUS,
     // Add more as needed
 } t_token_type;
 

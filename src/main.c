@@ -19,6 +19,7 @@ int main(int argc, char **argv)
 
         t_token *tokens = NULL;
         lexer(input, &tokens); // Tokenize the input
+        add_history(input);
         
         // Print each token and its type
         t_token *current = tokens;
@@ -50,6 +51,12 @@ int main(int argc, char **argv)
                     break;
                 case TOKEN_COMMAND:
                     type_str = "Command";
+                    break;
+                case TOKEN_ENV_VAR:
+                    type_str = "Environment Variable";
+                    break;
+                case TOKEN_EXIT_STATUS:
+                    type_str = "Exit Status";
                     break;
                 default:
                     type_str = "Unknown";
