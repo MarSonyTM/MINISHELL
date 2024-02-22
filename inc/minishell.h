@@ -12,7 +12,8 @@
 #define PROMPT "minishell> "
 
 /* holds information of each separate token */
-typedef enum e_token_type {
+typedef enum e_token_type
+{
     TOKEN_COMMAND,
     TOKEN_ARG,
     TOKEN_PIPE,
@@ -21,11 +22,12 @@ typedef enum e_token_type {
     TOKEN_DOUBLE_REDIRECT_OUT,
     TOKEN_WHITESPACE,
     TOKEN_QUOTE,
-    TOKEN_DQUOTE
+    TOKEN_DQUOTE,
     // Add more as needed
 } t_token_type;
 
-typedef struct s_token {
+typedef struct s_token
+{
     t_token_type type;
     char *value;
     struct s_token *next; // For linked list structure
