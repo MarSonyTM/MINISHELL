@@ -16,7 +16,8 @@ void free_tokens(t_token **tokens)
 void add_token(t_token **tokens, t_token_type type, char *value) 
 {
     t_token *new_token = malloc(sizeof(t_token));
-    if (!new_token) return; // Always check malloc return
+    if (!new_token)
+        return ; // Always check malloc return
 
     new_token->type = type;
     new_token->value = strdup(value); // Copy string to ensure independence
