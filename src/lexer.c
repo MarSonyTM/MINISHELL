@@ -136,7 +136,7 @@ void lexer(char *input, t_token **tokens)
             }
             else if (input[i] == '$')
             {
-                if (isalpha(input[i + 1]) || input[i + 1] == '?')
+                if (ft_isalpha(input[i + 1]) || input[i + 1] == '?')
                 {
                     // Environment variable or special variable $?
                     if (input[i + 1] == '?')
