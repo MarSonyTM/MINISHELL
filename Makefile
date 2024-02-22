@@ -6,7 +6,7 @@
 #    By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/02/06 10:33:02 by mafurnic         ###   ########.fr        #
+#    Updated: 2024/02/22 14:20:59 by mafurnic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SOURCES_PATH := src/
 LIBFT_PATH := libft/
 
 # Source and Object Files
-SOURCE_FILES := main.c  #... (add your Minishell source files)
+SOURCE_FILES := main.c lexer.c #... (add your Minishell source files)
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)
 LIBFT := $(LIBFT_PATH)libft.a
 
@@ -55,6 +55,7 @@ $(LIBFT):
 	@echo "$(COLOR_BLUE)Compiling libft$(COLOR_WHITE)"
 	@$(MAKE) -C $(LIBFT_PATH)
 
+
 # Cleaning Up Object Files
 clean:
 	@echo "$(COLOR_RED)Removing object files and directory...$(COLOR_WHITE)"
@@ -78,4 +79,6 @@ fclean: clean
 re: fclean all
 
 # Phony Targets
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re valgrind
+
+ 
