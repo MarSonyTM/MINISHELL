@@ -190,4 +190,3 @@ void lexer(char *input, t_token **tokens)
         }
     }
 }
-printf
