@@ -60,10 +60,65 @@ void lexer(char *input, t_token **tokens) {
             add_token(tokens, TOKEN_REDIRECT_IN, strdup(token));
         } else if (strcmp(token, ">") == 0) {
             add_token(tokens, TOKEN_REDIRECT_OUT, strdup(token));
-        } else if (token[0] == '\'' && token[strlen(token) - 1] == '\'') {
-            add_token(tokens, TOKEN_QUOTE, strdup(token));
-        } else if (token[0] == '\"' && token[strlen(token) - 1] == '\"') {
-            add_token(tokens, TOKEN_DQUOTE, strdup(token));
+        } else if (strcmp(token, "<<") == 0) {
+            add_token(tokens, TOKEN_HEREDOC, strdup(token));
+            token = strtok(NULL, delimiters); // Read the delimiter
+            if (token != NULL) {
+                char *value = strdup(token);
+                while (strcmp(token, value) != 0) {
+                    token = strtok(NULL, delimiters);
+                    if (token == NULL) {
+                        // Error: Unterminated delimiter
+                        free(value);
+                        return;
+                    }
+                    char *temp = strdup(value);
+                    value = malloc(strlen(temp) + strlen(token) + 2);
+                    strcpy(value, temp);
+                    strcat(value, " ");
+                    strcat(value, token);
+                    free(temp);
+                }
+                add_token(tokens, TOKEN_ARG, value);
+            }
+        } else if (strcmp(token, ">>") == 0) {
+            add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, strdup(token));
+        } else if (token[0] == '\'') {
+            // Handle single quoted strings
+            char *value = strdup(token);
+            while (token[strlen(token) - 1] != '\'') {
+                token = strtok(NULL, delimiters);
+                if (token == NULL) {
+                    // Error: Unterminated single quoted string
+                    free(value);
+                    return;
+                }
+                char *temp = strdup(value);
+                value = malloc(strlen(temp) + strlen(token) + 2);
+                strcpy(value, temp);
+                strcat(value, " ");
+                strcat(value, token);
+                free(temp);
+            }
+            add_token(tokens, TOKEN_QUOTE, value);
+        } else if (token[0] == '\"') {
+            // Handle double quoted strings
+            char *value = strdup(token);
+            while (token[strlen(token) - 1] != '\"') {
+                token = strtok(NULL, delimiters);
+                if (token == NULL) {
+                    // Error: Unterminated double quoted string
+                    free(value);
+                    return;
+                }
+                char *temp = strdup(value);
+                value = malloc(strlen(temp) + strlen(token) + 2);
+                strcpy(value, temp);
+                strcat(value, " ");
+                strcat(value, token);
+                free(temp);
+            }
+            add_token(tokens, TOKEN_DQUOTE, value);
         } else {
             add_token(tokens, TOKEN_ARG, strdup(token));
         }

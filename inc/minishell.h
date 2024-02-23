@@ -25,6 +25,8 @@ typedef enum e_token_type
     TOKEN_DQUOTE,
     TOKEN_ENV_VAR,
     TOKEN_EXIT_STATUS,
+    TOKEN_HEREDOC,
+    TOKEN_REDIRECT_OUT_APPEND,    
     // Add more as needed
 } t_token_type;
 
