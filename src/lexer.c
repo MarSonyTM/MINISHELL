@@ -14,7 +14,8 @@ void free_tokens(t_token **tokens) {
     *tokens = NULL;
 }
 
-void add_token(t_token **tokens, t_token_type type, char *value) {
+void add_token(t_token **tokens, t_token_type type, char *value)
+{
     t_token *new_token;
     t_token *temp;
 
@@ -22,7 +23,7 @@ void add_token(t_token **tokens, t_token_type type, char *value) {
     if (!new_token)
         return;
     new_token->type = type;
-    new_token->value = strdup(value);
+    new_token->value = ft_strdup(value);
     new_token->next = NULL;
     if (*tokens == NULL)
         *tokens = new_token;
@@ -85,7 +86,7 @@ void lexer(char *input, t_token **tokens)
                 }
                 add_token(tokens, TOKEN_ARG, value);
             }
-        } else if (strcmp(token, ">>") == 0) {
+        } else if (ft_strcmp(token, ">>") == 0) {
             add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(token));
         } else if (token[0] == '\'') {
             // Handle single quoted strings
@@ -95,11 +96,11 @@ void lexer(char *input, t_token **tokens)
                 if (token == NULL) {
                     // Error: Unterminated single quoted string
                     free(value);
-                    ft_printf("Error: Unterminated single quoted string\n");
+                    printf("Error: Unterminated single quoted string\n");
                     return;
                 }
                 char *temp = ft_strdup(value);
-                value = malloc(strlen(temp) + ft_strlen(token) + 2);
+                value = malloc(ft_strlen(temp) + ft_strlen(token) + 2);
                 if (!value)
                     return ;
                 ft_strcpy(value, temp);
@@ -130,7 +131,7 @@ void lexer(char *input, t_token **tokens)
             }
             add_token(tokens, TOKEN_DQUOTE, value);
         } else {
-            add_token(tokens, TOKEN_ARG, strdup(token));
+            add_token(tokens, TOKEN_ARG, ft_strdup(token));
         }
 
         // Get the next token
