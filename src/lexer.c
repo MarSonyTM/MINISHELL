@@ -62,7 +62,7 @@ void lexer(char *input, t_token **tokens)
             add_token(tokens, TOKEN_REDIRECT_IN, ft_strdup(token));
         } else if (ft_strcmp(token, ">") == 0) {
             add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(token));
-        } else if (ft_strcmp(token, "<<") == 0) {
+        } else if (ft_strcmp(token, "<<hi") == 0) {
             add_token(tokens, TOKEN_HEREDOC, ft_strdup(token));
             token = ft_strtok(NULL, delimiters); // Read the delimiter
             if (token != NULL) {
