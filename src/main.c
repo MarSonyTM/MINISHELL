@@ -12,7 +12,7 @@ int main(int argc, char **argv)
             break;
         add_history(input);
         // check if user wants to exit
-        if (strcmp(input, "exit") == 0)
+        if (ft_strcmp(input, "exit") == 0)
         {
             printf("exit\n");
             free(input);

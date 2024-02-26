@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 11:30:54 by mafurnic          #+#    #+#             */
-/*   Updated: 2023/10/11 14:50:29 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/02/26 13:21:00 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	*ft_strdup(const char *s)
 	i = 0;
 	len = ft_strlen(s);
 	d = (char *)malloc(sizeof(char) * (len + 1));
+	if (!d)
+		return (NULL);
 	if (d == NULL)
 		return (NULL);
 	while (i < len)
