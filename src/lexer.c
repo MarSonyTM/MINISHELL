@@ -1,41 +1,6 @@
 #include "../inc/minishell.h"
 
-void free_tokens(t_token **tokens) {
-    t_token *current;
-    t_token *temp;
-
-    current = *tokens;
-    while (current != NULL) {
-        temp = current;
-        current = current->next;
-        free(temp->value);
-        free(temp);
-    }
-    *tokens = NULL;
-}
-
-void add_token(t_token **tokens, t_token_type type, char *value)
-{
-    t_token *new_token;
-    t_token *temp;
-
-    new_token = malloc(sizeof(t_token));
-    if (!new_token)
-        return;
-    new_token->type = type;
-    new_token->value = ft_strdup(value);
-    new_token->next = NULL;
-    if (*tokens == NULL)
-        *tokens = new_token;
-    else {
-        temp = *tokens;
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = new_token;
-    }
-}
-
+ 
 void lexer(char *input, t_token **tokens)
 {
     char *token;
@@ -43,33 +8,51 @@ void lexer(char *input, t_token **tokens)
 
     // Tokenize the input string using strtok
     token = ft_strtok(input, delimiters);
-    while (token != NULL) {
+    
+    while (token != NULL)
+    {
         if (ft_strcmp(token, "echo") == 0 ||
             ft_strcmp(token, "cd") == 0 ||
             ft_strcmp(token, "pwd") == 0 ||
             ft_strcmp(token, "export") == 0 ||
             ft_strcmp(token, "unset") == 0 ||
             ft_strcmp(token, "env") == 0 ||
-            ft_strcmp(token, "exit") == 0) {
+            ft_strcmp(token, "exit") == 0) 
+            {
             add_token(tokens, TOKEN_COMMAND, ft_strdup(token));
-        } else if (ft_strcmp(token, "$?") == 0) {
+        } 
+        else if (ft_strcmp(token, "$?") == 0)
+        {
             add_token(tokens, TOKEN_EXIT_STATUS, ft_strdup(token));
-        } else if (token[0] == '$') {
+        } 
+        else if (token[0] == '$')
+        {
             add_token(tokens, TOKEN_ENV_VAR, ft_strdup(token));
-        } else if (ft_strcmp(token, "|") == 0) {
+        } 
+        else if (ft_strcmp(token, "|") == 0) 
+        {
             add_token(tokens, TOKEN_PIPE, ft_strdup(token));
-        } else if (ft_strcmp(token, "<") == 0) {
+        } 
+        else if (ft_strcmp(token, "<") == 0)
+        {
             add_token(tokens, TOKEN_REDIRECT_IN, ft_strdup(token));
-        } else if (ft_strcmp(token, ">") == 0) {
+        } 
+        else if (ft_strcmp(token, ">") == 0) 
+        {
             add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(token));
-        } else if (ft_strcmp(token, "<<hi") == 0) {
+        } 
+        else if (ft_strcmp(token, "<<hi") == 0) 
+        {
             add_token(tokens, TOKEN_HEREDOC, ft_strdup(token));
             token = ft_strtok(NULL, delimiters); // Read the delimiter
-            if (token != NULL) {
+            if (token != NULL) 
+            {
                 char *value = ft_strdup(token);
-                while (ft_strcmp(token, value) != 0) {
+                while (ft_strcmp(token, value) != 0) 
+                {
                     token = ft_strtok(NULL, delimiters);
-                    if (token == NULL) {
+                    if (token == NULL)
+                     {
                         // Error: Unterminated delimiter
                         free(value);
                         printf("Error: Unterminated delimiter\n");
@@ -86,14 +69,18 @@ void lexer(char *input, t_token **tokens)
                 }
                 add_token(tokens, TOKEN_ARG, value);
             }
-        } else if (ft_strcmp(token, ">>") == 0) {
+        } else if (ft_strcmp(token, ">>") == 0) 
+        {
             add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(token));
-        } else if (token[0] == '\'') {
+        } else if (token[0] == '\'') 
+        {
             // Handle single quoted strings
             char *value = ft_strdup(token);
-            while (token[ft_strlen(token) - 1] != '\'') {
+            while (token[ft_strlen(token) - 1] != '\'') 
+            {
                 token = ft_strtok(NULL, delimiters);
-                if (token == NULL) {
+                if (token == NULL)
+                 {
                     // Error: Unterminated single quoted string
                     free(value);
                     printf("Error: Unterminated single quoted string\n");
@@ -109,12 +96,15 @@ void lexer(char *input, t_token **tokens)
                 free(temp);
             }
             add_token(tokens, TOKEN_QUOTE, value);
-        } else if (token[0] == '\"') {
+        } else if (token[0] == '\"') 
+        {
             // Handle double quoted strings
             char *value = ft_strdup(token);
-            while (token[ft_strlen(token) - 1] != '\"') {
+            while (token[ft_strlen(token) - 1] != '\"') 
+            {
                 token = ft_strtok(NULL, delimiters);
-                if (token == NULL) {
+                if (token == NULL)
+                 {
                     // Error: Unterminated double quoted string
                     free(value);
                     printf("Error: Unterminated double quoted string\n");
@@ -130,7 +120,9 @@ void lexer(char *input, t_token **tokens)
                 free(temp);
             }
             add_token(tokens, TOKEN_DQUOTE, value);
-        } else {
+        } 
+        else
+        {
             add_token(tokens, TOKEN_ARG, ft_strdup(token));
         }
 

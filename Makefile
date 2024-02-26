@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+         #
+#    By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/02/22 14:20:59 by mafurnic         ###   ########.fr        #
+#    Updated: 2024/02/26 18:51:42 by marianfurni      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SOURCES_PATH := src/
 LIBFT_PATH := libft/
 
 # Source and Object Files
-SOURCE_FILES := main.c lexer.c #... (add your Minishell source files)
+SOURCE_FILES := main.c lexer.c lexer_utils.c #... (add your Minishell source files)
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)
 LIBFT := $(LIBFT_PATH)libft.a
 
