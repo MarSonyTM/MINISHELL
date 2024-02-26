@@ -1,13 +1,11 @@
 #include "../inc/minishell.h"
 
-void free_tokens(t_token **tokens) 
-{
+void free_tokens(t_token **tokens) {
     t_token *current;
     t_token *temp;
 
     current = *tokens;
-    while (current != NULL)
-    {
+    while (current != NULL) {
         temp = current;
         current = current->next;
         free(temp->value);
@@ -16,8 +14,7 @@ void free_tokens(t_token **tokens)
     *tokens = NULL;
 }
 
-void add_token(t_token **tokens, t_token_type type, char *value)
-{
+void add_token(t_token **tokens, t_token_type type, char *value) {
     t_token *new_token;
     t_token *temp;
 
@@ -25,7 +22,7 @@ void add_token(t_token **tokens, t_token_type type, char *value)
     if (!new_token)
         return;
     new_token->type = type;
-    new_token->value = ft_strdup(value);
+    new_token->value = strdup(value);
     new_token->next = NULL;
     if (*tokens == NULL)
         *tokens = new_token;
@@ -38,97 +35,87 @@ void add_token(t_token **tokens, t_token_type type, char *value)
     }
 }
 
-void lexer(char *input, t_token **tokens)
-{
+void lexer(char *input, t_token **tokens) {
     char *token;
     const char delimiters[] = " \t\n"; // Whitespace characters used as delimiters
 
     // Tokenize the input string using strtok
-    token = ft_strtok(input, delimiters);
+    token = strtok(input, delimiters);
     while (token != NULL) {
-        if (ft_strcmp(token, "echo") == 0 ||
-            ft_strcmp(token, "cd") == 0 ||
-            ft_strcmp(token, "pwd") == 0 ||
-            ft_strcmp(token, "export") == 0 ||
-            ft_strcmp(token, "unset") == 0 ||
-            ft_strcmp(token, "env") == 0 ||
-            ft_strcmp(token, "exit") == 0) {
-            add_token(tokens, TOKEN_COMMAND, ft_strdup(token));
-        } else if (ft_strcmp(token, "$?") == 0) {
-            add_token(tokens, TOKEN_EXIT_STATUS, ft_strdup(token));
+        if (strcmp(token, "echo") == 0 ||
+            strcmp(token, "cd") == 0 ||
+            strcmp(token, "pwd") == 0 ||
+            strcmp(token, "export") == 0 ||
+            strcmp(token, "unset") == 0 ||
+            strcmp(token, "env") == 0 ||
+            strcmp(token, "exit") == 0) {
+            add_token(tokens, TOKEN_COMMAND, strdup(token));
+        } else if (strcmp(token, "$?") == 0) {
+            add_token(tokens, TOKEN_EXIT_STATUS, strdup(token));
         } else if (token[0] == '$') {
-            add_token(tokens, TOKEN_ENV_VAR, ft_strdup(token));
-        } else if (ft_strcmp(token, "|") == 0) {
-            add_token(tokens, TOKEN_PIPE, ft_strdup(token));
-        } else if (ft_strcmp(token, "<") == 0) {
-            add_token(tokens, TOKEN_REDIRECT_IN, ft_strdup(token));
-        } else if (ft_strcmp(token, ">") == 0) {
-            add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(token));
-        } else if (ft_strcmp(token, "<<") == 0) {
-            add_token(tokens, TOKEN_HEREDOC, ft_strdup(token));
-            token = ft_strtok(NULL, delimiters); // Read the delimiter
+            add_token(tokens, TOKEN_ENV_VAR, strdup(token));
+        } else if (strcmp(token, "|") == 0) {
+            add_token(tokens, TOKEN_PIPE, strdup(token));
+        } else if (strcmp(token, "<") == 0) {
+            add_token(tokens, TOKEN_REDIRECT_IN, strdup(token));
+        } else if (strcmp(token, ">") == 0) {
+            add_token(tokens, TOKEN_REDIRECT_OUT, strdup(token));
+        } else if (strcmp(token, "<<") == 0) {
+            add_token(tokens, TOKEN_HEREDOC, strdup(token));
+            token = strtok(NULL, delimiters); // Read the delimiter
             if (token != NULL) {
-                char *value = ft_strdup(token);
-                while (ft_strcmp(token, value) != 0) {
-                    token = ft_strtok(NULL, delimiters);
+                char *value = strdup(token);
+                while (strcmp(token, value) != 0) {
+                    token = strtok(NULL, delimiters);
                     if (token == NULL) {
                         // Error: Unterminated delimiter
                         free(value);
-                        printf("Error: Unterminated delimiter\n");
                         return;
                     }
-                    char *temp = ft_strdup(value);
-                    value = malloc(ft_strlen(temp) + ft_strlen(token) + 2);
-                    if (!value)
-                        return ;
-                    ft_strcpy(value, temp);
-                    ft_strcat(value, " ");
-                    ft_strcat(value, token);
+                    char *temp = strdup(value);
+                    value = malloc(strlen(temp) + strlen(token) + 2);
+                    strcpy(value, temp);
+                    strcat(value, " ");
+                    strcat(value, token);
                     free(temp);
                 }
                 add_token(tokens, TOKEN_ARG, value);
             }
         } else if (strcmp(token, ">>") == 0) {
-            add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(token));
+            add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, strdup(token));
         } else if (token[0] == '\'') {
             // Handle single quoted strings
-            char *value = ft_strdup(token);
-            while (token[ft_strlen(token) - 1] != '\'') {
-                token = ft_strtok(NULL, delimiters);
+            char *value = strdup(token);
+            while (token[strlen(token) - 1] != '\'') {
+                token = strtok(NULL, delimiters);
                 if (token == NULL) {
                     // Error: Unterminated single quoted string
                     free(value);
-                    ft_printf("Error: Unterminated single quoted string\n");
                     return;
                 }
-                char *temp = ft_strdup(value);
-                value = malloc(strlen(temp) + ft_strlen(token) + 2);
-                if (!value)
-                    return ;
-                ft_strcpy(value, temp);
-                ft_strcat(value, " ");
-                ft_strcat(value, token);
+                char *temp = strdup(value);
+                value = malloc(strlen(temp) + strlen(token) + 2);
+                strcpy(value, temp);
+                strcat(value, " ");
+                strcat(value, token);
                 free(temp);
             }
             add_token(tokens, TOKEN_QUOTE, value);
         } else if (token[0] == '\"') {
             // Handle double quoted strings
-            char *value = ft_strdup(token);
-            while (token[ft_strlen(token) - 1] != '\"') {
-                token = ft_strtok(NULL, delimiters);
+            char *value = strdup(token);
+            while (token[strlen(token) - 1] != '\"') {
+                token = strtok(NULL, delimiters);
                 if (token == NULL) {
                     // Error: Unterminated double quoted string
                     free(value);
-                    printf("Error: Unterminated double quoted string\n");
                     return;
                 }
-                char *temp = ft_strdup(value);
-                value = malloc(ft_strlen(temp) + ft_strlen(token) + 2);
-                if (!value)
-                    return ;
-                ft_strcpy(value, temp);
-                ft_strcat(value, " ");
-                ft_strcat(value, token);
+                char *temp = strdup(value);
+                value = malloc(strlen(temp) + strlen(token) + 2);
+                strcpy(value, temp);
+                strcat(value, " ");
+                strcat(value, token);
                 free(temp);
             }
             add_token(tokens, TOKEN_DQUOTE, value);
@@ -137,6 +124,6 @@ void lexer(char *input, t_token **tokens)
         }
 
         // Get the next token
-        token = ft_strtok(NULL, delimiters);
+        token = strtok(NULL, delimiters);
     }
 }
