@@ -1,6 +1,5 @@
 #include "../inc/minishell.h"
 
- 
 void lexer(char *input, t_token **tokens)
 {
     char *token;
