@@ -74,7 +74,7 @@ void lexer(char *input, t_token **tokens)
                     if (token == NULL) {
                         // Error: Unterminated delimiter
                         free(value);
-                        printf("Error: Unterminated delimiter\n");
+                        ft_printf("Error: Unterminated delimiter\n");
                         return;
                     }
                     char *temp = strdup(value);

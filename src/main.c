@@ -10,6 +10,7 @@ int main(int argc, char **argv)
         char *input = readline(PROMPT);
         if (!input)
             break;
+        add_history(input);
         // check if user wants to exit
         if (strcmp(input, "exit") == 0)
         {
@@ -20,7 +21,6 @@ int main(int argc, char **argv)
 
         t_token *tokens = NULL;
         lexer(input, &tokens); // Tokenize the input
-        add_history(input);
         
         // Print each token and its type
         t_token *current = tokens;
