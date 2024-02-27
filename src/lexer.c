@@ -68,10 +68,12 @@ void lexer(char *input, t_token **tokens)
                 }
                 add_token(tokens, TOKEN_ARG, value);
             }
-        } else if (ft_strcmp(token, ">>") == 0) 
+        } 
+        else if (ft_strcmp(token, ">>") == 0) 
         {
             add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(token));
-        } else if (token[0] == '\'') 
+        } 
+        else if (token[0] == '\'') 
         {
             // Handle single quoted strings
             char *value = ft_strdup(token);
@@ -95,7 +97,8 @@ void lexer(char *input, t_token **tokens)
                 free(temp);
             }
             add_token(tokens, TOKEN_QUOTE, value);
-        } else if (token[0] == '\"') 
+        } 
+        else if (token[0] == '\"') 
         {
             // Handle double quoted strings
             char *value = ft_strdup(token);
@@ -124,7 +127,6 @@ void lexer(char *input, t_token **tokens)
         {
             add_token(tokens, TOKEN_ARG, ft_strdup(token));
         }
-
         // Get the next token
         token = ft_strtok(NULL, delimiters);
     }

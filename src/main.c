@@ -19,7 +19,7 @@ int main(int argc, char **argv)
             break;
         }
 
-        t_token *tokens = NULL;
+        t_token *tokens = NULL; 
         lexer(input, &tokens); // Tokenize the input
         
         // Print each token and its type
