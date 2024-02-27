@@ -16,6 +16,7 @@ void lexer(char *input, t_token **tokens)
             ft_strcmp(token, "export") == 0 ||
             ft_strcmp(token, "unset") == 0 ||
             ft_strcmp(token, "env") == 0 ||
+            ft_strcmp(token, "ls") == 0 ||
             ft_strcmp(token, "exit") == 0) 
             {
             add_token(tokens, TOKEN_COMMAND, ft_strdup(token));
@@ -40,7 +41,7 @@ void lexer(char *input, t_token **tokens)
         {
             add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(token));
         } 
-        else if (ft_strcmp(token, "<<hi") == 0) 
+        else if (ft_strcmp(token, "<<") == 0) 
         {
             add_token(tokens, TOKEN_HEREDOC, ft_strdup(token));
             token = ft_strtok(NULL, delimiters); // Read the delimiter
@@ -55,12 +56,12 @@ void lexer(char *input, t_token **tokens)
                         // Error: Unterminated delimiter
                         free(value);
                         printf("Error: Unterminated delimiter\n");
-                        return;
+                        return ;
                     }
                     char *temp = ft_strdup(value);
                     value = malloc(ft_strlen(temp) + ft_strlen(token) + 2);
                     if (!value)
-                        return ;
+                        return ; ;
                     ft_strcpy(value, temp);
                     ft_strcat(value, " ");
                     ft_strcat(value, token);
@@ -85,7 +86,7 @@ void lexer(char *input, t_token **tokens)
                     // Error: Unterminated single quoted string
                     free(value);
                     printf("Error: Unterminated single quoted string\n");
-                    return;
+                    return ;
                 }
                 char *temp = ft_strdup(value);
                 value = malloc(ft_strlen(temp) + ft_strlen(token) + 2);
@@ -110,7 +111,7 @@ void lexer(char *input, t_token **tokens)
                     // Error: Unterminated double quoted string
                     free(value);
                     printf("Error: Unterminated double quoted string\n");
-                    return;
+                    return ;
                 }
                 char *temp = ft_strdup(value);
                 value = malloc(ft_strlen(temp) + ft_strlen(token) + 2);
