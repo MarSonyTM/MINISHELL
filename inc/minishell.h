@@ -28,6 +28,7 @@ typedef enum e_token_type
     TOKEN_EXIT_STATUS,
     TOKEN_HEREDOC,
     TOKEN_REDIRECT_OUT_APPEND,    
+    TOKEN_COMMA,
     // Add more as needed
 } t_token_type;
 
@@ -62,6 +63,7 @@ typedef struct s_cmd
 void	lexer(char *input, t_token **tokens);
 void	free_tokens(t_token **tokens);
 void	add_token(t_token **tokens, t_token_type type, char *value);
+t_token_type determine_token_type(char *token);
 
 
 #endif

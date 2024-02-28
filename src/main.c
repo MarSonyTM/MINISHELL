@@ -62,6 +62,9 @@ int main(int argc, char **argv)
                 case TOKEN_HEREDOC:
                     type_str = "Heredoc";
                     break;
+                case TOKEN_COMMA:
+                    type_str = "Comma";
+                    break;
                 case TOKEN_REDIRECT_OUT_APPEND:
                     type_str = "Output Redirection Append";
                     break;
