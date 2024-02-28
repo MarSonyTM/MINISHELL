@@ -1,4 +1,4 @@
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void lexer(char *input, t_token **tokens)
 {
@@ -66,6 +66,11 @@ void lexer(char *input, t_token **tokens)
     } else if (inQuote != 0 && !quote_error) {
         // Handle the case where the input ends while still in a quote
         printf("Error: Unclosed quote\n");
+    }
+    if (quote_error) 
+    {
+        // Free the tokens if there was an error
+        free_tokens(tokens);
     }
 }
 // Placeholder for determine_token_type function
