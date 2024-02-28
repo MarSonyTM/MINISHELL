@@ -19,6 +19,8 @@ typedef enum e_token_type
     TOKEN_ARG,
     TOKEN_PIPE,
     TOKEN_REDIRECT_IN,
+    TOKEN_INPUT,
+    TOKEN_OUTPUT,
     TOKEN_REDIRECT_OUT,
     TOKEN_DOUBLE_REDIRECT_OUT,
     TOKEN_WHITESPACE,
@@ -64,6 +66,11 @@ void	lexer(char *input, t_token **tokens);
 void	free_tokens(t_token **tokens);
 void	add_token(t_token **tokens, t_token_type type, char *value);
 t_token_type determine_token_type(char *token);
+
+/*Functions prototypes for Parser*/
+
+void parse(t_token *tokens, t_cmd **cmd);
+
 
 
 #endif

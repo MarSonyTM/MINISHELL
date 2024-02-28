@@ -1,5 +1,42 @@
 #include "../inc/minishell.h"
 
+void print_commands(t_cmd *cmd) {
+    t_cmd *current_cmd = cmd;
+    while (current_cmd != NULL) {
+        printf("Command: %s\n", current_cmd->cmd_arr[0]); // Print command
+        for (int i = 1; current_cmd->cmd_arr[i] != NULL; i++) {
+            printf("Arg: %s\n", current_cmd->cmd_arr[i]); // Print arguments
+        }
+        if (current_cmd->input != NULL)
+            printf("Input Redirection: %s\n", current_cmd->input);
+        if (current_cmd->output != NULL)
+            printf("Output Redirection: %s\n", current_cmd->output);
+        current_cmd = current_cmd->next; // Move to the next command
+    }
+}
+
+void free_cmds(t_cmd **cmd) {
+    t_cmd *current = *cmd;
+    while (current != NULL) {
+        t_cmd *temp = current;
+        current = current->next;
+        // Free command path
+        free(temp->cmd_path);
+        // Free command arguments
+        for (int i = 0; temp->cmd_arr[i] != NULL; i++) {
+            free(temp->cmd_arr[i]);
+        }
+        // Free input and output redirection
+        free(temp->input);
+        free(temp->output);
+        // Free the command structure itself
+        free(temp);
+    }
+    // Set the pointer to NULL after freeing all commands
+    *cmd = NULL;
+}
+
+
 int main(int argc, char **argv)
 {
     if (argc != 1 || argv[1] != NULL)
@@ -21,6 +58,11 @@ int main(int argc, char **argv)
 
         t_token *tokens = NULL; 
         lexer(input, &tokens); // Tokenize the input
+     
+        t_cmd *cmd = NULL;
+        parse(tokens, &cmd); // Parse the tokens into commands
+        print_commands(cmd); // Print the commands
+   
         
         // Print each token and its type
         t_token *current = tokens;
@@ -76,6 +118,8 @@ int main(int argc, char **argv)
             current = current->next;
         }
         free_tokens(&tokens);
+        free(input);
+        free_cmds(&cmd);
 	}
 	return (0);
 }
