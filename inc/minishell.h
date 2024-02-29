@@ -12,7 +12,9 @@
 #define PROMPT "minishell> "
 #define SYNTAX_ERROR  2
 #define CMD_NOT_FOUND 127
+
 /* holds information of each separate token */
+
 typedef enum e_token_type
 {
     TOKEN_COMMAND,

@@ -22,6 +22,7 @@ void print_commands(t_cmd *cmd)
 
 void free_cmds(t_cmd **cmd) 
 {
+    int i = 0;
     t_cmd *current = *cmd;
     while (current != NULL) 
     {
@@ -30,9 +31,10 @@ void free_cmds(t_cmd **cmd)
         // Free command path
         free(temp->cmd_path);
         // Free command arguments
-        for (int i = 0; temp->cmd_arr[i] != NULL; i++) 
+        while(temp->cmd_arr[i] != NULL) 
         {
             free(temp->cmd_arr[i]);
+            i++;
         }
         // Free input and output redirection
         free(temp->input);
@@ -47,14 +49,14 @@ void free_cmds(t_cmd **cmd)
 
 int main(int argc, char **argv)
 {
-    if (argc != 1 || argv[1] != NULL)
+    if (argc > 1 || argv[1] != NULL)
         exit(printf("This program takes no arguments\n"));
 
     while (1)
     {
         char *input = readline(PROMPT);
         if (!input)
-            break;
+            break ;
         add_history(input);
         // check if user wants to exit
         if (ft_strcmp(input, "exit") == 0)

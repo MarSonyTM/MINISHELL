@@ -4,7 +4,13 @@ void lexer(char *input, t_token **tokens)
 {
     int i = 0;
     char currentChar;
-    char buffer[1024]; // Assuming a sufficiently large buffer
+    char *buffer = malloc((strlen(input) + 1) * sizeof(char));
+    if (buffer == NULL) 
+    {
+        // Handle memory allocation error
+        printf("Error: Failed to allocate memory for buffer\n");
+        return ;
+    }
     int bufIndex = 0;
     int inQuote = 0; // 0: no quote, 1: single quote, 2: double quote
     bool quote_error = false; // Track if there's an unclosed quote error
@@ -20,23 +26,28 @@ void lexer(char *input, t_token **tokens)
                 add_token(tokens, determine_token_type(buffer), strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
             }
-        } else if (currentChar == '\'' || currentChar == '\"')
+        } 
+        else if (currentChar == '\'' || currentChar == '\"')
         {
             if (inQuote == 0) { // Starting a quote
                 inQuote = (currentChar == '\'') ? 1 : 2;
-            } else if ((inQuote == 1 && currentChar == '\'') || (inQuote == 2 && currentChar == '\"'))
+            } 
+            else if ((inQuote == 1 && currentChar == '\'') || (inQuote == 2 && currentChar == '\"'))
             {
                 // Ending a quote
                 inQuote = 0;
-            } else 
+            } 
+            else 
             {
                 // Inside quotes, treat as part of the token
                 buffer[bufIndex++] = currentChar;
             }
-        } else if (currentChar == ',' && inQuote == 0) 
+        } 
+        else if (currentChar == ',' && inQuote == 0) 
         {
             // Commas outside of quotes are treated as separate tokens
-            if (bufIndex > 0) {
+            if (bufIndex > 0) 
+            {
                 // Add the current token before the comma
                 buffer[bufIndex] = '\0';
                 add_token(tokens, determine_token_type(buffer), strdup(buffer));
@@ -44,7 +55,8 @@ void lexer(char *input, t_token **tokens)
             }
             // Add the comma as a separate token
             add_token(tokens, TOKEN_COMMA, strdup(","));
-        } else 
+        } 
+        else 
         {
             // Regular character, add to the buffer
             buffer[bufIndex++] = currentChar;
@@ -58,12 +70,15 @@ void lexer(char *input, t_token **tokens)
         { // If we ended in a quote, it's an unclosed quote error
             printf("Error: Unclosed quote\n");
             quote_error = true; // Set error to prevent adding the token
-        } else 
+        } 
+        else 
         {
             buffer[bufIndex] = '\0'; // Null-terminate the current token
             add_token(tokens, determine_token_type(buffer), strdup(buffer)); // Add the token
         }
-    } else if (inQuote != 0 && !quote_error) {
+    }
+    else if (inQuote != 0 && !quote_error) 
+    {
         // Handle the case where the input ends while still in a quote
         printf("Error: Unclosed quote\n");
     }
@@ -71,6 +86,7 @@ void lexer(char *input, t_token **tokens)
     {
         // Free the tokens if there was an error
         free_tokens(tokens);
+        free(buffer);
     }
 }
 // Placeholder for determine_token_type function
