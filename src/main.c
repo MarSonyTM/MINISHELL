@@ -4,7 +4,8 @@ void print_commands(t_cmd *cmd) {
     t_cmd *current_cmd = cmd;
     while (current_cmd != NULL) {
         printf("Command: %s\n", current_cmd->cmd_arr[0]); // Print command
-        for (int i = 1; current_cmd->cmd_arr[i] != NULL; i++) {
+        for (int i = 1; current_cmd->cmd_arr[i] != NULL; i++) 
+        {
             printf("Arg: %s\n", current_cmd->cmd_arr[i]); // Print arguments
         }
         if (current_cmd->input != NULL)
@@ -15,15 +16,18 @@ void print_commands(t_cmd *cmd) {
     }
 }
 
-void free_cmds(t_cmd **cmd) {
+void free_cmds(t_cmd **cmd) 
+{
     t_cmd *current = *cmd;
-    while (current != NULL) {
+    while (current != NULL) 
+    {
         t_cmd *temp = current;
         current = current->next;
         // Free command path
         free(temp->cmd_path);
         // Free command arguments
-        for (int i = 0; temp->cmd_arr[i] != NULL; i++) {
+        for (int i = 0; temp->cmd_arr[i] != NULL; i++) 
+        {
             free(temp->cmd_arr[i]);
         }
         // Free input and output redirection
