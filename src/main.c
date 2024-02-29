@@ -56,7 +56,11 @@ int main(int argc, char **argv)
     {
         char *input = readline(PROMPT);
         if (!input)
+        {
+            free(input);
+            printf("exit\n");
             break ;
+        }
         add_history(input);
         // check if user wants to exit
         if (ft_strcmp(input, "exit") == 0)

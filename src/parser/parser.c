@@ -1,5 +1,6 @@
 #include "../../inc/minishell.h"
 
+
 // Function to add a new command to the list
 t_cmd *new_cmd(t_cmd **cmd)
 {
@@ -39,7 +40,7 @@ void parse(t_token *tokens, t_cmd **cmd)
         if (current->type == TOKEN_COMMAND) 
         {
             current_cmd = new_cmd(cmd); // Create a new command
-            current_cmd->cmd_arr[0] = strdup(current->value); // Command name
+            current_cmd->cmd_arr[0] = ft_strdup(current->value); // Command name
             current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
             arg_count = 1; // Reset argument count for the new command
         } 
@@ -51,21 +52,22 @@ void parse(t_token *tokens, t_cmd **cmd)
             {
                 // Handle realloc failure
                 printf("Error: Memory allocation failed\n");
+                return ;
                 // Clean up and exit or return an error
             }
-            current_cmd->cmd_arr[arg_count - 1] = strdup(current->value); // Add the new argument
+            current_cmd->cmd_arr[arg_count - 1] = ft_strdup(current->value); // Add the new argument
             current_cmd->cmd_arr[arg_count] = NULL; // NULL terminate the array
         } 
         else if (current->type == TOKEN_INPUT && current_cmd != NULL) 
         {
-            current_cmd->input = strdup(current->value);
+            current_cmd->input = ft_strdup(current->value);
         } 
         else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_DOUBLE_REDIRECT_OUT) 
 {
     if (current_cmd != NULL) 
     {
         // Store output file path accordingly
-        current_cmd->output = strdup(current->value);
+        current_cmd->output = ft_strdup(current->value);
     }
     // If it's a double redirection out, set append mode flag
     if (current->type == TOKEN_DOUBLE_REDIRECT_OUT) 
