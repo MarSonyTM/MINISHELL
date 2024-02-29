@@ -69,7 +69,6 @@ int main(int argc, char **argv)
             free(input);
             break;
         }
-
         t_token *tokens = NULL; 
         lexer(input, &tokens); // Tokenize the input
      
@@ -130,7 +129,6 @@ int main(int argc, char **argv)
         parse(tokens, &cmd); // Parse the tokens into commands
         print_commands(cmd); // Print the commands
    
-        
         // Print each token and its type
         free_tokens(&tokens);
         free(input);

@@ -33,7 +33,7 @@ void parse(t_token *tokens, t_cmd **cmd)
 {
     t_cmd *current_cmd = NULL;
     int arg_count = 0; // To keep track of the number of arguments
-    // int append_mode = 0; // Flag to indicate append mode for output redirection
+    int append_mode = 0; // Flag to indicate append mode for output redirection
 
     for (t_token *current = tokens; current; current = current->next) 
     {
@@ -72,7 +72,7 @@ void parse(t_token *tokens, t_cmd **cmd)
     // If it's a double redirection out, set append mode flag
     if (current->type == TOKEN_DOUBLE_REDIRECT_OUT) 
     {
-       // append_mode = 1; 
+       append_mode = 1; 
     }
 }
         else if (current->type == TOKEN_HEREDOC && current_cmd != NULL)
