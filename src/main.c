@@ -1,17 +1,21 @@
 #include "../inc/minishell.h"
 
-void print_commands(t_cmd *cmd) {
+void print_commands(t_cmd *cmd) 
+{
     t_cmd *current_cmd = cmd;
-    while (current_cmd != NULL) {
-        printf("Command: %s\n", current_cmd->cmd_arr[0]); // Print command
-        for (int i = 1; current_cmd->cmd_arr[i] != NULL; i++) 
+    int i = 1;
+    while (current_cmd != NULL) 
+    {
+        printf("PARSER: Command: %s\n", current_cmd->cmd_arr[0]); // Print command
+        while ( current_cmd->cmd_arr[i] != NULL) 
         {
-            printf("Arg: %s\n", current_cmd->cmd_arr[i]); // Print arguments
+            printf("PARSER: Arg: %s\n", current_cmd->cmd_arr[i]); // Print arguments
+            i++;
         }
         if (current_cmd->input != NULL)
-            printf("Input Redirection: %s\n", current_cmd->input);
+            printf("PARSER: Input Redirection: %s\n", current_cmd->input);
         if (current_cmd->output != NULL)
-            printf("Output Redirection: %s\n", current_cmd->output);
+            printf("PARSER: Output Redirection: %s\n", current_cmd->output);
         current_cmd = current_cmd->next; // Move to the next command
     }
 }
@@ -63,12 +67,6 @@ int main(int argc, char **argv)
         t_token *tokens = NULL; 
         lexer(input, &tokens); // Tokenize the input
      
-        t_cmd *cmd = NULL;
-        parse(tokens, &cmd); // Parse the tokens into commands
-        print_commands(cmd); // Print the commands
-   
-        
-        // Print each token and its type
         t_token *current = tokens;
         while (current != NULL)
         {
@@ -118,9 +116,16 @@ int main(int argc, char **argv)
                     type_str = "Unknown";
                     break;
             }
-            printf("Token: Type: %s, Value: %s\n", type_str, current->value);
+            printf("LEXER: Token: Type: %s, Value: %s\n", type_str, current->value);
             current = current->next;
         }
+        
+        t_cmd *cmd = NULL;
+        parse(tokens, &cmd); // Parse the tokens into commands
+        print_commands(cmd); // Print the commands
+   
+        
+        // Print each token and its type
         free_tokens(&tokens);
         free(input);
         free_cmds(&cmd);
