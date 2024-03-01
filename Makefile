@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+         #
+#    By: csturm <csturm@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/02/06 10:33:02 by mafurnic         ###   ########.fr        #
+#    Updated: 2024/02/28 16:09:35 by csturm           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Project Name and Compiler Settings
 NAME := minishell
 COMPILER := cc
-FLAGS := -Wall -Wextra -Werror
+FLAGS := -Wall -Wextra -Werror -g
 CLEANUP_CMD := rm -rf
 
 # Directory Paths
@@ -22,7 +22,8 @@ SOURCES_PATH := src/
 LIBFT_PATH := libft/
 
 # Source and Object Files
-SOURCE_FILES := main.c  #... (add your Minishell source files)
+SOURCE_FILES := main.c custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
+				custom/export.c error/cleanup.c execution/executor.c execution/executor_utils.c #... (add your Minishell source files)
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)
 LIBFT := $(LIBFT_PATH)libft.a
 
