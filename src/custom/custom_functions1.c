@@ -29,12 +29,12 @@ void    cd_cmd(t_cmd *cmd)
     {
         if (chdir(getenv("HOME")) == -1)
         {
-            /* error */
+            /* error ERROR*/
         }
     }
     else if (chdir(cmd->cmd_arr[1]) == -1)
     {
-        /* error */
+        /* error ERR_FIL*/
     }
 }
 
@@ -45,7 +45,7 @@ void    pwd_cmd(void)
     pwd = getcwd(NULL, 0);
     if (pwd == NULL)
     {
-        /* error */
+        /* error ERROR*/
     }
     ft_putstr_fd(pwd, 1);
     free(pwd);
@@ -57,7 +57,7 @@ void    env_cmd(t_cmd *cmd, t_env *env)
 
     if (cmd->cmd_arr[1] != NULL)
     {
-        /* error */
+        /* error ERR_ARGS*/
     }
     tmp = env;
     while (tmp != NULL)

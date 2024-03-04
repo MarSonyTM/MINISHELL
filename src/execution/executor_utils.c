@@ -49,11 +49,11 @@ void    redirection(char *file, int mode)
         fd = open(file, O_RDONLY);
         if (fd == -1)
         {
-            /* error */
+            /* error ERR_FIL*/
         }
         if (dup2(fd, 0) == -1)
         {
-            /* error */
+            /* error ERROR*/
         }
     }
     else
@@ -61,11 +61,11 @@ void    redirection(char *file, int mode)
         fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1)
         {
-            /* error */
+            /* error ERR_PERM*/
         }
         if (dup2(fd, 1) == -1)
         {
-            /* error */
+            /* error ERROR*/
         }
     }
     close(fd);

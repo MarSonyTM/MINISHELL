@@ -107,7 +107,7 @@ static void    concatenate_env_var(char *cmd, t_env **env, int j)
     j = j + 2;
     if (ft_strncmp(cmd + j, (*env)->key, ft_strlen((*env)->key)))
     {
-        /* error */
+        /* error ERR_ARG*/
     }
     else
     { 
@@ -142,7 +142,7 @@ void    export_cmd(t_cmd *cmd, t_env *env)
     }
     if (cmd->cmd_arr[1][0] == '=' || ft_isdigit(cmd->cmd_arr[1][0]))
     {
-        /* error */
+        /* error ERR_ARG*/
     }
     while (cmd->cmd_arr[i])
     {

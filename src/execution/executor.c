@@ -4,7 +4,7 @@ static void    duplicate_fd(int old_fd, int new_fd)
 {
     if(dup2(old_fd, new_fd) == -1)
     {
-        /* error */
+        /* error ERROR*/
     }
     close (old_fd);
 }
@@ -31,7 +31,7 @@ static void    child_process(t_cmd *cmd, int i, t_exec *exec, t_env *env)
         envp = env_to_array(cmd, env);
         if (execve(cmd->cmd_path, cmd->cmd_arr, envp) == -1)
         {
-            /* error */
+            /* error ERROR*/
             exit (1);
         }
     }

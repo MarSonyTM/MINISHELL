@@ -1,5 +1,18 @@
 #include "../../inc/minishell.h"
 
+void    free_array(char **arr)
+{
+    int i;
+
+    i = 0;
+    while (arr[i] != NULL)
+    {
+        free(arr[i]);
+        i++;
+    }
+    free(arr);
+}
+
 void    error(char *msg, t_cmd *cmd, t_env *env)
 {
     ft_putstr_fd("minishell: ", 2);
@@ -25,7 +38,7 @@ void    clean_up(t_cmd *cmd, t_env *env)
         free(tmp->cmd_path);
         free(tmp->input);
         free(tmp->output);
-        free(tmp->cmd_arr);
+        free_array(tmp->cmd_arr);
         free(tmp);
     }
     while (env != NULL)
