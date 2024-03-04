@@ -2,7 +2,6 @@
 
 void    custom_exec(t_cmd *cmd, t_env *env)
 {
-    ft_putstr_fd("custom_exec\n", 0);
     if (ft_strncmp(cmd->cmd_arr[0], "echo", 5) == 0)
         echo_cmd(cmd);
 /*     else if (ft_strncmp(cmd->cmd_arr[0], "cd", 3) == 0)

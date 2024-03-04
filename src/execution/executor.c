@@ -4,7 +4,6 @@ static void    duplicate_fd(int old_fd, int new_fd)
 {
     if(dup2(old_fd, new_fd) == -1)
     {
-        ft_putstr_fd("dup2 error\n", 0);
         /* error */
     }
     close (old_fd);
@@ -12,34 +11,23 @@ static void    duplicate_fd(int old_fd, int new_fd)
 
 static void    child_process(t_cmd *cmd, int i, t_exec *exec, t_env *env)
 {
-    ft_putstr_fd("child_process\n", 1);
     char **envp;
 
-    if (i != exec->processes - 1)
-        duplicate_fd(exec->fd[1], 1);
-    ft_putchar_fd('1', 0);
-    ft_putchar_fd('1', 1);
-    if (i != 0)
-        duplicate_fd(exec->old_fd[0], 0);
-    ft_putchar_fd('2', 0);
-    ft_putchar_fd('2', 1);
-    if (i != exec->processes -1)
-        close(exec->fd[0]);
-    ft_putchar_fd('3', 0);
-    ft_putchar_fd('3', 1);
+    if (i != exec->processes - 1) //if this is not the last process
+        duplicate_fd(exec->fd[1], 1); //duplicate write end of pipe to stdout
+    if (i != 0) //if this is not the first process
+    {
+        duplicate_fd(exec->old_fd[0], 0); //duplicate read end of old pipe to stdin
+        close(exec->fd[0]); //close read end of pipe
+    }
     if (cmd->input)
         redirection(cmd->input, 0);
-    ft_putchar_fd('4', 0);
-    ft_putchar_fd('4', 1);
     if (cmd->output)
         redirection(cmd->output, 1);
-    ft_putchar_fd('5', 0);
-    ft_putchar_fd('5', 1);
-    if (cmd->cmd_path == NULL)
+    if (cmd->cmd_path == NULL) //if command is custom
         custom_exec(cmd, env);
     else
     {
-        ft_putstr_fd("execve\n", 0);
         envp = env_to_array(cmd, env);
         if (execve(cmd->cmd_path, cmd->cmd_arr, envp) == -1)
         {
@@ -56,19 +44,16 @@ static void    create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env *env)
     exec->pid[i] = fork();
     if (exec->pid[i] == -1)
         exit(1);
-    if (exec->pid[i] == 0)
+    if (exec->pid[i] == 0) //if this is the child process
     {
         child_process(cmd, i, exec, env);
         exit(0);
     }
-    close (exec->fd[1]);
-    if (i != 0)
-    {
-        close(exec->old_fd[0]);
-    }
-    exec->old_fd[0] = exec->fd[0];
-    exec->old_fd[1] = exec->fd[1];
-    close (exec->fd[1]);
+    close (exec->fd[1]); //close write end of pipe
+    if (i != 0) //if this is not the first process
+        close(exec->old_fd[0]); //close read end of old pipe
+    exec->old_fd[0] = exec->fd[0]; //set old read end of pipe to current read end of pipe
+    exec->old_fd[1] = exec->fd[1]; //set old write end of pipe to current write end of pipe
 }
 
 /* how to keep track of open fds? --> struct (linked list)? */
@@ -91,27 +76,28 @@ int    executor(t_cmd *cmd, t_env *env)
         free(exec.pid);
         clean_up(cmd, env);
     }
-    if (ft_strncmp(cmd->cmd_arr[0], "cd", 3) == 0)
+    if (ft_strncmp(cmd->cmd_arr[0], "cd", 3) == 0) //check for cd command directly in parent
     {
         cd_cmd(cmd);
         return (0);
     }
-    i = 0;    
-    while (exec.processes > 0)
+    i = 0; //initialize i to 0, siginifies process number
+    j = exec.processes; //initialize j to number of processes
+    while (j > 0) //while there are still processes to execute
     {
-        ft_putnbr_fd(i, 1);
         create_child_process(cmd, i, &exec, env);
-        exec.processes--;
+        j--;
         i++;
-        if (cmd->next != NULL)
-            cmd = cmd->next;
+        if (cmd->next != NULL) //if there are still commands to execute
+            cmd = cmd->next; //move to next command
     }
-    j = 0;
-    while (j < exec.processes)
+    i = 0;
+    while (i < exec.processes)
     {
-        waitpid(exec.pid[j], &exec.status[j], 0);
-        if (WIFEXITED(exec.status[j]) && WEXITSTATUS(exec.status[j]) != 0)
+        waitpid(exec.pid[i], &exec.status[i], 0);
+        if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
             exit(1);
+        i++;
     }
     free(exec.pid);
     free(exec.status);

@@ -2,7 +2,6 @@
 
 void    echo_cmd(t_cmd *cmd)
 {
-    ft_putstr_fd("echo_cmd\n", 0);
     int i;
     int newline;
 
