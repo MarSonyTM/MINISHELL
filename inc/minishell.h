@@ -50,8 +50,8 @@ typedef struct s_exec
     int     processes;
     int     *pid;
     int     *status;
+    int     *open_fds;
 } t_exec;
-
 
 void    custom_exec(t_cmd *cmd, t_env *env);
 int     executor(t_cmd *cmd, t_env *env);
@@ -67,9 +67,9 @@ void    export_cmd(t_cmd *cmd, t_env *env);
 
 /* error management */
 void    clean_up(t_cmd *cmd, t_env *env);
+void    close_fds(int *open_fds, int processes);
 
 /* utils */
-
 void    redirection(char *file, int mode);
 char    **env_to_array(t_cmd *cmd, t_env *env);
 int     get_len(t_env *env);
