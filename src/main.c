@@ -71,9 +71,9 @@ int main (void)
     {
         /* error */
     }
-    tmp->cmd_arr[0] = ft_strdup("wc");
+    tmp->cmd_arr[0] = ft_strdup("cat");
     tmp->cmd_arr[1] = NULL;
-    tmp->cmd_path = ft_strdup ("/usr/bin/wc");
+    tmp->cmd_path = ft_strdup ("/usr/bin/cat");
     tmp->input = NULL;
     tmp->output = ft_strdup("output.txt");
     tmp->exit_status = 0;

@@ -100,7 +100,6 @@ int    executor(t_cmd *cmd, t_env *env)
     j = exec.processes; //initialize j to number of processes
     while (j > 0) //while there are still processes to execute
     {
-        ft_putnbr_fd(i, 1);
         create_child_process(cmd, i, &exec, env);
         j--;
         i++;
@@ -121,6 +120,6 @@ int    executor(t_cmd *cmd, t_env *env)
     exec.open_fds[(exec.processes - 1) * 2 - 2] = -1;
     close(exec.old_fd[1]);
     exec.open_fds[(exec.processes - 1) * 2 - 1] = -1;
-    close_fds(exec.open_fds, exec.processes * 2);
+    close_fds(exec.open_fds, exec.processes);
     return (0);
 }

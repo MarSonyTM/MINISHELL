@@ -11,6 +11,7 @@ void    close_fds(int *open_fds, int processes)
             close(open_fds[i]);
         i++;
     }
+    free(open_fds);
 }
 
 void    free_array(char **arr)
