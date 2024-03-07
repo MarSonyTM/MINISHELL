@@ -1,5 +1,5 @@
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -9,8 +9,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-
-#define PROMPT "minishell> "
+# define PROMPT "minishell> "
 
 /* error messages */
 # define ERROR "Error"
@@ -22,57 +21,56 @@
 # define ERR_ARGS "Arg list too long"
 # define ERR_ADDR "Bad address"
 
-
 /* holds information of each separate environment variable */
 typedef struct s_env
 {
-    char            *key;
-    char            *value;
-    struct s_env    *next;
-}   t_env;
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
 
 /* holds information of each separate command / child process */
 typedef struct s_cmd
 {
-    char            *cmd_path; //for execve, else NULL
-    char            **cmd_arr; //holds command, flags and arguments
-    char            *input; //for input redirection, else NULL
-    char            *output; //for output redirection, else NULL
-    int             exit_status;
-    struct s_cmd    *next;
-}   t_cmd;
+	char			*cmd_path; //for execve, else NULL
+	char			**cmd_arr; //holds command, flags and arguments
+	char			*input; //for input redirection, else NULL
+	char			*output; //for output redirection, else NULL
+	int				exit_status;
+	struct s_cmd	*next;
+}	t_cmd;
 
 /* just reduces variables in execution */
 typedef struct s_exec
 {
-    int     fd[2];
-    int     old_fd[2];
-    int     processes;
-    int     *pid;
-    int     *status;
-    int     *open_fds;
-} t_exec;
+	int	fd[2];
+	int	old_fd[2];
+	int	processes;
+	int	*pid;
+	int	*status;
+	int	*open_fds;
+}	t_exec;
 
-void    custom_exec(t_cmd *cmd, t_env *env);
-int     executor(t_cmd *cmd, t_env *env);
+void	custom_exec(t_cmd *cmd, t_env *env);
+int		executor(t_cmd *cmd, t_env *env);
 
 /* customs */
-void    echo_cmd(t_cmd *cmd);
-void    cd_cmd(t_cmd *cmd);
-void    pwd_cmd(void);
-void    env_cmd(t_cmd *cmd, t_env *env);
-void    unset_cmd(t_cmd *cmd, t_env **env);
-void    exit_cmd(t_cmd *cmd, t_env *env);
-void    export_cmd(t_cmd *cmd, t_env *env);
+void	echo_cmd(t_cmd *cmd);
+void	cd_cmd(t_cmd *cmd);
+void	pwd_cmd(void);
+void	env_cmd(t_cmd *cmd, t_env *env);
+void	unset_cmd(t_cmd *cmd, t_env **env);
+void	exit_cmd(t_cmd *cmd, t_env *env);
+void	export_cmd(t_cmd *cmd, t_env *env);
 
 /* error management */
-void    clean_up(t_cmd *cmd, t_env *env);
-void    close_fds(int *open_fds, int processes);
+void	clean_up(t_cmd *cmd, t_env *env);
+void	close_fds(int *open_fds, int processes);
 
 /* utils */
-void    redirection(char *file, int mode);
-char    **env_to_array(t_cmd *cmd, t_env *env);
-int     get_len(t_env *env);
-int     count_processes(t_cmd *cmd);
+void	redirection(char *file, int mode);
+char	**env_to_array(t_cmd *cmd, t_env *env);
+int		get_len(t_env *env);
+int		count_processes(t_cmd *cmd);
 
 #endif

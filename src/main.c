@@ -19,10 +19,10 @@
 int main (void)
 {
     t_env *env;
+    t_env *tmp_env;
     t_cmd *cmd;
     t_cmd *tmp;
 
-    env = NULL;
     cmd = malloc(sizeof(t_cmd));
     if (!cmd)
     {
@@ -34,51 +34,54 @@ int main (void)
     {
         /* error */
     }
-    tmp->cmd_arr[0] = ft_strdup("cat");
-    tmp->cmd_arr[1] = NULL;
-    tmp->cmd_path = ft_strdup ("/usr/bin/cat");
-    tmp->input = ft_strdup("Makefile");
-    tmp->output = NULL;
-    tmp->exit_status = 0;
-
-    tmp->next = malloc(sizeof(t_cmd));
-    if (!tmp->next)
-    {
-        /* error */
-    }
-    tmp = tmp->next;
-    tmp->cmd_arr = malloc(sizeof(char *) * 2);
-    if (!tmp->cmd_arr)
-    {
-        /* error */
-    }
-    tmp->cmd_arr[0] = ft_strdup("sort");
-    tmp->cmd_arr[1] = NULL;
-    tmp->cmd_path = ft_strdup ("/usr/bin/sort");
+    tmp->cmd_arr[0] = ft_strdup("export");
+    tmp->cmd_arr[1] = ft_strdup("NEW=value");
+    tmp->cmd_arr[2] = NULL;
+    tmp->cmd_path = NULL;
     tmp->input = NULL;
     tmp->output = NULL;
     tmp->exit_status = 0;
+
+    // tmp->next = malloc(sizeof(t_cmd));
+    // if (!tmp->next)
+    // {
+    //     /* error */
+    // }
+    // tmp = tmp->next;
+    // tmp->cmd_arr = malloc(sizeof(char *) * 2);
+    // if (!tmp->cmd_arr)
+    // {
+    //     /* error */
+    // }
+    // tmp->cmd_arr[0] = ft_strdup("env");
+    // tmp->cmd_arr[1] = NULL;
+    // tmp->cmd_path = NULL;
+    // tmp->input = NULL;
+    // tmp->output = ft_strdup("output.txt");
+    // tmp->exit_status = 0;
     tmp->next = NULL;
 
-    tmp->next = malloc(sizeof(t_cmd));
-    if (!tmp->next)
+    env = malloc(sizeof(t_env));
+    if (!env)
     {
         /* error */
     }
-    tmp = tmp->next;
-    tmp->cmd_arr = malloc(sizeof(char *) * 2);
-    if (!tmp->cmd_arr)
+    tmp_env = env;
+    tmp_env->key = ft_strdup("PATH");
+    tmp_env->value = ft_strdup("/usr/bin:/bin");
+
+    tmp_env->next = malloc(sizeof(t_env));
+    if (!tmp_env->next)
     {
         /* error */
     }
-    tmp->cmd_arr[0] = ft_strdup("cat");
-    tmp->cmd_arr[1] = NULL;
-    tmp->cmd_path = ft_strdup ("/usr/bin/cat");
-    tmp->input = NULL;
-    tmp->output = ft_strdup("output.txt");
-    tmp->exit_status = 0;
-    tmp->next = NULL;
+    tmp_env = tmp_env->next;
+    tmp_env->key = ft_strdup("HOME");
+    tmp_env->value = ft_strdup("/home/user");
+    tmp_env->next = NULL;
+
     executor(cmd, env);
+    env_cmd(cmd, env);
     clean_up(cmd, env);
     return (0);
 }
