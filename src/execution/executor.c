@@ -33,6 +33,15 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 	}
 }
 
+/* 	Only the last custom command is being executed!
+	So, no possibility of two customs after each other.
+	It makes no sense to have a custom in the middle of a pipeline, since it takes no input.
+	But it does work! Just ignores what came before.
+	So, no need to have the read end of a pipe for a custom.
+	
+	In conclusion: custom does not read, but can write into pipe.
+	It can be at the beginning, middle or end of a pipeline. */
+
 static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
 	int	stdout_fd;
