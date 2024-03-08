@@ -1,9 +1,9 @@
 #include "../../inc/minishell.h"
 
-void lexer(char *input, t_token **tokens)
+void lexer(char *input, t_token **tokens) // takes in a string and a pointer to a pointer to a token
 {
-    int i = 0;
-    char currentChar;
+    int i = 0; // Index for input string
+    char currentChar; // Current character being processed
     char *buffer = malloc((strlen(input) + 1) * sizeof(char));
     if (buffer == NULL) 
     {
@@ -11,23 +11,23 @@ void lexer(char *input, t_token **tokens)
         printf("Error: Failed to allocate memory for buffer\n");
         return ;
     }
-    int bufIndex = 0;
+    int bufIndex = 0; // Index for buffer
     int inQuote = 0; // 0: no quote, 1: single quote, 2: double quote
     bool quote_error = false; // Track if there's an unclosed quote error
 
     while ((currentChar = input[i]) != '\0' && !quote_error)
     {
-        if ((currentChar == ' ' || currentChar == '\t' || currentChar == '\n') && inQuote == 0)
+        if ((currentChar == ' ' || currentChar == '\t' || currentChar == '\n') && inQuote == 0) // Whitespace , outside of quotes
         {
             // End of a token
-            if (bufIndex > 0)
+            if (bufIndex > 0) // If there's a token in the buffer
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
                 add_token(tokens, determine_token_type(buffer), strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
             }
         } 
-        else if (currentChar == '\'' || currentChar == '\"')
+        else if (currentChar == '\'' || currentChar == '\"') // Quote handling
         {
             if (inQuote == 0) { // Starting a quote
                 inQuote = (currentChar == '\'') ? 1 : 2;
@@ -69,6 +69,8 @@ void lexer(char *input, t_token **tokens)
         if (inQuote != 0) 
         { // If we ended in a quote, it's an unclosed quote error
             printf("Error: Unclosed quote\n");
+            free(buffer); // Free the buffer
+            free(tokens); // Free the tokens
             quote_error = true; // Set error to prevent adding the token
         } 
         else 
@@ -81,6 +83,9 @@ void lexer(char *input, t_token **tokens)
     {
         // Handle the case where the input ends while still in a quote
         printf("Error: Unclosed quote\n");
+        free(buffer); // Free the buffer
+        free(tokens); // Free the tokens
+        quote_error = true; // Set error to prevent adding the token
     }
     if (quote_error) 
     {

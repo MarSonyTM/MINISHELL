@@ -72,7 +72,7 @@ t_token_type determine_token_type(char *token);
 /*Functions prototypes for Parser*/
 
 void parse(t_token *tokens, t_cmd **cmd);
-
+void free_cmds(t_cmd **cmd);
 
 
 #endif

@@ -69,7 +69,7 @@ int main(int argc, char **argv)
             free(input);
             break;
         }
-        t_token *tokens = NULL; 
+        t_token *tokens = NULL; // initialize tokens 
         lexer(input, &tokens); // Tokenize the input
      
         t_token *current = tokens;
@@ -125,11 +125,12 @@ int main(int argc, char **argv)
             current = current->next;
         }
         
-        t_cmd *cmd = NULL;
+        t_cmd *cmd = NULL; // Initialize commands
         parse(tokens, &cmd); // Parse the tokens into commands
         print_commands(cmd); // Print the commands
    
-        // Print each token and its type
+
+        // Free the tokens and commands
         free_tokens(&tokens);
         free(input);
         free_cmds(&cmd);

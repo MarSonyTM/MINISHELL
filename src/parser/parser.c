@@ -1,5 +1,24 @@
 #include "../../inc/minishell.h"
 
+char *append_line(char *heredoc_content, char *line) 
+{
+    char *temp = heredoc_content ? ft_strjoin(heredoc_content, "\n") : ft_strdup("");
+    char *new_content = ft_strjoin(temp, line);
+    free(temp); // Prevent memory leaks
+    return new_content;
+}
+
+char *store_heredoc_in_tmpfile(char *content)
+{
+    char *tmp_filename = tmpnam(NULL); // Generate a unique temporary file name
+    FILE *fp = fopen(tmp_filename, "w"); // Open the temp file for writing
+    if (fp) {
+        fputs(content, fp); // Write the content to the file
+        fclose(fp); // Close the file
+    }
+    return strdup(tmp_filename); // Return a copy of the temp file name for safety
+}
+
 
 // Function to add a new command to the list
 t_cmd *new_cmd(t_cmd **cmd)
@@ -44,7 +63,7 @@ void parse(t_token *tokens, t_cmd **cmd)
             current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
             arg_count = 1; // Reset argument count for the new command
         } 
-        else if (current->type == TOKEN_ARG && current_cmd != NULL) 
+        else if (current->type == TOKEN_ARG && current_cmd != NULL) //
         {
             arg_count++;
             current_cmd->cmd_arr = realloc(current_cmd->cmd_arr, sizeof(char *) * (arg_count + 1)); // Resize for new arg
@@ -52,13 +71,15 @@ void parse(t_token *tokens, t_cmd **cmd)
             {
                 // Handle realloc failure
                 printf("Error: Memory allocation failed\n");
+                free_cmds(cmd);
+                free(tokens);
                 return ;
                 // Clean up and exit or return an error
             }
             current_cmd->cmd_arr[arg_count - 1] = ft_strdup(current->value); // Add the new argument
             current_cmd->cmd_arr[arg_count] = NULL; // NULL terminate the array
         } 
-        else if (current->type == TOKEN_INPUT && current_cmd != NULL) 
+        else if (current->type == TOKEN_INPUT && current_cmd != NULL)   // Handle input redirection
         {
             current_cmd->input = ft_strdup(current->value);
         } 
@@ -75,12 +96,28 @@ void parse(t_token *tokens, t_cmd **cmd)
        append_mode = 1; 
     }
 }
-        else if (current->type == TOKEN_HEREDOC && current_cmd != NULL)
+        else if (current->type == TOKEN_HEREDOC && current_cmd != NULL) 
         {
-            // Handle here-document input
-            // Logic to capture input until delimiter is encountered
-            // Store captured input as command's stdin
+        char *heredoc_content = NULL;
+        printf("heredoc> ");
+        char *line;
+        while ((line = readline(NULL)) && strcmp(line, current->value) != 0) 
+        {
+            char *new_content = append_line(heredoc_content, line);
+            free(heredoc_content);
+            heredoc_content = new_content;
+            free(line);
+            printf("heredoc> ");
         }
+        free(line); // Don't forget to free the last line read
+        
+        // Store the heredoc content into a temporary file
+        char *tmp_filename = store_heredoc_in_tmpfile(heredoc_content);
+        free(heredoc_content); // Clean up the heredoc content
+        
+        // Assign the temporary file as the command's input
+        current_cmd->input = tmp_filename;
+    }
         else if (current->type == TOKEN_COMMA)
         {
             // Handle comma based on shell's syntax rules
@@ -98,5 +135,5 @@ void parse(t_token *tokens, t_cmd **cmd)
         }
         // Add handling for other types as necessary
     }
-
+    
 }
