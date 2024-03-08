@@ -1,6 +1,5 @@
 #include "../../inc/minishell.h"
 
-
 // Function to add a new command to the list
 t_cmd *new_cmd(t_cmd **cmd)
 {
@@ -68,7 +67,7 @@ void parse(t_token *tokens, t_cmd **cmd)
 {
     if (current_cmd != NULL) 
     {
-        // Store output file path accordingly
+        // Set the output file for the command
         current_cmd->output = ft_strdup(current->value);
     }
     // If it's a double redirection out, set append mode flag
@@ -77,7 +76,7 @@ void parse(t_token *tokens, t_cmd **cmd)
        append_mode = 1; 
     }
 }
-        else if (current->type == TOKEN_HEREDOC && current_cmd != NULL)
+        else if (current->type == TOKEN_HEREDOC && current_cmd != NULL) 
         {
             // Handle here-document input
             // Logic to capture input until delimiter is encountered
