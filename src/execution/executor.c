@@ -9,7 +9,7 @@ static void	duplicate_fd(int old_fd, int new_fd)
 	close (old_fd);
 }
 
-static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env *env)
+static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
 	char	**envp;
 
@@ -25,25 +25,30 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env *env)
 		redirection(cmd->input, 0);
 	if (cmd->output)
 		redirection(cmd->output, 1);
-	if (cmd->cmd_path == NULL) //if command is custom
-		custom_exec(cmd, env);
-	else
+	envp = env_to_array(cmd, env);
+	if (execve(cmd->cmd_path, cmd->cmd_arr, envp) == -1)
 	{
-		envp = env_to_array(cmd, env);
-		if (execve(cmd->cmd_path, cmd->cmd_arr, envp) == -1)
-		{
-			/* error ERROR*/
-			exit (1);
-		}
+		/* error ERROR*/
+		exit (1);
 	}
 }
 
-static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env *env)
+static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
+	int	stdout_fd;
+
 	if (pipe(exec->fd) == -1)
 		exit(1);
 	exec->open_fds[i * 2] = exec->fd[0];
 	exec->open_fds[i * 2 + 1] = exec->fd[1];
+	if (cmd->cmd_path == NULL) //if command is custom
+	{
+		stdout_fd = dup(1);
+		duplicate_fd(exec->fd[1], 1);
+		custom_exec(cmd, env);
+		duplicate_fd(stdout_fd, 1);
+		return ;
+	}
 	exec->pid[i] = fork();
 	if (exec->pid[i] == -1)
 		exit(1);
@@ -65,7 +70,7 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env *env)
 
 /* how to keep track of open fds? --> struct (linked list)? */
 
-int	executor(t_cmd *cmd, t_env *env)
+int	executor(t_cmd *cmd, t_env **env)
 {
 	t_exec	exec;
 	int		i;
@@ -76,19 +81,19 @@ int	executor(t_cmd *cmd, t_env *env)
 	exec.old_fd[1] = -1;
 	exec.pid = (int *)malloc(sizeof(int) * exec.processes);
 	if (!exec.pid)
-		clean_up(cmd, env);
+		clean_up(cmd, *env);
 	exec.status = (int *)malloc(sizeof(int) * exec.processes);
 	if (!exec.status)
 	{
 		free(exec.pid);
-		clean_up(cmd, env);
+		clean_up(cmd, *env);
 	}
 	exec.open_fds = (int *)malloc(sizeof(int) * exec.processes * 2);
 	if (!exec.open_fds)
 	{
 		free(exec.pid);
 		free(exec.status);
-		clean_up(cmd, env);
+		clean_up(cmd, *env);
 	}
 	if (ft_strncmp(cmd->cmd_arr[0], "cd", 3) == 0) //check for cd command directly in parent
 	{

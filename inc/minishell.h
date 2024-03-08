@@ -51,8 +51,8 @@ typedef struct s_exec
 	int	*open_fds;
 }	t_exec;
 
-void	custom_exec(t_cmd *cmd, t_env *env);
-int		executor(t_cmd *cmd, t_env *env);
+void	custom_exec(t_cmd *cmd, t_env **env);
+int		executor(t_cmd *cmd, t_env **env);
 
 /* customs */
 void	echo_cmd(t_cmd *cmd);
@@ -61,7 +61,7 @@ void	pwd_cmd(void);
 void	env_cmd(t_cmd *cmd, t_env *env);
 void	unset_cmd(t_cmd *cmd, t_env **env);
 void	exit_cmd(t_cmd *cmd, t_env *env);
-void	export_cmd(t_cmd *cmd, t_env *env);
+void	export_cmd(t_cmd *cmd, t_env **env);
 
 /* error management */
 void	clean_up(t_cmd *cmd, t_env *env);
@@ -69,7 +69,7 @@ void	close_fds(int *open_fds, int processes);
 
 /* utils */
 void	redirection(char *file, int mode);
-char	**env_to_array(t_cmd *cmd, t_env *env);
+char	**env_to_array(t_cmd *cmd, t_env **env);
 int		get_len(t_env *env);
 int		count_processes(t_cmd *cmd);
 

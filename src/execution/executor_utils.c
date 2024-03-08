@@ -15,7 +15,7 @@ int	get_len(t_env *env)
 	return (len);
 }
 
-char	**env_to_array(t_cmd *cmd, t_env *env)
+char	**env_to_array(t_cmd *cmd, t_env **env)
 {
 	t_env	*tmp;	
 	char	**envp;
@@ -24,11 +24,11 @@ char	**env_to_array(t_cmd *cmd, t_env *env)
 	int		len;
 
 	i = 0;
-	len = get_len(env);
-	tmp = env;
+	len = get_len(*env);
+	tmp = *env;
 	envp = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!envp)
-		clean_up(cmd, env);
+		clean_up(cmd, *env);
 	while (tmp != NULL)
 	{
 		tmp_str = ft_strjoin(tmp->key, "=");

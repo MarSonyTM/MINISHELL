@@ -104,7 +104,7 @@ static void	concatenate_env_var(char *cmd, t_env **env, int j)
 	}
 }
 
-void	export_cmd(t_cmd *cmd, t_env *env)
+void	export_cmd(t_cmd *cmd, t_env **env)
 {
 	int	i;
 	int	j;
@@ -112,7 +112,7 @@ void	export_cmd(t_cmd *cmd, t_env *env)
 	i = 1;
 	if (!cmd->cmd_arr[1]) //export command with no argument
 	{
-		env_cmd(cmd, env);
+		env_cmd(cmd, *env);
 		return ;
 	}
 	if (cmd->cmd_arr[1][0] == '=' || ft_isdigit(cmd->cmd_arr[1][0]))
@@ -125,12 +125,12 @@ void	export_cmd(t_cmd *cmd, t_env *env)
 		{
 			j = 0;
 			if (ft_strchr(cmd->cmd_arr[i], '$'))
-				concatenate_env_var(cmd->cmd_arr[i], &env, j);
+				concatenate_env_var(cmd->cmd_arr[i], env, j);
 			else
-				add_new_env_var(cmd->cmd_arr[i], &env, j);
+				add_new_env_var(cmd->cmd_arr[i], env, j);
 		}
 		else
-			add_empty_env_var(cmd->cmd_arr[i], &env);
+			add_empty_env_var(cmd->cmd_arr[i], env);
 		i++;
 	}
 }
