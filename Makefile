@@ -6,7 +6,7 @@
 #    By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/02/28 14:22:38 by mafurnic         ###   ########.fr        #
+#    Updated: 2024/03/08 11:46:07 by mafurnic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,8 +41,7 @@ $(NAME): $(LIBFT) $(OBJECTS)
 	@echo "$(COLOR_YELLOW)Building $(NAME)$(COLOR_WHITE)"
 	@$(COMPILER) $(FLAGS) $(OBJECTS) -L$(LIBFT_PATH) -lft -lreadline -o $(NAME)
 	@echo "$(COLOR_GREEN)$(NAME) compiled successfully.$(COLOR_WHITE)"
-	@sleep 1
-	@clear
+	 
 
 # Compiling Source Files
 $(OBJECTS_PATH)%.o: $(SOURCES_PATH)%.c
