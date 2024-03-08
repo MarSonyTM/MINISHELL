@@ -49,6 +49,7 @@ typedef struct s_exec
 	int	*pid;
 	int	*status;
 	int	*open_fds;
+	int	non_customs;
 }	t_exec;
 
 void	custom_exec(t_cmd *cmd, t_env **env);

@@ -77,7 +77,7 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 	exec->old_fd[1] = exec->fd[1]; //set old write end of pipe to current write end of pipe
 }
 
-/* how to keep track of open fds? --> struct (linked list)? */
+/* how to keep track of amount of non-custom commands? and how to wait for them? */
 
 int	executor(t_cmd *cmd, t_env **env)
 {
