@@ -1,5 +1,28 @@
 #include "../../inc/minishell.h"
 
+char *resolve_command_path(char *command) 
+{
+    char *path = getenv("PATH"); // Get the PATH environment variable value
+    char *pathCopy = strdup(path); // Duplicate since strtok modifies the string
+    char *dir = strtok(pathCopy, ":");
+
+    while (dir != NULL) 
+    {
+        char *fullPath = malloc(strlen(dir) + strlen(command) + 2); // For '/' and '\0'
+        sprintf(fullPath, "%s/%s", dir, command);
+        if (access(fullPath, X_OK) == 0) 
+        {
+            free(pathCopy);
+            return fullPath; // Command found
+        }
+        free(fullPath);
+        dir = strtok(NULL, ":");
+    }
+    free(pathCopy);
+    return NULL; // Command not found
+}
+
+
 // Function to add a new command to the list
 t_cmd *new_cmd(t_cmd **cmd)
 {
@@ -36,14 +59,32 @@ void parse(t_token *tokens, t_cmd **cmd)
 
     for (t_token *current = tokens; current; current = current->next) 
     {
-        if (current->type == TOKEN_COMMAND) 
+        if (current->type == TOKEN_BUILTIN) 
         {
             current_cmd = new_cmd(cmd); // Create a new command
             current_cmd->cmd_arr[0] = ft_strdup(current->value); // Command name
             current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
             arg_count = 1; // Reset argument count for the new command
+        }
+        else if (current->type == TOKEN_COMMAND)
+        {
+            current_cmd = new_cmd(cmd); // Create a new command
+            current_cmd->cmd_arr[0] = ft_strdup(current->value); // Command name
+            current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
+            arg_count = 1; // Reset argument count for the new command
+            char *cmd_path = resolve_command_path(current->value); // Resolve the command's path
+            current_cmd->cmd_path = cmd_path; // Set the command's path
+            if (cmd_path == NULL) 
+            {
+                // Handle command not found error
+                printf("Error: Command not found\n");
+                free_cmds(cmd);
+                free(tokens);
+                return ;
+                // Clean up and exit or return an error
+            }
         } 
-        else if (current->type == TOKEN_ARG && current_cmd != NULL) //
+        else if (current->type == TOKEN_ARG && current_cmd != NULL) 
         {
             arg_count++;
             current_cmd->cmd_arr = realloc(current_cmd->cmd_arr, sizeof(char *) * (arg_count + 1)); // Resize for new arg

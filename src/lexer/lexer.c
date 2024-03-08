@@ -113,11 +113,27 @@ t_token_type determine_token_type(char *token)
     else if (ft_strcmp(token, "echo") == 0 || ft_strcmp(token, "cd") == 0 ||
              ft_strcmp(token, "pwd") == 0 || ft_strcmp(token, "export") == 0 ||
              ft_strcmp(token, "unset") == 0 || ft_strcmp(token, "env") == 0 ||
-             ft_strcmp(token, "ls") == 0 || ft_strcmp(token, "exit") == 0) 
+             ft_strcmp(token, "exit") == 0) 
     {
-        return TOKEN_COMMAND;
+        return TOKEN_BUILTIN;
     }
-    // Default case for arguments or anything not specifically matched above
-    else return TOKEN_ARG;
+     char *path = getenv("PATH");
+    char *pathCopy = strdup(path);
+    char *dir = strtok(pathCopy, ":");
+
+    while (dir != NULL) {
+        char *fullPath = malloc(strlen(dir) + strlen(token) + 2); // For '/' and '\0'
+        sprintf(fullPath, "%s/%s", dir, token);
+        if (access(fullPath, X_OK) == 0) {
+            free(pathCopy);
+            free(fullPath);
+            return TOKEN_COMMAND; // Token corresponds to an executable file
+        }
+        free(fullPath);
+        dir = strtok(NULL, ":");
+    }
+
+    free(pathCopy);
+    return TOKEN_ARG; // Token is not an executable file
 }
 

@@ -117,6 +117,9 @@ int main(int argc, char **argv)
                 case TOKEN_REDIRECT_OUT_APPEND:
                     type_str = "Output Redirection Append";
                     break;
+                case TOKEN_BUILTIN:
+                    type_str = "Builtin";
+                    break;
                 default:
                     type_str = "Unknown";
                     break;

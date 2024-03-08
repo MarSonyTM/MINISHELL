@@ -18,6 +18,7 @@
 typedef enum e_token_type
 {
     TOKEN_COMMAND,
+    TOKEN_BUILTIN,
     TOKEN_ARG,
     TOKEN_PIPE,
     TOKEN_REDIRECT_IN,
