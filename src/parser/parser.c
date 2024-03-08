@@ -105,7 +105,7 @@ void parse(t_token *tokens, t_cmd **cmd)
             current_cmd->input = ft_strdup(current->value);
         } 
         else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_DOUBLE_REDIRECT_OUT) 
-{
+        {
     if (current_cmd != NULL) 
     {
         // Set the output file for the command
