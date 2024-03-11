@@ -207,24 +207,25 @@ void parse(t_token *tokens, t_cmd **cmd)
     }
 
     // Create a new command structure for the next command in the pipeline
-    t_cmd *next_cmd = new_cmd(cmd);
-    next_cmd->cmd_arr[0] = ft_strdup(current->value); // Set the command for the new command structure
-    next_cmd->cmd_arr[1] = NULL; // NULL terminate the array
+    current_cmd = new_cmd(cmd);
+    current_cmd->cmd_arr[0] = ft_strdup(current->value); // Set the command for the new command structure
+    current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
 
-    // Link the new command structure to the previous one
-    if (current_cmd != NULL) 
+    // Resolve the command's path
+    char *cmd_path = resolve_command_path(current->value);
+    current_cmd->cmd_path = cmd_path;
+
+    // Handle command not found error
+    if (cmd_path == NULL) 
     {
-        current_cmd->next = next_cmd;
-    }
-    else 
-    {
-        // If current command is NULL, it means this is the first command in the pipeline
-        *cmd = next_cmd;
+        printf("Error: Command not found\n");
+        free_cmds(cmd);
+        free(tokens);
+        return;
     }
 
-    // Reset the current command pointer to prepare for the next command
-    current_cmd = next_cmd;
-    arg_count = 1; // Reset argument count for the new command
+    // Reset argument count for the new command
+    arg_count = 1;
 }
 	}
 }

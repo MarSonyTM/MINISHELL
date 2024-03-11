@@ -17,6 +17,7 @@ void print_commands(t_cmd *cmd)
         if (current_cmd->output != NULL)
             printf("PARSER: Output Redirection: %s\n", current_cmd->output);
         current_cmd = current_cmd->next; // Move to the next command
+        i = 1; // Reset argument index for the next command
     }
 }
 
