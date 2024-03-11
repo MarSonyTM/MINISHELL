@@ -196,11 +196,35 @@ void parse(t_token *tokens, t_cmd **cmd)
             // Process them during expansion or execution phases
         }
         else if (current->type == TOKEN_PIPE)
-        {
-            // When a pipe is encountered, prepare for a new command on the next iteration
-            current_cmd = NULL; // This will trigger a new t_cmd creation on next command token
-        }
-        // Add handling for other types as necessary
+{
+    // Advance to the next token and use its value as the command for the new command structure
+    current = current->next;
+    if (current == NULL || (current->type != TOKEN_COMMAND && current->type != TOKEN_BUILTIN)) 
+    {
+        printf("Error: Expected a command after |\n");
+        free_cmds(cmd);
+        return;
     }
-    
+
+    // Create a new command structure for the next command in the pipeline
+    t_cmd *next_cmd = new_cmd(cmd);
+    next_cmd->cmd_arr[0] = ft_strdup(current->value); // Set the command for the new command structure
+    next_cmd->cmd_arr[1] = NULL; // NULL terminate the array
+
+    // Link the new command structure to the previous one
+    if (current_cmd != NULL) 
+    {
+        current_cmd->next = next_cmd;
+    }
+    else 
+    {
+        // If current command is NULL, it means this is the first command in the pipeline
+        *cmd = next_cmd;
+    }
+
+    // Reset the current command pointer to prepare for the next command
+    current_cmd = next_cmd;
+    arg_count = 1; // Reset argument count for the new command
+}
+	}
 }
