@@ -29,35 +29,57 @@ int main (void)
         /* error */
     }
     tmp = cmd;
-    tmp->cmd_arr = malloc(sizeof(char *) * 1);
+    tmp->cmd_arr = malloc(sizeof(char *) * 3);
     if (!cmd->cmd_arr)
     {
         /* error */
     }
-    tmp->cmd_arr[0] = ft_strdup("env");
-    tmp->cmd_arr[1] = NULL;
-    tmp->cmd_path = NULL;
+    tmp->cmd_arr[0] = ft_strdup("touch");
+    tmp->cmd_arr[1] = ft_strdup("output.txt");
+    tmp->cmd_arr[2] = NULL;
+    tmp->cmd_path = ft_strdup("/usr/bin/touch");
     tmp->input = NULL;
     tmp->output = NULL;
     tmp->exit_status = 0;
 
-    tmp->next = malloc(sizeof(t_cmd));
-    if (!tmp->next)
-    {
-        /* error */
-    }
-    tmp = tmp->next;
-    tmp->cmd_arr = malloc(sizeof(char *) * 2);
-    if (!tmp->cmd_arr)
-    {
-        /* error */
-    }
-    tmp->cmd_arr[0] = ft_strdup("cat");
-    tmp->cmd_arr[1] = NULL;
-    tmp->cmd_path = ft_strdup("/usr/bin/cat");
-    tmp->input = NULL;
-    tmp->output = ft_strdup("output.txt");
-    tmp->exit_status = 0;
+    // tmp->next = malloc(sizeof(t_cmd));
+    // if (!tmp->next)
+    // {
+    //     /* error */
+    // }
+    // tmp = tmp->next;
+
+    // tmp->cmd_arr = malloc(sizeof(char *) * 2);
+    // if (!cmd->cmd_arr)
+    // {
+    //     /* error */
+    // }
+    // tmp->cmd_arr[0] = ft_strdup("cat");
+    // tmp->cmd_arr[1] = NULL;
+    // tmp->cmd_path = ft_strdup("/usr/bin/cat");
+    // tmp->input = NULL;
+    // tmp->output = NULL;
+    // tmp->exit_status = 0;
+
+    // tmp->next = malloc(sizeof(t_cmd));
+    // if (!tmp->next)
+    // {
+    //     /* error */
+    // }
+    // tmp = tmp->next;
+
+    // tmp->cmd_arr = malloc(sizeof(char *) * 3);
+    // if (!tmp->cmd_arr)
+    // {
+    //     /* error */
+    // }
+    // tmp->cmd_arr[0] = ft_strdup("wc");
+    // tmp->cmd_arr[1] = ft_strdup("-l");
+    // tmp->cmd_arr[2] = NULL;
+    // tmp->cmd_path = ft_strdup("/usr/bin/wc");
+    // tmp->input = NULL;
+    // tmp->output = ft_strdup("output.txt");
+    // tmp->exit_status = 0;
     tmp->next = NULL;
 
     env = malloc(sizeof(t_env));

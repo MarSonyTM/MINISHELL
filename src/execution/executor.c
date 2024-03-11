@@ -46,16 +46,31 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
 	int	stdout_fd;
 
-	if (pipe(exec->fd) == -1)
-		exit(1);
-	exec->open_fds[i * 2] = exec->fd[0];
-	exec->open_fds[i * 2 + 1] = exec->fd[1];
+	if (cmd->next != NULL)
+	{
+		if (pipe(exec->fd) == -1)
+			exit(1);
+		exec->open_fds[i * 2] = exec->fd[0];
+		exec->open_fds[i * 2 + 1] = exec->fd[1];
+	}
 	if (cmd->cmd_path == NULL) //if command is custom
 	{
+		exec->pid[i] = -1;
 		stdout_fd = dup(1);
-		duplicate_fd(exec->fd[1], 1);
+		if (cmd->output)
+			redirection(cmd->output, 1);
+		if (cmd->next != NULL)
+			duplicate_fd(exec->fd[1], 1);
 		custom_exec(cmd, env);
 		duplicate_fd(stdout_fd, 1);
+		close (stdout_fd);
+		if (cmd->next != NULL)
+		{
+			close(exec->fd[1]);
+			exec->open_fds[i * 2 + 1] = -1;
+		}
+		exec->old_fd[0] = exec->fd[0];
+		exec->old_fd[1] = exec->fd[1];
 		return ;
 	}
 	exec->pid[i] = fork();
@@ -104,10 +119,11 @@ int	executor(t_cmd *cmd, t_env **env)
 		free(exec.status);
 		clean_up(cmd, *env);
 	}
-	if (ft_strncmp(cmd->cmd_arr[0], "cd", 3) == 0) //check for cd command directly in parent
+	i = 0;
+	while (i < exec.processes * 2)
 	{
-		cd_cmd(cmd);
-		return (0);
+		exec.open_fds[i] = -1;
+		i++;
 	}
 	i = 0; //initialize i to 0, siginifies process number
 	j = exec.processes; //initialize j to number of processes
@@ -122,9 +138,12 @@ int	executor(t_cmd *cmd, t_env **env)
 	i = 0;
 	while (i < exec.processes)
 	{
-		waitpid(exec.pid[i], &exec.status[i], 0);
-		if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
-			exit(1);
+		if (exec.pid[i] != -1)
+		{
+			waitpid(exec.pid[i], &exec.status[i], 0);
+			if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
+				exit(1);
+		}
 		i++;
 	}
 	free(exec.pid);

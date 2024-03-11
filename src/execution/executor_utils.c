@@ -29,6 +29,12 @@ char	**env_to_array(t_cmd *cmd, t_env **env)
 	envp = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!envp)
 		clean_up(cmd, *env);
+	while (i < len)
+	{
+		envp[i] = ft_strdup("");
+		i++;
+	}
+	i = 0;
 	while (tmp != NULL)
 	{
 		tmp_str = ft_strjoin(tmp->key, "=");
@@ -37,6 +43,7 @@ char	**env_to_array(t_cmd *cmd, t_env **env)
 		i++;
 		tmp = tmp->next;
 	}
+	envp[i] = NULL;
 	return (envp);
 }
 
