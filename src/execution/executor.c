@@ -1,14 +1,5 @@
 #include "../../inc/minishell.h"
 
-static void	duplicate_fd(int old_fd, int new_fd)
-{
-	if (dup2(old_fd, new_fd) == -1)
-	{
-		/* error ERROR*/
-	}
-	close (old_fd);
-}
-
 static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
 	char	**envp;
@@ -33,44 +24,13 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 	}
 }
 
-/* 	Only the last custom command is being executed!
-	So, no possibility of two customs after each other.
-	It makes no sense to have a custom in the middle of a pipeline, since it takes no input.
-	But it does work! Just ignores what came before.
-	So, no need to have the read end of a pipe for a custom.
-	
-	In conclusion: custom does not read, but can write into pipe.
-	It can be at the beginning, middle or end of a pipeline. */
-
 static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
-	int	stdout_fd;
-
 	if (cmd->next != NULL)
-	{
-		if (pipe(exec->fd) == -1)
-			exit(1);
-		exec->open_fds[i * 2] = exec->fd[0];
-		exec->open_fds[i * 2 + 1] = exec->fd[1];
-	}
+		handle_pipe(cmd, exec, i);
 	if (cmd->cmd_path == NULL) //if command is custom
 	{
-		exec->pid[i] = -1;
-		stdout_fd = dup(1);
-		if (cmd->output)
-			redirection(cmd->output, 1);
-		if (cmd->next != NULL)
-			duplicate_fd(exec->fd[1], 1);
-		custom_exec(cmd, env);
-		duplicate_fd(stdout_fd, 1);
-		close (stdout_fd);
-		if (cmd->next != NULL)
-		{
-			close(exec->fd[1]);
-			exec->open_fds[i * 2 + 1] = -1;
-		}
-		exec->old_fd[0] = exec->fd[0];
-		exec->old_fd[1] = exec->fd[1];
+		handle_custom(cmd, env, exec, i);
 		return ;
 	}
 	exec->pid[i] = fork();
@@ -92,7 +52,33 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 	exec->old_fd[1] = exec->fd[1]; //set old write end of pipe to current write end of pipe
 }
 
-/* how to keep track of amount of non-custom commands? and how to wait for them? */
+static void	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
+{
+	int	i;
+
+	exec->processes = count_processes(cmd);
+	exec->old_fd[0] = -1;
+	exec->old_fd[1] = -1;
+	exec->pid = (int *)malloc(sizeof(int) * exec->processes);
+	if (!exec->pid)
+		clean_up(cmd, *env);
+	exec->status = (int *)malloc(sizeof(int) * exec->processes);
+	if (!exec->status)
+	{
+		free(exec->pid);
+		clean_up(cmd, *env);
+	}
+	exec->open_fds = (int *)malloc(sizeof(int) * exec->processes * 2);
+	if (!exec->open_fds)
+	{
+		free(exec->pid);
+		free(exec->status);
+		clean_up(cmd, *env);
+	}
+	i = 0;
+	while (i < exec->processes * 2)
+		exec->open_fds[i++] = -1;
+}
 
 int	executor(t_cmd *cmd, t_env **env)
 {
@@ -100,31 +86,7 @@ int	executor(t_cmd *cmd, t_env **env)
 	int		i;
 	int		j;
 
-	exec.processes = count_processes(cmd);
-	exec.old_fd[0] = -1;
-	exec.old_fd[1] = -1;
-	exec.pid = (int *)malloc(sizeof(int) * exec.processes);
-	if (!exec.pid)
-		clean_up(cmd, *env);
-	exec.status = (int *)malloc(sizeof(int) * exec.processes);
-	if (!exec.status)
-	{
-		free(exec.pid);
-		clean_up(cmd, *env);
-	}
-	exec.open_fds = (int *)malloc(sizeof(int) * exec.processes * 2);
-	if (!exec.open_fds)
-	{
-		free(exec.pid);
-		free(exec.status);
-		clean_up(cmd, *env);
-	}
-	i = 0;
-	while (i < exec.processes * 2)
-	{
-		exec.open_fds[i] = -1;
-		i++;
-	}
+	init_exec(&exec, cmd, env);
 	i = 0; //initialize i to 0, siginifies process number
 	j = exec.processes; //initialize j to number of processes
 	while (j > 0) //while there are still processes to execute
@@ -146,15 +108,6 @@ int	executor(t_cmd *cmd, t_env **env)
 		}
 		i++;
 	}
-	free(exec.pid);
-	free(exec.status);
-	if (exec.processes > 1)
-	{
-		close(exec.old_fd[0]);
-		exec.open_fds[(exec.processes - 1) * 2 - 2] = -1;
-		close(exec.old_fd[1]);
-		exec.open_fds[(exec.processes - 1) * 2 - 1] = -1;
-	}
-	close_fds(exec.open_fds, exec.processes);
+	close_and_free(&exec);
 	return (0);
 }

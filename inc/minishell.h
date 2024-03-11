@@ -67,11 +67,17 @@ void	export_cmd(t_cmd *cmd, t_env **env);
 /* error management */
 void	clean_up(t_cmd *cmd, t_env *env);
 void	close_fds(int *open_fds, int processes);
+void	close_and_free(t_exec *exec);
 
 /* utils */
 void	redirection(char *file, int mode);
 char	**env_to_array(t_cmd *cmd, t_env **env);
 int		get_len(t_env *env);
 int		count_processes(t_cmd *cmd);
+char	*get_key(char *cmd, int *j);
+char	*get_value(char *cmd, int *j);
+void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
+void	handle_pipe(t_cmd *cmd, t_exec *exec, int i);
+void	duplicate_fd(int old_fd, int new_fd);
 
 #endif

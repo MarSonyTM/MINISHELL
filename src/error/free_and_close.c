@@ -1,5 +1,19 @@
 #include "../../inc/minishell.h"
 
+void	close_and_free(t_exec *exec)
+{
+	free(exec->pid);
+	free(exec->status);
+	if (exec->processes > 1)
+	{
+		close(exec->old_fd[0]);
+		exec->open_fds[(exec->processes - 1) * 2 - 2] = -1;
+		close(exec->old_fd[1]);
+		exec->open_fds[(exec->processes - 1) * 2 - 1] = -1;
+	}
+	close_fds(exec->open_fds, exec->processes);	
+}
+
 void	close_fds(int *open_fds, int processes)
 {
 	int	i;

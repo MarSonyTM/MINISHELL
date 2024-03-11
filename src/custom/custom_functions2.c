@@ -1,24 +1,35 @@
 #include "../../inc/minishell.h"
 
-void	exit_cmd(t_cmd *cmd, t_env *env)
+static int	check_for_digit(char *str)
 {
 	int	i;
-	int	exit_code;
 
 	i = 0;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+		{
+			/* error ERR_ARG */
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+void	exit_cmd(t_cmd *cmd, t_env *env)
+{
+	int	exit_code;
+
 	exit_code = EXIT_SUCCESS;
 	if (cmd->cmd_arr[1] && cmd->cmd_arr[2])
 	{
 		/* error ERR_ARGS*/
 	}
-	else if (cmd->cmd_arr[1])
+	else if (cmd->cmd_arr[1] && check_for_digit(cmd->cmd_arr[1]))
 	{
-		while (cmd->cmd_arr[1][i] && ft_isdigit(cmd->cmd_arr[1][i]))
-			i++;
-		if (cmd->cmd_arr[1][i])
-		{
-			/* error ERR_ARG*/
-		}
 		exit_code = ft_atoi(cmd->cmd_arr[1]);
 		while (exit_code < 0)
 			exit_code = 256 + exit_code;

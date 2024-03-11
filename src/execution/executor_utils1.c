@@ -30,10 +30,7 @@ char	**env_to_array(t_cmd *cmd, t_env **env)
 	if (!envp)
 		clean_up(cmd, *env);
 	while (i < len)
-	{
-		envp[i] = ft_strdup("");
-		i++;
-	}
+		envp[i++] = ft_strdup("");
 	i = 0;
 	while (tmp != NULL)
 	{
@@ -47,46 +44,26 @@ char	**env_to_array(t_cmd *cmd, t_env **env)
 	return (envp);
 }
 
+static void	handle_redirect(int fd, int mode)
+{
+	if (fd == -1)
+	{
+		/* error ERR_FIL || ERR_PERM */
+	}
+	if (dup2(fd, mode) == -1)
+	{
+		/* error ERROR*/
+	}
+	close(fd);
+}
+
 void	redirection(char *file, int mode)
 {
 	int	fd;
 
 	if (mode == 0)
-	{
 		fd = open(file, O_RDONLY);
-		if (fd == -1)
-		{
-			/* error ERR_FIL*/
-		}
-		if (dup2(fd, 0) == -1)
-		{
-			/* error ERROR*/
-		}
-	}
 	else
-	{
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			/* error ERR_PERM*/
-		}
-		if (dup2(fd, 1) == -1)
-		{
-			/* error ERROR*/
-		}
-	}
-	close(fd);
-}
-
-int	count_processes(t_cmd *cmd)
-{
-	int	processes;
-
-	processes = 0;
-	while (cmd->next != NULL)
-	{
-		cmd = cmd->next;
-		processes++;
-	}
-	return (processes + 1);
+	handle_redirect(fd, mode);
 }

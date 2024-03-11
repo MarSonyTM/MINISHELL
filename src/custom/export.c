@@ -75,39 +75,28 @@ static void	concatenate_env_var(char *cmd, t_env **env, int j)
 	char	*value;
 
 	if (ft_strchr(cmd, ':') == NULL)
-		add_empty_env_var(cmd, env);
-	while (cmd[j] && cmd[j] != '=')
-		j++;
-	key = ft_substr(cmd, 0, j);
-	j = j + 2;
-	if (ft_strncmp(cmd + j, (*env)->key, ft_strlen((*env)->key)))
 	{
-		/* error ERR_ARG*/
+		add_empty_env_var(cmd, env);
+		return ;
+	}
+	key = get_key(cmd, &j);
+	value = get_value(cmd, &j);
+	tmp = *env;
+	while (tmp != NULL && ft_strncmp(tmp->key, key, ft_strlen(key)))
+		tmp = tmp->next;
+	if (tmp)
+	{
+		tmp->value = ft_strjoin(tmp->value, value);
+		free(key);
+		free(value);
 	}
 	else
-	{
-		while (cmd[j] != ':')
-			j++;
-		value = ft_substr(cmd, j + 1, ft_strlen(cmd) - j - 1);
-		tmp = *env;
-		while (tmp != NULL)
-		{
-			if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
-			{
-				tmp->value = ft_strjoin(tmp->value, value);
-				break ;
-			}
-			tmp = tmp->next;
-		}
-		if (!tmp)
-			*env = add_env_node(env, key, value);
-	}
+		*env = add_env_node(env, key, value);
 }
 
 void	export_cmd(t_cmd *cmd, t_env **env)
 {
 	int	i;
-	int	j;
 
 	i = 1;
 	if (!cmd->cmd_arr[1]) //export command with no argument
@@ -123,11 +112,10 @@ void	export_cmd(t_cmd *cmd, t_env **env)
 	{
 		if (ft_strchr(cmd->cmd_arr[i], '='))
 		{
-			j = 0;
 			if (ft_strchr(cmd->cmd_arr[i], '$'))
-				concatenate_env_var(cmd->cmd_arr[i], env, j);
+				concatenate_env_var(cmd->cmd_arr[i], env, 0);
 			else
-				add_new_env_var(cmd->cmd_arr[i], env, j);
+				add_new_env_var(cmd->cmd_arr[i], env, 0);
 		}
 		else
 			add_empty_env_var(cmd->cmd_arr[i], env);
