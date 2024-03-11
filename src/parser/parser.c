@@ -1,5 +1,6 @@
 #include "../../inc/minishell.h"
 
+
 char *append_string(const char *str1, const char *str2) 
 {
     size_t len1 = ft_strlen(str1);
@@ -25,11 +26,21 @@ char *resolve_command_path(char *command)
     char *path = getenv("PATH"); // Get the PATH environment variable value
     char *pathCopy = ft_strdup(path); // Duplicate since strtok modifies the string
     char *dir = ft_strtok(pathCopy, ":");
+    size_t commandLen = ft_strlen(command);
 
     while (dir != NULL) 
     {
-        char *fullPath = malloc(ft_strlen(dir) + ft_strlen(command) + 2); // For '/' and '\0'
-        sprintf(fullPath, "%s/%s", dir, command);
+        size_t dirLen = ft_strlen(dir);
+        char *fullPath = malloc(dirLen + commandLen + 2); // For '/' and '\0'
+        if (fullPath == NULL) {
+            // Handle memory allocation failure
+            free(pathCopy);
+            return NULL;
+        }
+        
+        ft_strcpy(fullPath, dir);
+        fullPath[dirLen] = '/'; // Append '/'
+        ft_strcpy(fullPath + dirLen + 1, command); // Append command
         if (access(fullPath, X_OK) == 0) 
         {
             free(pathCopy);
@@ -41,7 +52,6 @@ char *resolve_command_path(char *command)
     free(pathCopy);
     return NULL; // Command not found
 }
-
 
 // Function to add a new command to the list
 t_cmd *new_cmd(t_cmd **cmd)
@@ -137,7 +147,8 @@ void parse(t_token *tokens, t_cmd **cmd)
        append_mode = 1; 
     }
 }
-        else if (current->type == TOKEN_HEREDOC) {
+        else if (current->type == TOKEN_HEREDOC) 
+        {
     // Advance to the next token and use its value as the delimiter
     current = current->next;
     if (current == NULL) {
