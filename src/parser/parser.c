@@ -63,6 +63,8 @@ t_cmd *new_cmd(t_cmd **cmd)
     new_cmd->cmd_arr = malloc(sizeof(char *) * 2); // Initial size for command + NULL
     new_cmd->cmd_arr[0] = NULL; // Initialize to NULL for safety
     new_cmd->input = NULL;
+    new_cmd->exit_status_token = NULL;
+    new_cmd->env_var = NULL;
     new_cmd->output = NULL;
     new_cmd->exit_status = 0;
     new_cmd->next = NULL;
