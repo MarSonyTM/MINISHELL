@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 17:28:03 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/02/26 13:07:08 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/03/11 13:41:33 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,12 @@
 # include <stdlib.h>
 # include <stdbool.h>
 # include <limits.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <sys/ioctl.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 1042
 # endif
 
 typedef struct s_list

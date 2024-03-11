@@ -118,11 +118,11 @@ t_token_type determine_token_type(char *token)
         return TOKEN_BUILTIN;
     }
      char *path = getenv("PATH");
-    char *pathCopy = strdup(path);
-    char *dir = strtok(pathCopy, ":");
+    char *pathCopy = ft_strdup(path);
+    char *dir = ft_strtok(pathCopy, ":");
 
     while (dir != NULL) {
-        char *fullPath = malloc(strlen(dir) + strlen(token) + 2); // For '/' and '\0'
+        char *fullPath = malloc(ft_strlen(dir) + ft_strlen(token) + 2); // For '/' and '\0'
         sprintf(fullPath, "%s/%s", dir, token);
         if (access(fullPath, X_OK) == 0) {
             free(pathCopy);
@@ -130,7 +130,7 @@ t_token_type determine_token_type(char *token)
             return TOKEN_COMMAND; // Token corresponds to an executable file
         }
         free(fullPath);
-        dir = strtok(NULL, ":");
+        dir = ft_strtok(NULL, ":");
     }
 
     free(pathCopy);

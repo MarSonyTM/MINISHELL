@@ -1,14 +1,34 @@
 #include "../../inc/minishell.h"
 
+char *append_string(const char *str1, const char *str2) 
+{
+    size_t len1 = ft_strlen(str1);
+    size_t len2 = ft_strlen(str2);
+
+    // Allocate memory for the concatenated string
+    char *result = malloc(len1 + len2 + 1);
+    if (!result)
+    {
+        // Error handling for memory allocation failure
+        return NULL;
+    }
+
+    // Copy the contents of str1 and str2 into the result buffer
+    ft_strcpy(result, str1);
+    ft_strcpy(result + len1, str2);
+
+    return result;
+}
+
 char *resolve_command_path(char *command) 
 {
     char *path = getenv("PATH"); // Get the PATH environment variable value
-    char *pathCopy = strdup(path); // Duplicate since strtok modifies the string
-    char *dir = strtok(pathCopy, ":");
+    char *pathCopy = ft_strdup(path); // Duplicate since strtok modifies the string
+    char *dir = ft_strtok(pathCopy, ":");
 
     while (dir != NULL) 
     {
-        char *fullPath = malloc(strlen(dir) + strlen(command) + 2); // For '/' and '\0'
+        char *fullPath = malloc(ft_strlen(dir) + ft_strlen(command) + 2); // For '/' and '\0'
         sprintf(fullPath, "%s/%s", dir, command);
         if (access(fullPath, X_OK) == 0) 
         {
@@ -16,7 +36,7 @@ char *resolve_command_path(char *command)
             return fullPath; // Command found
         }
         free(fullPath);
-        dir = strtok(NULL, ":");
+        dir = ft_strtok(NULL, ":");
     }
     free(pathCopy);
     return NULL; // Command not found
@@ -117,12 +137,48 @@ void parse(t_token *tokens, t_cmd **cmd)
        append_mode = 1; 
     }
 }
-        else if (current->type == TOKEN_HEREDOC && current_cmd != NULL) 
+        else if (current->type == TOKEN_HEREDOC) 
+{
+    // Advance to the next token and use its value as the delimiter
+    current = current->next;
+    if (current == NULL) 
+    {
+        printf("Error: Expected a delimiter after <<\n");
+        free_cmds(cmd);
+    // free(tokens); // CAUSES SEGFAULT
+        return;
+    }
+
+    char *delimiter = current->value; // Get the delimiter from the token value
+    char *input_buffer = NULL;
+    size_t buffer_size = 0;
+
+    // Read input line by line until the delimiter is encountered
+    while (1) 
+    {
+        printf("> ");
+        ssize_t bytes_read = getline(&input_buffer, &buffer_size, stdin);
+        if (bytes_read == -1) 
         {
-            // Handle here-document input
-            // Logic to capture input until delimiter is encountered
-            // Store captured input as command's stdin
+            // Error reading input
+            printf("Error reading input\n");
+            free_cmds(cmd);
+            free(input_buffer);
+            free(tokens);
+            return;
         }
+
+        // Strip newline from input_buffer
+        input_buffer[strcspn(input_buffer, "\n")] = 0;
+
+        if (ft_strcmp(input_buffer, delimiter) == 0) 
+        {
+            // Delimiter encountered, stop reading input
+            break;
+        }
+    }
+    free(input_buffer); // Free the input buffer
+}
         else if (current->type == TOKEN_COMMA)
         {
             // Handle comma based on shell's syntax rules
