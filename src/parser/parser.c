@@ -137,48 +137,42 @@ void parse(t_token *tokens, t_cmd **cmd)
        append_mode = 1; 
     }
 }
-        else if (current->type == TOKEN_HEREDOC) 
-{
+        else if (current->type == TOKEN_HEREDOC) {
     // Advance to the next token and use its value as the delimiter
     current = current->next;
-    if (current == NULL) 
-    {
+    if (current == NULL) {
         printf("Error: Expected a delimiter after <<\n");
         free_cmds(cmd);
-    // free(tokens); // CAUSES SEGFAULT
         return;
     }
 
     char *delimiter = current->value; // Get the delimiter from the token value
     char *input_buffer = NULL;
-    size_t buffer_size = 0;
 
     // Read input line by line until the delimiter is encountered
-    while (1) 
-    {
+    while (1) {
         printf("> ");
-        ssize_t bytes_read = getline(&input_buffer, &buffer_size, stdin);
-        if (bytes_read == -1) 
-        {
+        // Read input using readline
+        input_buffer = readline(NULL);
+        if (!input_buffer) {
             // Error reading input
             printf("Error reading input\n");
             free_cmds(cmd);
-            free(input_buffer);
-            free(tokens);
             return;
         }
 
         // Strip newline from input_buffer
-        input_buffer[strcspn(input_buffer, "\n")] = 0;
+        input_buffer[strcspn(input_buffer, "\n")] = '\0';
 
-        if (ft_strcmp(input_buffer, delimiter) == 0) 
-        {
+        if (strcmp(input_buffer, delimiter) == 0) {
             // Delimiter encountered, stop reading input
+            free(input_buffer);
             break;
         }
+        free(input_buffer); // Free the input buffer
     }
-    free(input_buffer); // Free the input buffer
 }
+
         else if (current->type == TOKEN_COMMA)
         {
             // Handle comma based on shell's syntax rules
