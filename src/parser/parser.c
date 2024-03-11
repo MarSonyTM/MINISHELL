@@ -223,9 +223,8 @@ void parse(t_token *tokens, t_cmd **cmd)
         free(tokens);
         return;
     }
-
     // Reset argument count for the new command
     arg_count = 1;
 }
 	}
-}
+} 
