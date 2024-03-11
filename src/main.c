@@ -132,8 +132,6 @@ int main(int argc, char **argv)
         t_cmd *cmd = NULL; // Initialize commands
         parse(tokens, &cmd); // Parse the tokens into commands
         print_commands(cmd); // Print the commands
-   
-
         // Free the tokens and commands
         free_tokens(&tokens);
         free(input);

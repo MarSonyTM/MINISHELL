@@ -57,6 +57,8 @@ typedef struct s_cmd
 {
     char            *cmd_path; //for execve, else NULL
     char            **cmd_arr; //holds flags and arguments
+    char            *env_var; //for env var expansion, else NULL
+    char            *exit_status_token; //for exit status expansion, else NULL
     char            *input; //for input redirection, else NULL
     char            *output; //for output redirection, else NULL
     int             exit_status;

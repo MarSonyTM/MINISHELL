@@ -184,12 +184,28 @@ void parse(t_token *tokens, t_cmd **cmd)
         free(input_buffer); // Free the input buffer
     }
 }
-
         else if (current->type == TOKEN_COMMA)
+{
+    // Handle commas by treating them as part of the input
+    // You can choose to ignore them or include them as part of arguments
+    // For simplicity, let's assume we include them as part of arguments
+    if (current_cmd != NULL  ) 
+    {
+        arg_count++;
+        current_cmd->cmd_arr = realloc(current_cmd->cmd_arr, sizeof(char *) * (arg_count + 1)); // Resize for new arg
+        if (!current_cmd->cmd_arr) 
         {
-            // Handle comma based on shell's syntax rules
-            // Parse or ignore based on the role of commas in the shell
+            // Handle realloc failure
+            printf("Error: Memory allocation failed\n");
+            free_cmds(cmd);
+            free(tokens);    
+            return ;
+            // Clean up and exit or return an error
         }
+        current_cmd->cmd_arr[arg_count - 1] = ft_strdup(",");
+        current_cmd->cmd_arr[arg_count] = NULL; // NULL terminate the array
+    } 
+}
         else if (current->type == TOKEN_ENV_VAR || current->type == TOKEN_EXIT_STATUS)
         {
             // Mark these tokens for later expansion
