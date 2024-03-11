@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 17:28:03 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/03/11 13:41:33 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/03/11 14:21:08 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,6 @@ char			*ft_strtok(char *str, const char *delim);
 char			*ft_strcat(char *dest, const char *src);
 char			*ft_strcpy(char *dest, const char *src);
 int				ft_strcmp(const char *s1, const char *s2);
+size_t			ft_strcspn(const char *s, const char *reject);
 
 #endif

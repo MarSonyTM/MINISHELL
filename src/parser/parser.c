@@ -150,7 +150,8 @@ void parse(t_token *tokens, t_cmd **cmd)
     char *input_buffer = NULL;
 
     // Read input line by line until the delimiter is encountered
-    while (1) {
+    while (1) 
+    {
         printf("> ");
         // Read input using readline
         input_buffer = readline(NULL);
@@ -162,9 +163,9 @@ void parse(t_token *tokens, t_cmd **cmd)
         }
 
         // Strip newline from input_buffer
-        input_buffer[strcspn(input_buffer, "\n")] = '\0';
+        input_buffer[ft_strcspn(input_buffer, "\n")] = '\0';
 
-        if (strcmp(input_buffer, delimiter) == 0) {
+        if (ft_strcmp(input_buffer, delimiter) == 0) {
             // Delimiter encountered, stop reading input
             free(input_buffer);
             break;
