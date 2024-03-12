@@ -31,28 +31,23 @@ void lexer(char *input, t_token **tokens)
             if (inQuote == 0) 
             { // Starting a quote
                 if (currentChar == '\'') 
-                {
                     inQuote = 1;
-                } 
                 else 
-                {
                     inQuote = 2;
-                }
+                
             } 
-            else if ((inQuote == 1 && currentChar == '\'') || (inQuote == 2 && currentChar == '\"')) {
+            else if ((inQuote == 1 && currentChar == '\'') || (inQuote == 2 && currentChar == '\"'))
                 // Ending a quote
                 inQuote = 0;
-            } 
             else 
-            {
                 // Inside quotes, treat as part of the token
                 buffer[bufIndex++] = currentChar;
-            }
         } 
         else if (currentChar == ',' && inQuote == 0) 
         {
             // Commas outside of quotes are treated as separate tokens
-            if (bufIndex > 0) {
+            if (bufIndex > 0) 
+            {
                 // Add the current token before the comma
                 buffer[bufIndex] = '\0';
                 add_token(tokens, determine_token_type(buffer), ft_strdup(buffer));
@@ -65,7 +60,8 @@ void lexer(char *input, t_token **tokens)
          {
             // Check if the next character is not '<' and not in a quote
             // This indicates a redirect in token
-            if (bufIndex > 0) {
+            if (bufIndex > 0) 
+            {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
                 add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
@@ -77,7 +73,8 @@ void lexer(char *input, t_token **tokens)
         {
             // Check if the next character is not '>' and not in a quote
             // This indicates a redirect out token
-            if (bufIndex > 0) {
+            if (bufIndex > 0)
+            {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
                 add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
@@ -114,10 +111,8 @@ void lexer(char *input, t_token **tokens)
             i++; // Move past the second '>'
         }
         else
-        {
             // Regular character, add to the buffer
             buffer[bufIndex++] = currentChar;
-        }
         i++;
     }
     // Check if there's a token at the end of the input
@@ -197,10 +192,8 @@ while (dir != NULL)
 
     // Append '/' if the directory path doesn't end with '/'
     if (fullPath[ft_strlen(fullPath) - 1] != '/')
-    {
         ft_strcat(fullPath, "/");
-    }
-
+    
     // Append the token to fullPath
     ft_strcat(fullPath, token);
 
