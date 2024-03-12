@@ -6,7 +6,7 @@
 #    By: csturm <csturm@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/03/12 15:32:44 by csturm           ###   ########.fr        #
+#    Updated: 2024/03/12 16:20:57 by csturm           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ $(LIBFT):
 	@echo "$(COLOR_BLUE)Compiling libft$(COLOR_WHITE)"
 	@$(MAKE) -C $(LIBFT_PATH)
 
+
 # Cleaning Up Object Files
 clean:
 	@echo "$(COLOR_RED)Removing object files and directory...$(COLOR_WHITE)"
@@ -80,4 +81,6 @@ fclean: clean
 re: fclean all
 
 # Phony Targets
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re valgrind
+
+ 

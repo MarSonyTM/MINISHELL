@@ -1,11 +1,14 @@
- #include "../inc/minishell.h"
+#include "../inc/minishell.h"
+#include <stdio.h>
 
 /* int main(void)
 {
-    char *input;
+    if (argc != 1 || argv[1])
+        exit(printf("This program takes no arguments\n"));
+
     while (1)
     {
-        input = readline(PROMPT);
+        char *input = readline(PROMPT);
         if (!input)
             break ;
         if (*input)
@@ -81,4 +84,3 @@ int main (int argc, char **argv, char **envp)
 
     return (0);
 }
- 
