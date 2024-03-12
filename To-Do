@@ -1,0 +1,11 @@
+Still to do:
+
+- naming of output files
+    --> example: calling pwd > output.txt results in file that is named >, but has the correct content
+- several output files possible
+    --> example: > file1 > file2 > file3 should create empty file1 and file2 and filled file3
+    --> maybe array of output files
+- exit after one loop if non-custom command
+- signals
+- echo $?
+- error management

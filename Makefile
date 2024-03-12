@@ -6,7 +6,7 @@
 #    By: csturm <csturm@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/03/12 16:20:57 by csturm           ###   ########.fr        #
+#    Updated: 2024/03/12 17:30:38 by csturm           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,11 @@ SOURCES_PATH := src/
 LIBFT_PATH := libft/
 
 # Source and Object Files
-SOURCE_FILES := main.c custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
+
+SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c parser/parser.c custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
 				custom/export.c error/free_and_close.c execution/executor.c execution/executor_utils1.c \
-				env/arr_to_linked_list.c execution/executor_utils2.c #... (add your Minishell source files)
+				env/arr_to_linked_list.c execution/executor_utils2.c
+
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)
 LIBFT := $(LIBFT_PATH)libft.a
 
@@ -43,8 +45,7 @@ $(NAME): $(LIBFT) $(OBJECTS)
 	@echo "$(COLOR_YELLOW)Building $(NAME)$(COLOR_WHITE)"
 	@$(COMPILER) $(FLAGS) $(OBJECTS) -L$(LIBFT_PATH) -lft -lreadline -o $(NAME)
 	@echo "$(COLOR_GREEN)$(NAME) compiled successfully.$(COLOR_WHITE)"
-	@sleep 1
-	@clear
+	 
 
 # Compiling Source Files
 $(OBJECTS_PATH)%.o: $(SOURCES_PATH)%.c

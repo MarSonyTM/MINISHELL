@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 17:28:03 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/02/21 11:51:30 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/03/12 17:38:16 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,14 @@ typedef struct s_list
 }	t_list;
 
 t_list			*ft_lstnew(int content);
+int 			ft_strcmp(const char *s1, const char *s2);
 int				ft_lstsize(t_list *head);
 void			ft_lstadd_front(t_list **stack, t_list *newnode);
 void			ft_lstadd_back(t_list	**stack, t_list *newnode);
 t_list			*ft_lstlast(t_list *head);
 char			*ft_itoa_base(int n, int base);
+char 			*ft_strcpy(char *dest, const char *src);
+char 			*ft_strcat(char *dest, const char *src);
 int				ft_atoi_base(const char *str, int base);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
@@ -49,6 +52,7 @@ int				ft_isprint(int c);
 int				ft_toupper(int c);
 int				ft_tolower(int c);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
+size_t			ft_strcspn(const char *s, const char *reject);
 unsigned long	ft_strlen(const char *s);
 char			*ft_strchr(const char *s, int c);
 char			*ft_strrchr(const char *s, int c);
