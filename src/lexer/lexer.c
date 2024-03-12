@@ -4,7 +4,7 @@ void lexer(char *input, t_token **tokens) // takes in a string and a pointer to 
 {
     int i = 0; // Index for input string
     char currentChar; // Current character being processed
-    char *buffer = malloc((strlen(input) + 1) * sizeof(char));
+    char *buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
     if (buffer == NULL) 
     {
         // Handle memory allocation error
@@ -23,7 +23,7 @@ void lexer(char *input, t_token **tokens) // takes in a string and a pointer to 
             if (bufIndex > 0) // If there's a token in the buffer
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                add_token(tokens, determine_token_type(buffer), strdup(buffer)); // Add the token
+                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
             }
         } 
@@ -50,11 +50,11 @@ void lexer(char *input, t_token **tokens) // takes in a string and a pointer to 
             {
                 // Add the current token before the comma
                 buffer[bufIndex] = '\0';
-                add_token(tokens, determine_token_type(buffer), strdup(buffer));
+                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer));
                 bufIndex = 0;
             }
             // Add the comma as a separate token
-            add_token(tokens, TOKEN_COMMA, strdup(","));
+            add_token(tokens, TOKEN_COMMA, ft_strdup(","));
         } 
         else 
         {
@@ -74,7 +74,7 @@ void lexer(char *input, t_token **tokens) // takes in a string and a pointer to 
         else 
         {
             buffer[bufIndex] = '\0'; // Null-terminate the current token
-            add_token(tokens, determine_token_type(buffer), strdup(buffer)); // Add the token
+            add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
         }
     }
     else if (inQuote != 0 && !quote_error) 
