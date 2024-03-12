@@ -50,7 +50,9 @@ void free_cmds(t_cmd **cmd)
 
 int main(int argc, char **argv, char **envp)
 {
-	(void)envp; // Silence the unused parameter
+	t_env *env;
+
+	env = arr_to_linked_list(envp);
     if (argc > 1 || argv[1] != NULL)
         exit(printf("This program takes no arguments\n"));
 

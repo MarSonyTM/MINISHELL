@@ -10,8 +10,16 @@
 # include <fcntl.h>
 
 #define PROMPT "minishell> "
-#define SYNTAX_ERROR  2
-#define CMD_NOT_FOUND 127
+
+/* error messages */
+# define ERROR "Error"
+# define ERR_FIL "No such file or directory"
+# define ERR_CMD "Command not found"
+# define ERR_PERM "Permission denied"
+# define ERR_INT "Interrupted system call"
+# define ERR_ARG "Invalid argument"
+# define ERR_ARGS "Arg list too long"
+# define ERR_ADDR "Bad address"
 
 /* holds information of each separate token */
 
@@ -66,6 +74,18 @@ typedef struct s_cmd
     struct s_cmd    *next;
 }   t_cmd;
 
+/* just reduces variables in execution */
+typedef struct s_exec
+{
+	int	fd[2];
+	int	old_fd[2];
+	int	processes;
+	int	*pid;
+	int	*status;
+	int	*open_fds;
+	int	non_customs;
+}	t_exec;
+
 /*Functions prototypes for Lexer*/
 
 void	lexer(char *input, t_token **tokens);
@@ -77,5 +97,38 @@ t_token_type determine_token_type(char *token);
 
 void parse(t_token *tokens, t_cmd **cmd);
 void free_cmds(t_cmd **cmd);
+
+
+/*Functions prototypes for Execution*/
+
+void	custom_exec(t_cmd *cmd, t_env **env);
+int		executor(t_cmd *cmd, t_env **env);
+t_env	*arr_to_linked_list(char **envp);
+
+/* customs */
+void	echo_cmd(t_cmd *cmd);
+void	cd_cmd(t_cmd *cmd);
+void	pwd_cmd(void);
+void	env_cmd(t_cmd *cmd, t_env *env);
+void	unset_cmd(t_cmd *cmd, t_env **env);
+void	exit_cmd(t_cmd *cmd, t_env *env);
+void	export_cmd(t_cmd *cmd, t_env **env);
+
+/* error management */
+void	clean_up(t_cmd *cmd, t_env *env);
+void	close_fds(int *open_fds, int processes);
+void	close_and_free(t_exec *exec);
+
+/* utils */
+void	redirection(char *file, int mode);
+char	**env_to_array(t_cmd *cmd, t_env **env);
+int		get_len(t_env *env);
+int		count_processes(t_cmd *cmd);
+char	*get_key(char *cmd, int *j);
+char	*get_value(char *cmd, int *j);
+char	*get_value_concat(char *cmd, int *j);
+void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
+void	handle_pipe(t_exec *exec, int i);
+void	duplicate_fd(int old_fd, int new_fd);
 
 #endif
