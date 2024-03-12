@@ -45,10 +45,10 @@ char *resolve_command_path(char *command)
             free(pathCopy);
             return fullPath; // Command found
         }
-        free(fullPath);
+        free(fullPath); // Free the allocated memory for fullPath
         dir = ft_strtok(NULL, ":");
     }
-    free(pathCopy);
+    free(pathCopy);  
     return NULL; // Command not found
 }
 
@@ -150,48 +150,67 @@ void parse(t_token *tokens, t_cmd **cmd)
 			}
 		}
 		else if (current->type == TOKEN_HEREDOC) 
-		{
-			// Advance to the next token and use its value as the delimiter
-			current = current->next;
-			if (current == NULL) {
-				printf("Error: Expected a delimiter after <<\n");
-				free_cmds(cmd);
-				return;
-			}
+{
+    // Advance to the next token and use its value as the delimiter
+    current = current->next;
+    if (current == NULL) 
+    {
+        printf("Error: Expected a delimiter after <<\n");
+        free_cmds(cmd);
+        return;
+    }
 
-			char *delimiter = current->value; // Get the delimiter from the token value
-			char *input_buffer = NULL;
+    char *delimiter = current->value; // Get the delimiter from the token value
+    char *input_buffer = NULL;
+    char *heredoc_input = NULL;
 
-			// Read input line by line until the delimiter is encountered
-			while (1) 
-			{
-				printf("> ");
-				// Read input using readline
-				input_buffer = readline(NULL);
-				if (!input_buffer) {
-					// Error reading input
-					printf("Error reading input\n");
-					free_cmds(cmd);
-					return;
-				}
+    // Read input line by line until the delimiter is encountered
+    while (1) 
+    {
+        printf("> ");
+        // Read input using readline
+        input_buffer = readline(NULL);
+        if (!input_buffer) 
+        {
+            // Error reading input
+            printf("Error reading input\n");
+            free_cmds(cmd);
+            return;
+        }
+        // Strip newline from input_buffer
+        input_buffer[ft_strcspn(input_buffer, "\n")] = '\0';
 
-				// Strip newline from input_buffer
-				input_buffer[ft_strcspn(input_buffer, "\n")] = '\0';
-
-				if (ft_strcmp(input_buffer, delimiter) == 0) 
-				{
-					// Delimiter encountered, stop reading input
-					free(input_buffer);
-					break;
-				}
-				free(input_buffer); // Free the input buffer
-			}
-		}
+        if (ft_strcmp(input_buffer, delimiter) == 0) 
+        {
+            // Delimiter encountered, stop reading input
+            free(input_buffer);
+            break;
+        }
+        // Concatenate the input to heredoc_input
+        if (heredoc_input == NULL) 
+        {
+            heredoc_input = ft_strdup(input_buffer);
+        } 
+        else 
+        {
+            char *tmp = ft_strjoin(heredoc_input, "\n");
+            free(heredoc_input);
+            heredoc_input = ft_strjoin(tmp, input_buffer);
+            free(tmp);
+        }
+        free(input_buffer); // Free the input buffer
+    }
+    // Store the input in the command structure
+    if (current_cmd != NULL) 
+    {
+        current_cmd->input = heredoc_input;
+    }
+	printf("heredoc_input: %s\n", heredoc_input); // Debugging
+}
 		else if (current->type == TOKEN_COMMA)
 		{
 			// Handle commas by treating them as part of the input
-			// For simplicity, let's assume we include them as part of arguments
-			if (current_cmd != NULL  ) 
+			if (current_cmd != NULL) 
 			{
 				arg_count++;
 				current_cmd->cmd_arr = realloc(current_cmd->cmd_arr, sizeof(char *) * (arg_count + 1)); // Resize for new arg
@@ -209,10 +228,22 @@ void parse(t_token *tokens, t_cmd **cmd)
 			} 
 		}
 		else if (current->type == TOKEN_ENV_VAR || current->type == TOKEN_EXIT_STATUS)
-		{
-			// Mark these tokens for later expansion
-			// Process them during expansion or execution phases
-		}
+{
+    // Mark these tokens for later expansion
+    if (current_cmd != NULL)
+    {
+        if (current->type == TOKEN_ENV_VAR)
+        {
+            current_cmd->env_var = ft_strdup(current->value);
+			printf("Parser env_var: %s\n", current_cmd->env_var);
+        }
+        else if (current->type == TOKEN_EXIT_STATUS)
+        {
+            current_cmd->exit_status_token = ft_strdup(current->value);
+			printf("Parser exit_status_token: %s\n", current_cmd->exit_status_token);
+        }
+    }
+}
 		else if (current->type == TOKEN_PIPE)
 		{
 			// Advance to the next token and use its value as the command for the new command structure
@@ -244,7 +275,6 @@ void parse(t_token *tokens, t_cmd **cmd)
 			// Reset argument count for the new command
 			arg_count = 1;
 		}
-
 		current = current->next;
 	}
 } 
