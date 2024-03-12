@@ -156,7 +156,7 @@ void parse(t_token *tokens, t_cmd **cmd)
     {
         printf("Error: Expected a delimiter after <<\n");
         free_cmds(cmd);
-        return;
+        return ;
     }
 
     char *delimiter = current->value; // Get the delimiter from the token value
