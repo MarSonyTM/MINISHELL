@@ -54,6 +54,7 @@ typedef struct s_exec
 
 void	custom_exec(t_cmd *cmd, t_env **env);
 int		executor(t_cmd *cmd, t_env **env);
+t_env	*arr_to_linked_list(char **envp);
 
 /* customs */
 void	echo_cmd(t_cmd *cmd);
@@ -76,8 +77,9 @@ int		get_len(t_env *env);
 int		count_processes(t_cmd *cmd);
 char	*get_key(char *cmd, int *j);
 char	*get_value(char *cmd, int *j);
+char	*get_value_concat(char *cmd, int *j);
 void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
-void	handle_pipe(t_cmd *cmd, t_exec *exec, int i);
+void	handle_pipe(t_exec *exec, int i);
 void	duplicate_fd(int old_fd, int new_fd);
 
 #endif

@@ -13,6 +13,7 @@ void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i)
 {
 	int	stdout_fd;
 
+	exec->pid[i] = -1;
 	stdout_fd = dup(1);
 	if (cmd->output)
 		redirection(cmd->output, 1);
@@ -30,7 +31,7 @@ void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i)
 	exec->old_fd[1] = exec->fd[1];
 }
 
-void	handle_pipe(t_cmd *cmd, t_exec *exec, int i)
+void	handle_pipe(t_exec *exec, int i)
 {
 	if (pipe(exec->fd) == -1)
 	{

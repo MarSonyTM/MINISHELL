@@ -29,10 +29,10 @@ static void	add_empty_env_var(char *cmd, t_env **env)
 	tmp = *env;
 	while (tmp != NULL)
 	{
-		if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
+		if (!ft_strncmp(tmp->key, key, ft_strlen(key) + 1))
 		{
-			free(tmp->key);
 			free(tmp->value);
+			tmp->value = value;
 			break ;
 		}
 		tmp = tmp->next;
@@ -76,11 +76,12 @@ static void	concatenate_env_var(char *cmd, t_env **env, int j)
 
 	if (ft_strchr(cmd, ':') == NULL)
 	{
-		add_empty_env_var(cmd, env);
+		key = get_key(cmd, &j);
+		add_empty_env_var(key, env);
 		return ;
 	}
 	key = get_key(cmd, &j);
-	value = get_value(cmd, &j);
+	value = get_value_concat(cmd, &j);
 	tmp = *env;
 	while (tmp != NULL && ft_strncmp(tmp->key, key, ft_strlen(key)))
 		tmp = tmp->next;

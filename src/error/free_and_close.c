@@ -77,5 +77,5 @@ void	clean_up(t_cmd *cmd, t_env *env)
 		free(env_tmp->value);
 		free(env_tmp);
 	}
-	exit(exit_status);
+	// exit(exit_status);
 }

@@ -27,7 +27,7 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
 	if (cmd->next != NULL)
-		handle_pipe(cmd, exec, i);
+		handle_pipe(exec, i);
 	if (cmd->cmd_path == NULL) //if command is custom
 	{
 		handle_custom(cmd, env, exec, i);
