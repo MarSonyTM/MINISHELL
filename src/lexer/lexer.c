@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-void lexer(char *input, t_token **tokens) // takes in a string and a pointer to a pointer to a token
+void lexer(char *input, t_token **tokens) 
 {
     int i = 0; // Index for input string
     char currentChar; // Current character being processed
@@ -9,31 +9,29 @@ void lexer(char *input, t_token **tokens) // takes in a string and a pointer to 
     {
         // Handle memory allocation error
         printf("Error: Failed to allocate memory for buffer\n");
-        return ;
+        return;
     }
     int bufIndex = 0; // Index for buffer
     int inQuote = 0; // 0: no quote, 1: single quote, 2: double quote
     bool quote_error = false; // Track if there's an unclosed quote error
 
-    while ((currentChar = input[i]) != '\0' && !quote_error)
+    while ((currentChar = input[i]) != '\0' && !quote_error) 
     {
-        if ((currentChar == ' ' || currentChar == '\t' || currentChar == '\n') && inQuote == 0) // Whitespace , outside of quotes
-        {
-            // End of a token
-            if (bufIndex > 0) // If there's a token in the buffer
+        if ((currentChar == ' ' || currentChar == '\t' || currentChar == '\n') && inQuote == 0) {
+            // Whitespace, outside of quotes
+            if (bufIndex > 0) 
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
                 add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
             }
-        } 
-        else if (currentChar == '\'' || currentChar == '\"') // Quote handling
+        } else if (currentChar == '\'' || currentChar == '\"') 
         {
-            if (inQuote == 0) { // Starting a quote
+            // Quote handling
+            if (inQuote == 0) 
+            { // Starting a quote
                 inQuote = (currentChar == '\'') ? 1 : 2;
-            } 
-            else if ((inQuote == 1 && currentChar == '\'') || (inQuote == 2 && currentChar == '\"'))
-            {
+            } else if ((inQuote == 1 && currentChar == '\'') || (inQuote == 2 && currentChar == '\"')) {
                 // Ending a quote
                 inQuote = 0;
             } 
@@ -56,6 +54,19 @@ void lexer(char *input, t_token **tokens) // takes in a string and a pointer to 
             // Add the comma as a separate token
             add_token(tokens, TOKEN_COMMA, ft_strdup(","));
         } 
+        else if (currentChar == '<' && input[i + 1] == '<') 
+        {
+            // Check if the next character is also '<'
+            // This indicates a heredoc token
+            if (bufIndex > 0) {
+                buffer[bufIndex] = '\0'; // Null-terminate the current token
+                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
+                bufIndex = 0; // Reset buffer index for the next token
+            }
+            // Add the heredoc token
+            add_token(tokens, TOKEN_HEREDOC, ft_strdup("<<"));
+            i++; // Move past the second '<'
+        } 
         else 
         {
             // Regular character, add to the buffer
@@ -76,12 +87,11 @@ void lexer(char *input, t_token **tokens) // takes in a string and a pointer to 
             buffer[bufIndex] = '\0'; // Null-terminate the current token
             add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
         }
-    }
+    } 
     else if (inQuote != 0 && !quote_error) 
     {
         // Handle the case where the input ends while still in a quote
         printf("Error: Unclosed quote\n");
-         // Free the buffer  
         quote_error = true; // Set error to prevent adding the token
     }
     if (quote_error) 
@@ -91,6 +101,7 @@ void lexer(char *input, t_token **tokens) // takes in a string and a pointer to 
         free(buffer);
     }
 }
+
 // Placeholder for determine_token_type function
 t_token_type determine_token_type(char *token)
 {
@@ -117,7 +128,7 @@ t_token_type determine_token_type(char *token)
     {
         return TOKEN_BUILTIN;
     }
-     char *path = getenv("PATH");
+    char *path = getenv("PATH");
     char *pathCopy = ft_strdup(path);
     char *dir = ft_strtok(pathCopy, ":");
 
@@ -132,7 +143,6 @@ t_token_type determine_token_type(char *token)
         free(fullPath);
         dir = ft_strtok(NULL, ":");
     }
-
     free(pathCopy);
     return TOKEN_ARG; // Token is not an executable file
 }

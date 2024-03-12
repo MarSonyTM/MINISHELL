@@ -12,7 +12,6 @@ char *append_string(const char *str1, const char *str2)
         // Error handling for memory allocation failure
         return NULL;
     }
-
     // Copy the contents of str1 and str2 into the result buffer
     ft_strcpy(result, str1);
     ft_strcpy(result + len1, str2);
