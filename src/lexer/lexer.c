@@ -19,19 +19,19 @@ void lexer(char *input, t_token **tokens)
     {
         if ((currentChar == ' ' || currentChar == '\t' || currentChar == '\n') && inQuote == 0) {
             // Whitespace, outside of quotes
-            if (bufIndex > 0) 
-            {
+            if (bufIndex > 0) {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
                 add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
             }
-        } else if (currentChar == '\'' || currentChar == '\"') 
+        } 
+        else if (currentChar == '\'' || currentChar == '\"') 
         {
             // Quote handling
-            if (inQuote == 0) 
-            { // Starting a quote
+            if (inQuote == 0) { // Starting a quote
                 inQuote = (currentChar == '\'') ? 1 : 2;
-            } else if ((inQuote == 1 && currentChar == '\'') || (inQuote == 2 && currentChar == '\"')) {
+            } 
+            else if ((inQuote == 1 && currentChar == '\'') || (inQuote == 2 && currentChar == '\"')) {
                 // Ending a quote
                 inQuote = 0;
             } 
@@ -44,8 +44,7 @@ void lexer(char *input, t_token **tokens)
         else if (currentChar == ',' && inQuote == 0) 
         {
             // Commas outside of quotes are treated as separate tokens
-            if (bufIndex > 0) 
-            {
+            if (bufIndex > 0) {
                 // Add the current token before the comma
                 buffer[bufIndex] = '\0';
                 add_token(tokens, determine_token_type(buffer), ft_strdup(buffer));
@@ -54,9 +53,33 @@ void lexer(char *input, t_token **tokens)
             // Add the comma as a separate token
             add_token(tokens, TOKEN_COMMA, ft_strdup(","));
         } 
-        else if (currentChar == '<' && input[i + 1] == '<') 
+        else if (currentChar == '<' && input[i + 1] != '<' && inQuote == 0)
+         {
+            // Check if the next character is not '<' and not in a quote
+            // This indicates a redirect in token
+            if (bufIndex > 0) {
+                buffer[bufIndex] = '\0'; // Null-terminate the current token
+                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
+                bufIndex = 0; // Reset buffer index for the next token
+            }
+            // Add the redirect in token
+            add_token(tokens, TOKEN_REDIRECT_IN, ft_strdup("<"));
+        } 
+        else if (currentChar == '>' && input[i + 1] != '>' && inQuote == 0)
         {
-            // Check if the next character is also '<'
+            // Check if the next character is not '>' and not in a quote
+            // This indicates a redirect out token
+            if (bufIndex > 0) {
+                buffer[bufIndex] = '\0'; // Null-terminate the current token
+                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
+                bufIndex = 0; // Reset buffer index for the next token
+            }
+            // Add the redirect out token
+            add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(">"));
+        } 
+        else if (currentChar == '<' && input[i + 1] == '<' && inQuote == 0)
+        {
+            // Check if the next character is also '<' and not in a quote
             // This indicates a heredoc token
             if (bufIndex > 0) {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
@@ -67,7 +90,20 @@ void lexer(char *input, t_token **tokens)
             add_token(tokens, TOKEN_HEREDOC, ft_strdup("<<"));
             i++; // Move past the second '<'
         } 
-        else 
+        else if (currentChar == '>' && input[i + 1] == '>' && inQuote == 0)
+        {
+            // Check if the next character is also '>' and not in a quote
+            // This indicates a redirect out append token
+            if (bufIndex > 0) {
+                buffer[bufIndex] = '\0'; // Null-terminate the current token
+                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
+                bufIndex = 0; // Reset buffer index for the next token
+            }
+            // Add the redirect out append token
+            add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>"));
+            i++; // Move past the second '>'
+        }
+        else
         {
             // Regular character, add to the buffer
             buffer[bufIndex++] = currentChar;
@@ -132,10 +168,12 @@ t_token_type determine_token_type(char *token)
     char *pathCopy = ft_strdup(path);
     char *dir = ft_strtok(pathCopy, ":");
 
-    while (dir != NULL) {
+    while (dir != NULL)
+     {
         char *fullPath = malloc(ft_strlen(dir) + ft_strlen(token) + 2); // For '/' and '\0'
         sprintf(fullPath, "%s/%s", dir, token);
-        if (access(fullPath, X_OK) == 0) {
+        if (access(fullPath, X_OK) == 0) 
+        {
             free(pathCopy);
             free(fullPath);
             return TOKEN_COMMAND; // Token corresponds to an executable file
