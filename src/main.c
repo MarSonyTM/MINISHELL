@@ -63,7 +63,7 @@ int main(int argc, char **argv, char **envp)
         {
             free(input);
             printf("exit\n");
-            break ;
+            continue; ;
         }
         add_history(input);
         // check if user wants to exit
