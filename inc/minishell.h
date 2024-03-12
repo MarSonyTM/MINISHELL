@@ -78,5 +78,33 @@ t_token_type determine_token_type(char *token);
 void parse(t_token *tokens, t_cmd **cmd);
 void free_cmds(t_cmd **cmd);
 
+typedef struct s_token
+{
+    t_token_type type;
+    char *value;
+    struct s_token *next; // For linked list structure
+} t_token;
+
+/* holds information of each separate environment variable */
+typedef struct s_env
+{
+    char            *key;
+    char            *value;
+    struct s_env    *next;
+}   t_env;
+
+/* holds information of each separate command / child process */
+typedef struct s_cmd
+{
+    char            *cmd_path; //for execve, else NULL
+    char            **cmd_arr; //holds flags and arguments
+    char            *input; //for input redirection, else NULL
+    char            *output; //for output redirection, else NULL
+    int             exit_status;
+    struct s_cmd    *next;
+}   t_cmd;
+
+void lexer(char *input, t_token **tokens);
+void free_tokens(t_token **tokens);
 
 #endif

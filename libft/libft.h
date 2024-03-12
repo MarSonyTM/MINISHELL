@@ -6,7 +6,11 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 17:28:03 by mafurnic          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/03/11 14:47:54 by mafurnic         ###   ########.fr       */
+=======
+/*   Updated: 2024/02/21 11:51:30 by mafurnic         ###   ########.fr       */
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +105,12 @@ int				ft_isnum(const char *str);
 int				ft_atoi_overflow(const char *str, int *error);
 long			ft_atoi_long(const char *nptr);
 char			*ft_strtok(char *str, const char *delim);
+<<<<<<< HEAD
 char			*ft_strcat(char *dest, const char *src);
 char			*ft_strcpy(char *dest, const char *src);
 int				ft_strcmp(const char *s1, const char *s2);
 size_t			ft_strcspn(const char *s, const char *reject);
+=======
+>>>>>>> master
 
 #endif
