@@ -48,8 +48,9 @@ void free_cmds(t_cmd **cmd)
 }
 
 
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **envp)
 {
+	(void)envp; // Silence the unused parameter
     if (argc > 1 || argv[1] != NULL)
         exit(printf("This program takes no arguments\n"));
 

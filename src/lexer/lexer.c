@@ -28,8 +28,16 @@ void lexer(char *input, t_token **tokens)
         else if (currentChar == '\'' || currentChar == '\"') 
         {
             // Quote handling
-            if (inQuote == 0) { // Starting a quote
-                inQuote = (currentChar == '\'') ? 1 : 2;
+            if (inQuote == 0) 
+            { // Starting a quote
+                if (currentChar == '\'') 
+                {
+                    inQuote = 1;
+                } 
+                else 
+                {
+                    inQuote = 2;
+                }
             } 
             else if ((inQuote == 1 && currentChar == '\'') || (inQuote == 2 && currentChar == '\"')) {
                 // Ending a quote
@@ -81,7 +89,8 @@ void lexer(char *input, t_token **tokens)
         {
             // Check if the next character is also '<' and not in a quote
             // This indicates a heredoc token
-            if (bufIndex > 0) {
+            if (bufIndex > 0) 
+            {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
                 add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
@@ -94,7 +103,8 @@ void lexer(char *input, t_token **tokens)
         {
             // Check if the next character is also '>' and not in a quote
             // This indicates a redirect out append token
-            if (bufIndex > 0) {
+            if (bufIndex > 0)
+         {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
                 add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
@@ -164,24 +174,54 @@ t_token_type determine_token_type(char *token)
     {
         return TOKEN_BUILTIN;
     }
-    char *path = getenv("PATH");
-    char *pathCopy = ft_strdup(path);
-    char *dir = ft_strtok(pathCopy, ":");
+char *path = getenv("PATH");
+char *pathCopy = ft_strdup(path);
+char *dir = ft_strtok(pathCopy, ":");
 
-    while (dir != NULL)
-     {
-        char *fullPath = malloc(ft_strlen(dir) + ft_strlen(token) + 2); // For '/' and '\0'
-        sprintf(fullPath, "%s/%s", dir, token);
-        if (access(fullPath, X_OK) == 0) 
-        {
-            free(pathCopy);
-            free(fullPath);
-            return TOKEN_COMMAND; // Token corresponds to an executable file
-        }
-        free(fullPath);
-        dir = ft_strtok(NULL, ":");
+while (dir != NULL)
+{
+    // Calculate the length of the directory path, token, '/' and null terminator
+    size_t fullPathLen = ft_strlen(dir) + ft_strlen(token) + 2;
+    char *fullPath = malloc(fullPathLen);
+
+    // Check if malloc succeeded
+    if (fullPath == NULL)
+    {
+        printf("Error: Failed to allocate memory for fullPath\n");
+        free(pathCopy);
+        return TOKEN_ERROR; // Indicate an error condition
     }
-    free(pathCopy);
-    return TOKEN_ARG; // Token is not an executable file
+
+    // Copy the directory path into fullPath
+    ft_strcpy(fullPath, dir);
+
+    // Append '/' if the directory path doesn't end with '/'
+    if (fullPath[ft_strlen(fullPath) - 1] != '/')
+    {
+        ft_strcat(fullPath, "/");
+    }
+
+    // Append the token to fullPath
+    ft_strcat(fullPath, token);
+
+    // Check if the concatenated path exists and is executable
+    if (access(fullPath, X_OK) == 0) 
+    {
+        free(pathCopy);
+        free(fullPath);
+        return TOKEN_COMMAND; // Token corresponds to an executable file
+    }
+
+    // Free the memory allocated for fullPath
+    free(fullPath);
+
+    // Move to the next directory in PATH
+    dir = ft_strtok(NULL, ":");
+}
+
+// Free the memory allocated for pathCopy
+free(pathCopy);
+
+return TOKEN_ARG; // Token is not an executable file
 }
 
