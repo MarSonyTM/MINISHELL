@@ -120,7 +120,6 @@ while (i < exec.processes)
     i++;
 }
 close_and_free(&exec);
-
 // Optionally: Use the exit status of the last child process for some logic
 // For now, simply return it or ignore it
 return child_exit_status; // Or just return 0 to indicate the shell itself exits normally
