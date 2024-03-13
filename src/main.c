@@ -65,6 +65,7 @@ int main(int argc, char **argv, char **envp)
     while (1)
     {
         char *input = readline(PROMPT);
+        sleep(0);
         if (!input)
         {
             free(input);
