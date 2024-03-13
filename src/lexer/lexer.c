@@ -138,8 +138,9 @@ void lexer(char *input, t_token **tokens)
     if (quote_error) 
     {
         // Free the tokens if there was an error
-        free_tokens(tokens);
-        free(buffer);
+        // free_tokens(tokens);
+        // free(buffer);
+        return ; // Return without processing the tokens
     }
 }
 

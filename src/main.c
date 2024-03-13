@@ -59,7 +59,7 @@ int main(int argc, char **argv, char **envp)
         exit(printf("This program takes no arguments\n"));
    
      // Set up signal handlers
-    signal(SIGINT, handle_sigint);  
+    signal(SIGINT, handle_sigint);   
     signal(SIGQUIT, handle_sigquit);  
 
     while (1)
