@@ -72,13 +72,7 @@ int main(int argc, char **argv, char **envp)
             break ;
         }
         add_history(input);
-        // check if user wants to exit
-        if (ft_strcmp(input, "exit") == 0)
-        {
-            printf("exit\n");
-            free(input);
-            break;
-        }
+
         t_token *tokens = NULL; // initialize tokens 
         lexer(input, &tokens); // Tokenize the input
      
