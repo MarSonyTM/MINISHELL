@@ -148,7 +148,7 @@ void parse(t_token *tokens, t_cmd **cmd)
 				append_mode = 1; 
 			}
 		}
-		else if (current->type == TOKEN_HEREDOC) 
+else if (current->type == TOKEN_HEREDOC) 
 {
     // Advance to the next token and use its value as the delimiter
     current = current->next;
@@ -205,6 +205,7 @@ void parse(t_token *tokens, t_cmd **cmd)
         current_cmd->input = heredoc_input;
     }
 	printf("heredoc_input: %s\n", heredoc_input); // Debugging
+    
 }
 		else if (current->type == TOKEN_COMMA)
 		{

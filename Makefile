@@ -6,14 +6,14 @@
 #    By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/03/13 11:21:52 by mafurnic         ###   ########.fr        #
+#    Updated: 2024/03/13 12:49:19 by mafurnic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Project Name and Compiler Settings
 NAME := minishell
 COMPILER := cc
-FLAGS := -Wall -Wextra -Werror -g
+FLAGS := -Wall -Wextra -Werror  -g
 CLEANUP_CMD := rm -rf
 
 # Directory Paths

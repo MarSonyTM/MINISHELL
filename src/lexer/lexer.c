@@ -9,7 +9,7 @@ void lexer(char *input, t_token **tokens)
     {
         // Handle memory allocation error
         printf("Error: Failed to allocate memory for buffer\n");
-        return;
+        return ;
     }
     int bufIndex = 0; // Index for buffer
     int inQuote = 0; // 0: no quote, 1: single quote, 2: double quote
@@ -138,8 +138,8 @@ void lexer(char *input, t_token **tokens)
     if (quote_error) 
     {
         // Free the tokens if there was an error
-        // free_tokens(tokens);
-        // free(buffer);
+        //  free_tokens(tokens); //segfaults here!!!!
+         free(buffer);
         return ; // Return without processing the tokens
     }
 }
