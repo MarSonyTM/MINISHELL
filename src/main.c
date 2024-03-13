@@ -47,7 +47,6 @@ void free_cmds(t_cmd **cmd)
     *cmd = NULL;
 }
 
-
 int main(int argc, char **argv, char **envp)
 {
     
