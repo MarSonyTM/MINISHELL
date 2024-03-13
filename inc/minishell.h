@@ -131,4 +131,8 @@ void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
 void	handle_pipe(t_exec *exec, int i);
 void	duplicate_fd(int old_fd, int new_fd);
 
+/* signal management */
+void	handle_sigint(int sig);
+void	handle_sigquit(int sig);
+
 #endif

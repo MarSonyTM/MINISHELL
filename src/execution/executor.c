@@ -85,6 +85,7 @@ int	executor(t_cmd *cmd, t_env **env)
 	t_exec	exec;
 	int		i;
 	int		j;
+	int		child_exit_status;
 
 	init_exec(&exec, cmd, env);
 	i = 0; //initialize i to 0, siginifies process number
@@ -98,16 +99,29 @@ int	executor(t_cmd *cmd, t_env **env)
 			cmd = cmd->next; //move to next command
 	}
 	i = 0;
-	while (i < exec.processes)
-	{
-		if (exec.pid[i] != -1)
-		{
-			waitpid(exec.pid[i], &exec.status[i], 0);
-			if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
-				exit(1);
-		}
-		i++;
-	}
-	close_and_free(&exec);
-	return (0);
+while (i < exec.processes)
+{
+    if (exec.pid[i] != -1)
+    {
+        int status;
+        waitpid(exec.pid[i], &status, 0); // Wait for each child process to finish
+        
+        if (WIFEXITED(status))
+        {
+            // Capture the exit status of the child process
+            int exitStatus = WEXITSTATUS(status);
+            // Optionally, update the exit status for the shell to report
+            child_exit_status = exitStatus;
+            
+            // For debugging: Print the exit status of the child process
+            printf("Child process %d exited with status %d\n", exec.pid[i], exitStatus);
+        }
+    }
+    i++;
+}
+close_and_free(&exec);
+
+// Optionally: Use the exit status of the last child process for some logic
+// For now, simply return it or ignore it
+return child_exit_status; // Or just return 0 to indicate the shell itself exits normally
 }

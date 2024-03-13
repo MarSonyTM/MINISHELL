@@ -50,12 +50,17 @@ void free_cmds(t_cmd **cmd)
 
 int main(int argc, char **argv, char **envp)
 {
+    
 	t_env *env;
 
 	env = arr_to_linked_list(envp);
 	
     if (argc > 1 || argv[1] != NULL)
         exit(printf("This program takes no arguments\n"));
+   
+     // Set up signal handlers
+    signal(SIGINT, handle_sigint);  
+    signal(SIGQUIT, handle_sigquit);  
 
     while (1)
     {
@@ -136,7 +141,8 @@ int main(int argc, char **argv, char **envp)
         t_cmd *cmd = NULL; // Initialize commands
         parse(tokens, &cmd); // Parse the tokens into commands
         print_commands(cmd); // Print the commands
-		executor(cmd, &env);
+		executor(cmd, &env); // Execute the commands
+        
         // clean_up(cmd, env);          
         // Free the tokens and commands
         free_tokens(&tokens);

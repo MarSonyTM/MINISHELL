@@ -6,7 +6,7 @@
 #    By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/03/12 16:54:02 by mafurnic         ###   ########.fr        #
+#    Updated: 2024/03/13 11:21:52 by mafurnic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ LIBFT_PATH := libft/
 
 SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c parser/parser.c custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
 				custom/export.c error/free_and_close.c execution/executor.c execution/executor_utils1.c \
-				env/arr_to_linked_list.c execution/executor_utils2.c
+				env/arr_to_linked_list.c execution/executor_utils2.c /signals/signals.c \
 
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)
 LIBFT := $(LIBFT_PATH)libft.a
