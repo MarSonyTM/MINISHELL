@@ -137,7 +137,10 @@ int main(int argc, char **argv, char **envp)
         parse(tokens, &cmd); // Parse the tokens into commands
         print_commands(cmd); // Print the commands
 		executor(cmd, &env); // Execute the commands
-
+        if (strcmp(*cmd->cmd_arr, "pwd") == 0)
+        {
+            printf("\n");
+        }
         // clean_up(cmd, env);          
         // Free the tokens and commands
         free_tokens(&tokens);
