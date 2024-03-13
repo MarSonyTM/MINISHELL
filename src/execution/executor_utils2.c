@@ -41,15 +41,20 @@ void	handle_pipe(t_exec *exec, int i)
 	exec->open_fds[i * 2 + 1] = exec->fd[1];
 }
 
-int	count_processes(t_cmd *cmd)
+int count_processes(t_cmd *cmd)
 {
-	int	processes;
+    int processes = 0;
 
-	processes = 0;
-	while (cmd->next != NULL)
-	{
-		cmd = cmd->next;
-		processes++;
-	}
-	return (processes + 1);
+    while (cmd != NULL && cmd->next != NULL)
+    {
+        cmd = cmd->next;
+        processes++;
+    }
+
+    if (cmd != NULL)
+    {
+        processes++;
+    }
+
+    return processes;
 }

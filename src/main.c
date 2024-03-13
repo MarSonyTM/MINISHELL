@@ -60,7 +60,7 @@ int main(int argc, char **argv, char **envp)
    
      // Set up signal handlers
     signal(SIGINT, handle_sigint);   
-    signal(SIGQUIT, handle_sigquit);  
+    signal(SIGQUIT, handle_sigquit); 
 
     while (1)
     {
