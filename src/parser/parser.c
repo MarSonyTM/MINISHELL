@@ -134,23 +134,29 @@ void parse(t_token *tokens, t_cmd **cmd)
 		{
 			current_cmd->input = ft_strdup(current->value);
 		} 
-		else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_DOUBLE_REDIRECT_OUT) 
+		else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_REDIRECT_OUT_APPEND) 
 {
     // Store the current token type before moving to the next token
     int current_type = current->type;
 
     current = current->next;
-    if (current == NULL) 
-    {
+    
+if (current == NULL || current->value == NULL) 
+{
+    if (current_type == TOKEN_REDIRECT_OUT_APPEND) 
+        printf("Error: Expected a file after >>\n");
+    else 
         printf("Error: Expected a file after >\n");
-        free_cmds(cmd);
-        return ;
-    }
+    
+    free_cmds(cmd);
+    return ;
+}
     if (current_cmd != NULL) 
     {
         // If it was a double redirection out, set the redirection_append field
-        if (current_type == TOKEN_DOUBLE_REDIRECT_OUT) 
+        if (current_type == TOKEN_REDIRECT_OUT_APPEND) 
         {
+            // Set the output file for the command
             current_cmd->redirection_append = ft_strdup(current->value);
         }
         else // It was a single redirection out
