@@ -137,6 +137,13 @@ void parse(t_token *tokens, t_cmd **cmd)
 		} 
 		else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_DOUBLE_REDIRECT_OUT) 
 		{
+            current = current->next;
+            if (current == NULL) 
+            {
+                printf("Error: Expected a file after >\n");
+                free_cmds(cmd);
+                return ;
+            }
 			if (current_cmd != NULL) 
 			{
 				// Set the output file for the command
