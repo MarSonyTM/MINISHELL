@@ -144,7 +144,6 @@ void parse(t_token *tokens, t_cmd **cmd)
     {
         printf("Error: Expected a file after >\n");
         free_cmds(cmd);
-        free(tokens);
         return ;
     }
     if (current_cmd != NULL) 
