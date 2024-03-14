@@ -39,7 +39,7 @@ void free_cmds(t_cmd **cmd)
             free(temp->cmd_arr[i]);
             i++;
         }
-        // Free input and output redirection
+        // Free input and output redirection 
         free(temp->input);
         free(temp->output);
         // Free the command structure itself
@@ -49,6 +49,15 @@ void free_cmds(t_cmd **cmd)
     *cmd = NULL;  
 }
 
+static void reset_cmd(t_cmd *cmd) 
+{
+    while (cmd != NULL) {
+        cmd->input = NULL;
+        cmd->output = NULL;
+        cmd->redirection_append = NULL;
+        cmd = cmd->next;
+    }
+}
 
 int main(int argc, char **argv, char **envp)
 {
@@ -143,6 +152,7 @@ int main(int argc, char **argv, char **envp)
         expand_env_vars(cmd); // Expand environment variables
         print_commands(cmd); // Print the commands
 		executor(cmd, &env); // Execute the commands
+        reset_cmd(cmd); // Reset the commands
         // clean_up(cmd, env);          
         // Free the tokens and commands
         free_tokens(&tokens);
