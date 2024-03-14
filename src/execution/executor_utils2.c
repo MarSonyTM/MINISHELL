@@ -17,6 +17,8 @@ void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i)
 	stdout_fd = dup(1);
 	if (cmd->output)
 		redirection(cmd->output, 1);
+	else if (cmd->redirection_append)
+		redirection(cmd->redirection_append, 2);
 	if (cmd->next != NULL)
 		duplicate_fd(exec->fd[1], 1);
 	custom_exec(cmd, env);

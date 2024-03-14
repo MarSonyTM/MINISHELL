@@ -46,7 +46,7 @@ void free_cmds(t_cmd **cmd)
         free(temp);
     }
     // Set the pointer to NULL after freeing all commands
-    *cmd = NULL;
+    *cmd = NULL;  
 }
 
 

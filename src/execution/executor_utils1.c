@@ -1,4 +1,5 @@
 #include "../../inc/minishell.h"
+#include <unistd.h>
 
 int	get_len(t_env *env)
 {
@@ -50,9 +51,19 @@ static void	handle_redirect(int fd, int mode)
 	{
 		/* error ERR_FIL || ERR_PERM */
 	}
-	if (dup2(fd, mode) == -1)
+	if (mode == 0)
 	{
-		/* error ERROR*/
+		if (dup2(fd, 0) == -1)
+		{
+			/* error ERROR*/
+		}
+	}
+	else 
+	{
+		if (dup2(fd, 1) == -1)
+		{
+			/* error ERROR*/
+		}
 	}
 	close(fd);
 }
@@ -63,9 +74,10 @@ void	redirection(char *file, int mode)
 
 	if (mode == 0)
 		fd = open(file, O_RDONLY);
-	if (mode == 2)
-		fd = open(file, O_WRONLY | O_APPEND, 0644);
+	else if (mode == 2)
+		fd = open(file, O_WRONLY  | O_CREAT | O_APPEND, 0644);
 	else
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	
 	handle_redirect(fd, mode);
 }
