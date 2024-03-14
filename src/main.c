@@ -16,7 +16,9 @@ void print_commands(t_cmd *cmd)
             printf("PARSER: Input Redirection: %s\n", current_cmd->input);
         if (current_cmd->output != NULL)
             printf("PARSER: Output Redirection: %s\n", current_cmd->output);
-        current_cmd = current_cmd->next; // Move to the next command
+        if (current_cmd->redirection_append != NULL)
+            printf("PARSER: Output Redirection Append: %s\n", current_cmd->redirection_append);
+        current_cmd = current_cmd->next; // Move to the next commandr
         i = 1; // Reset argument index for the next command
     }
 }
@@ -100,9 +102,6 @@ int main(int argc, char **argv, char **envp)
                     break;
                 case TOKEN_REDIRECT_OUT:
                     type_str = "Output Redirection";
-                    break;
-                case TOKEN_DOUBLE_REDIRECT_OUT:
-                    type_str = "Double Output Redirection";
                     break;
                 case TOKEN_QUOTE:
                     type_str = "Single Quote";

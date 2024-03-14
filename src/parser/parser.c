@@ -147,7 +147,6 @@ if (current == NULL || current->value == NULL)
         printf("Error: Expected a file after >>\n");
     else 
         printf("Error: Expected a file after >\n");
-    
     free_cmds(cmd);
     return ;
 }
@@ -158,11 +157,13 @@ if (current == NULL || current->value == NULL)
         {
             // Set the output file for the command
             current_cmd->redirection_append = ft_strdup(current->value);
+            printf("Parser redirection_append: %s\n", current_cmd->redirection_append); // Debugging
         }
         else // It was a single redirection out
         {
             // Set the output file for the command
             current_cmd->output = ft_strdup(current->value);
+            printf("Parser output: %s\n", current_cmd->output); // Debugging
         }
     }
 }

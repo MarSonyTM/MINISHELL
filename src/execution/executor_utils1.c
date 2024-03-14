@@ -63,8 +63,8 @@ void	redirection(char *file, int mode)
 
 	if (mode == 0)
 		fd = open(file, O_RDONLY);
-	else if (mode == 2)
-		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (mode == 2)
+		fd = open(file, O_WRONLY | O_APPEND, 0644);
 	else
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	handle_redirect(fd, mode);
