@@ -70,6 +70,7 @@ typedef struct s_cmd
     char            *exit_status_token; //for exit status expansion, else NULL
     char            *input; //for input redirection, else NULL
     char            *output; //for output redirection, else NULL
+    char            *redirection_append; //for output redirection append, else NULL
     int             exit_status;
     struct s_cmd    *next;
 }   t_cmd;
@@ -130,5 +131,12 @@ char	*get_value_concat(char *cmd, int *j);
 void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
 void	handle_pipe(t_exec *exec, int i);
 void	duplicate_fd(int old_fd, int new_fd);
+
+/* signal management */
+void	handle_sigint(int sig);
+void	handle_sigquit(int sig);
+
+/* expansion */
+void expand_env_vars(t_cmd *cmd);
 
 #endif

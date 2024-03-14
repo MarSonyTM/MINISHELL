@@ -48,6 +48,7 @@ void	pwd_cmd(void)
 		/* error ERROR*/
 	}
 	ft_putstr_fd(pwd, 1);
+	ft_putchar_fd('\n', 1);
 	free(pwd);
 }
 

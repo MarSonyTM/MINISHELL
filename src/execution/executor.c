@@ -16,6 +16,8 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 		redirection(cmd->input, 0);
 	if (cmd->output)
 		redirection(cmd->output, 1);
+	else if (cmd->redirection_append)
+		redirection(cmd->redirection_append, 2);
 	envp = env_to_array(cmd, env);
 	if (execve(cmd->cmd_path, cmd->cmd_arr, envp) == -1)
 	{
@@ -85,6 +87,7 @@ int	executor(t_cmd *cmd, t_env **env)
 	t_exec	exec;
 	int		i;
 	int		j;
+	/* int	child_exit_status; */
 
 	init_exec(&exec, cmd, env);
 	i = 0; //initialize i to 0, siginifies process number
@@ -104,7 +107,10 @@ int	executor(t_cmd *cmd, t_env **env)
 		{
 			waitpid(exec.pid[i], &exec.status[i], 0);
 			if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
-				exit(1);
+			{
+				/* error management: capture exit status of child
+				& update prevalent exit status */
+			}
 		}
 		i++;
 	}

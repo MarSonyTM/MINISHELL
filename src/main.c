@@ -1,7 +1,4 @@
 #include "../inc/minishell.h"
-#include <stdio.h>
-
-#include "../inc/minishell.h"
 
 void print_commands(t_cmd *cmd) 
 {
@@ -19,7 +16,9 @@ void print_commands(t_cmd *cmd)
             printf("PARSER: Input Redirection: %s\n", current_cmd->input);
         if (current_cmd->output != NULL)
             printf("PARSER: Output Redirection: %s\n", current_cmd->output);
-        current_cmd = current_cmd->next; // Move to the next command
+        if (current_cmd->redirection_append != NULL)
+            printf("PARSER: Output Redirection Append: %s\n", current_cmd->redirection_append);
+        current_cmd = current_cmd->next; // Move to the next commandr
         i = 1; // Reset argument index for the next command
     }
 }
@@ -43,6 +42,7 @@ void free_cmds(t_cmd **cmd)
         // Free input and output redirection
         free(temp->input);
         free(temp->output);
+        free(temp->redirection_append);
         // Free the command structure itself
         free(temp);
     }
@@ -53,15 +53,22 @@ void free_cmds(t_cmd **cmd)
 
 int main(int argc, char **argv, char **envp)
 {
+    
 	t_env *env;
 
 	env = arr_to_linked_list(envp);
+	
     if (argc > 1 || argv[1] != NULL)
         exit(printf("This program takes no arguments\n"));
+   
+     // Set up signal handlers
+    signal(SIGINT, handle_sigint);   
+    signal(SIGQUIT, handle_sigquit); 
 
     while (1)
     {
         char *input = readline(PROMPT);
+        sleep(0);
         if (!input)
         {
             free(input);
@@ -70,6 +77,12 @@ int main(int argc, char **argv, char **envp)
         }
         add_history(input);
         // check if user wants to exit
+        if (ft_strcmp(input, "exit") == 0)
+        {
+            printf("exit\n");
+            free(input);
+            break;
+        }
         t_token *tokens = NULL; // initialize tokens 
         lexer(input, &tokens); // Tokenize the input
      
@@ -90,9 +103,6 @@ int main(int argc, char **argv, char **envp)
                     break;
                 case TOKEN_REDIRECT_OUT:
                     type_str = "Output Redirection";
-                    break;
-                case TOKEN_DOUBLE_REDIRECT_OUT:
-                    type_str = "Double Output Redirection";
                     break;
                 case TOKEN_QUOTE:
                     type_str = "Single Quote";
@@ -131,8 +141,9 @@ int main(int argc, char **argv, char **envp)
         
         t_cmd *cmd = NULL; // Initialize commands
         parse(tokens, &cmd); // Parse the tokens into commands
+        expand_env_vars(cmd); // Expand environment variables
         print_commands(cmd); // Print the commands
-		executor(cmd, &env);
+		executor(cmd, &env); // Execute the commands
         // clean_up(cmd, env);          
         // Free the tokens and commands
         free_tokens(&tokens);

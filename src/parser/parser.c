@@ -85,8 +85,7 @@ void parse(t_token *tokens, t_cmd **cmd)
 {
 	t_cmd *current_cmd = NULL;
 	int arg_count = 0; // To keep track of the number of arguments
-	int append_mode = 0; // Flag to indicate append mode for output redirection
-
+	 
 	t_token *current = tokens;
 	while (current != NULL) 
 	{
@@ -135,19 +134,39 @@ void parse(t_token *tokens, t_cmd **cmd)
 		{
 			current_cmd->input = ft_strdup(current->value);
 		} 
-		else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_DOUBLE_REDIRECT_OUT) 
-		{
-			if (current_cmd != NULL) 
-			{
-				// Set the output file for the command
-				current_cmd->output = ft_strdup(current->value);
-			}
-			// If it's a double redirection out, set append mode flag
-			if (current->type == TOKEN_DOUBLE_REDIRECT_OUT) 
-			{
-				append_mode = 1; 
-			}
-		}
+		else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_REDIRECT_OUT_APPEND) 
+{
+    // Store the current token type before moving to the next token
+    int current_type = current->type;
+
+    current = current->next;
+    
+if (current == NULL || current->value == NULL) 
+{
+    if (current_type == TOKEN_REDIRECT_OUT_APPEND) 
+        printf("Error: Expected a file after >>\n");
+    else 
+        printf("Error: Expected a file after >\n");
+    free_cmds(cmd);
+    return ;
+}
+    if (current_cmd != NULL) 
+    {
+        // If it was a double redirection out, set the redirection_append field
+        if (current_type == TOKEN_REDIRECT_OUT_APPEND) 
+        {
+            // Set the output file for the command
+            current_cmd->redirection_append = ft_strdup(current->value);
+            printf("Parser redirection_append: %s\n", current_cmd->redirection_append); // Debugging
+        }
+        else // It was a single redirection out
+        {
+            // Set the output file for the command
+            current_cmd->output = ft_strdup(current->value);
+            printf("Parser output: %s\n", current_cmd->output); // Debugging
+        }
+    }
+}
 		else if (current->type == TOKEN_HEREDOC) 
 {
     // Advance to the next token and use its value as the delimiter
@@ -156,7 +175,7 @@ void parse(t_token *tokens, t_cmd **cmd)
     {
         printf("Error: Expected a delimiter after <<\n");
         free_cmds(cmd);
-        return;
+        return ;
     }
 
     char *delimiter = current->value; // Get the delimiter from the token value
@@ -205,6 +224,7 @@ void parse(t_token *tokens, t_cmd **cmd)
         current_cmd->input = heredoc_input;
     }
 	printf("heredoc_input: %s\n", heredoc_input); // Debugging
+    
 }
 		else if (current->type == TOKEN_COMMA)
 		{

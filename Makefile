@@ -6,14 +6,14 @@
 #    By: csturm <csturm@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/03/12 17:30:38 by csturm           ###   ########.fr        #
+#    Updated: 2024/03/14 15:18:22 by csturm           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Project Name and Compiler Settings
 NAME := minishell
 COMPILER := cc
-FLAGS := -Wall -Wextra -Werror -g
+FLAGS := -Wall -Wextra -Werror -g 
 CLEANUP_CMD := rm -rf
 
 # Directory Paths
@@ -25,7 +25,7 @@ LIBFT_PATH := libft/
 
 SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c parser/parser.c custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
 				custom/export.c error/free_and_close.c execution/executor.c execution/executor_utils1.c \
-				env/arr_to_linked_list.c execution/executor_utils2.c
+				env/arr_to_linked_list.c execution/executor_utils2.c /signals/signals.c expansion/expansion.c\
 
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)
 LIBFT := $(LIBFT_PATH)libft.a
@@ -83,5 +83,3 @@ re: fclean all
 
 # Phony Targets
 .PHONY: all clean fclean re valgrind
-
- 
