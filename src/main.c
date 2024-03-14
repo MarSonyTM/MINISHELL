@@ -141,6 +141,7 @@ int main(int argc, char **argv, char **envp)
         
         t_cmd *cmd = NULL; // Initialize commands
         parse(tokens, &cmd); // Parse the tokens into commands
+        expand_env_vars(cmd); // Expand environment variables
         print_commands(cmd); // Print the commands
 		executor(cmd, &env); // Execute the commands
         // clean_up(cmd, env);          

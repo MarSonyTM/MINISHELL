@@ -135,5 +135,7 @@ void	duplicate_fd(int old_fd, int new_fd);
 void	handle_sigint(int sig);
 void	handle_sigquit(int sig);
 
+/* expansion */
+void expand_env_vars(t_cmd *cmd);
 
 #endif
