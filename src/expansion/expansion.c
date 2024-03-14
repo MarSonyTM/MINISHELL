@@ -2,7 +2,8 @@
 
 void expand_env_vars(t_cmd *cmd)
 {
-    while (cmd != NULL) {
+    while (cmd != NULL)
+    {
         if (cmd->env_var != NULL) 
         {
             // Remove the $ symbol from the environment variable name
@@ -18,7 +19,9 @@ void expand_env_vars(t_cmd *cmd)
                 // Replace the env_var field with the environment variable's value
                 free(cmd->env_var);
                 cmd->env_var = ft_strdup(var_value);
-            } else {
+            } 
+            else 
+            {
                 // Handle error: Environment variable not found
                 printf("Error: Environment variable '%s' not found\n", env_var_name); // Debug print
             }

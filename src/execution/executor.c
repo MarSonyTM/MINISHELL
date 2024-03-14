@@ -34,6 +34,7 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 		return ;
 	}
 	exec->pid[i] = fork();
+	
 	if (exec->pid[i] == -1)
 		exit(1);
 	if (exec->pid[i] == 0) //if this is the child process

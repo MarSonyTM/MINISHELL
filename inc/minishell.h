@@ -70,6 +70,7 @@ typedef struct s_cmd
     char            *exit_status_token; //for exit status expansion, else NULL
     char            *input; //for input redirection, else NULL
     char            *output; //for output redirection, else NULL
+    char            *redirection_append; //for output redirection append, else NULL
     int             exit_status;
     struct s_cmd    *next;
 }   t_cmd;
