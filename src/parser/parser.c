@@ -20,7 +20,7 @@ char *resolve_command_path(char *command)
         ft_strcpy(fullPath, dir);
         fullPath[dirLen] = '/'; // Append '/'
         ft_strcpy(fullPath + dirLen + 1, command); // Append command
-        if (access(fullPath, X_OK) == 0) 
+        if ((access(fullPath, X_OK) == 0) && access(fullPath, F_OK) == 0)
         {
             free(pathCopy);
             return fullPath; // Command found
