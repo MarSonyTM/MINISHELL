@@ -1,23 +1,5 @@
 #include "../../inc/minishell.h"
 
-char *append_string(const char *str1, const char *str2) 
-{
-    size_t len1 = ft_strlen(str1);
-    size_t len2 = ft_strlen(str2);
-
-    // Allocate memory for the concatenated string
-    char *result = malloc(len1 + len2 + 1);
-    if (!result)
-    {
-        // Error handling for memory allocation failure
-        return NULL;
-    }
-    // Copy the contents of str1 and str2 into the result buffer
-    ft_strcpy(result, str1);
-    ft_strcpy(result + len1, str2);
-
-    return result;
-}
 
 char *resolve_command_path(char *command) 
 {

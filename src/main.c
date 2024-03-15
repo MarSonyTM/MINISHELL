@@ -39,6 +39,12 @@ void free_cmds(t_cmd **cmd)
             free(temp->cmd_arr[i]);
             i++;
         }
+        i = 0;
+        while(temp->env_vars[i] != NULL) 
+        {
+            free(temp->env_vars[i]);
+            i++;
+        }
         // Free input and output redirection 
         free(temp->input);
         free(temp->output);
