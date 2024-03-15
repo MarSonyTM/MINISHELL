@@ -1,24 +1,5 @@
 #include "../../inc/minishell.h"
 
-char *append_string(const char *str1, const char *str2) 
-{
-    size_t len1 = ft_strlen(str1);
-    size_t len2 = ft_strlen(str2);
-
-    // Allocate memory for the concatenated string
-    char *result = malloc(len1 + len2 + 1);
-    if (!result)
-    {
-        // Error handling for memory allocation failure
-        return NULL;
-    }
-    // Copy the contents of str1 and str2 into the result buffer
-    ft_strcpy(result, str1);
-    ft_strcpy(result + len1, str2);
-
-    return result;
-}
-
 char *resolve_command_path(char *command) 
 {
     char *path = getenv("PATH"); // Get the PATH environment variable value
@@ -39,7 +20,7 @@ char *resolve_command_path(char *command)
         ft_strcpy(fullPath, dir);
         fullPath[dirLen] = '/'; // Append '/'
         ft_strcpy(fullPath + dirLen + 1, command); // Append command
-        if (access(fullPath, X_OK) == 0) 
+        if (access (fullPath, F_OK) == 0 && access(fullPath, X_OK) == 0) 
         {
             free(pathCopy);
             return fullPath; // Command found
@@ -59,6 +40,11 @@ t_cmd *new_cmd(t_cmd **cmd)
         return (NULL); // Error handling for malloc failure
     new_cmd->cmd_path = NULL;
     new_cmd->cmd_arr = malloc(sizeof(char *) * 2); // Initial size for command + NULL
+    if (!new_cmd->cmd_arr)
+    {
+        free(new_cmd);
+        return (NULL); // Error handling for malloc failure
+    }
     new_cmd->cmd_arr[0] = NULL; // Initialize to NULL for safety
     new_cmd->input = NULL;
     new_cmd->exit_status_token = NULL;
@@ -92,6 +78,15 @@ void parse(t_token *tokens, t_cmd **cmd)
 		if (current->type == TOKEN_BUILTIN) 
 		{
 			current_cmd = new_cmd(cmd); // Create a new command
+            if (!current_cmd) 
+            {
+                // Handle malloc failure
+                // printf("Error: Memory allocation failed\n");
+                free_cmds(cmd);
+                free(tokens);
+                return ;
+                // Clean up and exit or return an error
+            }
 			current_cmd->cmd_arr[0] = ft_strdup(current->value); // Command name
 			current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
 			arg_count = 1; // Reset argument count for the new command
@@ -103,6 +98,15 @@ void parse(t_token *tokens, t_cmd **cmd)
 			current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
 			arg_count = 1; // Reset argument count for the new command
 			char *cmd_path = resolve_command_path(current->value); // Resolve the command's path
+            if (!cmd_path) 
+            {
+                // Handle command not found error
+                printf("Error: Command not found\n");
+                free_cmds(cmd);
+                free(tokens);
+                return ;
+                // Clean up and exit or return an error
+            }
 			current_cmd->cmd_path = cmd_path; // Set the command's path
 			if (cmd_path == NULL) 
 			{
@@ -281,6 +285,15 @@ if (current == NULL || current->value == NULL)
 
 			// Resolve the command's path
 			char *cmd_path = resolve_command_path(current->value);
+            if (!cmd_path) 
+            {
+                // Handle command not found error
+                printf("Error: Command not found\n");
+                free_cmds(cmd);
+                free(tokens);
+                return ;
+                // Clean up and exit or return an error
+            }
 			current_cmd->cmd_path = cmd_path;
 
 			// Handle command not found error

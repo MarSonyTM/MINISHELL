@@ -92,8 +92,12 @@ int main(int argc, char **argv, char **envp)
             break;
         }
         t_token *tokens = NULL; // initialize tokens 
-        lexer(input, &tokens); // Tokenize the input
-     
+        if (lexer(input, &tokens) == 1) // Tokenize the input
+        {
+            free_tokens(&tokens);
+            free(input);
+            continue;
+        }
         t_token *current = tokens;
         while (current != NULL)
         {

@@ -20,6 +20,7 @@
 # define ERR_ARG "invalid argument"
 # define ERR_ARGS "arg list too long"
 # define ERR_ADDR "bad address"
+# define ERR_QUOT "unclosed quote"
 
 /* holds information of each separate token */
 
@@ -89,9 +90,9 @@ typedef struct s_exec
 
 /*Functions prototypes for Lexer*/
 
-void	lexer(char *input, t_token **tokens);
+int     lexer(char *input, t_token **tokens); 
 void	free_tokens(t_token **tokens);
-void	add_token(t_token **tokens, t_token_type type, char *value);
+int 	add_token(t_token **tokens, t_token_type type, char *value);
 t_token_type determine_token_type(char *token);
 
 /*Functions prototypes for Parser*/
