@@ -40,6 +40,7 @@ void free_cmds(t_cmd **cmd)
             i++;
         }
         i = 0;
+        // Free environment variables
         while(temp->env_vars[i] != NULL) 
         {
             free(temp->env_vars[i]);
