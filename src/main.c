@@ -54,7 +54,7 @@ int main(int argc, char **argv, char **envp)
 {
     
 	t_env *env;
-
+    int exit_status = 0;
 	env = arr_to_linked_list(envp);
 	
     if (argc > 1 || argv[1] != NULL)
@@ -142,7 +142,7 @@ int main(int argc, char **argv, char **envp)
         parse(tokens, &cmd); // Parse the tokens into commands
         expand_env_vars(cmd); // Expand environment variables
         print_commands(cmd); // Print the commands
-		executor(cmd, &env); // Execute the commands
+		exit_status = executor(cmd, &env); // Execute the commands & get the exit status
         // clean_up(cmd, env);          
         // Free the tokens and commands
         free_tokens(&tokens);

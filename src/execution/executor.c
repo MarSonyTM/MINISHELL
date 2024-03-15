@@ -5,10 +5,10 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 	char	**envp;
 
 	if (i != exec->processes - 1) //if this is not the last process
-		duplicate_fd(exec->fd[1], 1); //duplicate write end of pipe to stdout
+		duplicate_fd(exec->fd[1], 1, 0); //duplicate write end of pipe to stdout
 	if (i != 0) //if this is not the first process
 	{
-		duplicate_fd(exec->old_fd[0], 0); //duplicate read end of old pipe to stdin
+		duplicate_fd(exec->old_fd[0], 0, 0); //duplicate read end of old pipe to stdin
 		close(exec->fd[0]); //close read end of pipe
 		exec->open_fds[i * 2] = -1;
 	}
@@ -26,14 +26,20 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
 	if (cmd->next != NULL)
-		handle_pipe(exec, i);
+	{
+		if (handle_pipe(exec, i, cmd->next->cmd_path) == 1)
+		{
+			cmd->exit_status = 1;
+			return ;
+		}
+	}
 	if (cmd->cmd_path == NULL) //if command is custom
 	{
-		handle_custom(cmd, env, exec, i);
+		if (handle_custom(cmd, env, exec, i) == 1 && cmd->exit_status == 0)
+			cmd->exit_status = 1;
 		return ;
 	}
-	exec->pid[i] = fork();
-	
+	exec->pid[i] = fork();	
 	if (exec->pid[i] == -1)
 		exit(1);
 	if (exec->pid[i] == 0) //if this is the child process
@@ -111,6 +117,8 @@ int	executor(t_cmd *cmd, t_env **env)
 			if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
 				last_exit_status = cmd->exit_status; // Capture the exit status of the child process
 		}
+		if (cmd->exit_status != 0)
+			last_exit_status = cmd->exit_status;
 		cmd = cmd->next;
 		i++;
 	}

@@ -128,9 +128,9 @@ int		count_processes(t_cmd *cmd);
 char	*get_key(char *cmd, int *j);
 char	*get_value(char *cmd, int *j);
 char	*get_value_concat(char *cmd, int *j);
-void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
-void	handle_pipe(t_exec *exec, int i);
-void	duplicate_fd(int old_fd, int new_fd);
+int 	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
+int	    handle_pipe(t_exec *exec, int i, char *cmd_path);
+int 	duplicate_fd(int old_fd, int new_fd, int custom);
 
 /* signal management */
 void	handle_sigint(int sig);

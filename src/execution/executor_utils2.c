@@ -1,28 +1,37 @@
 #include "../../inc/minishell.h"
 
-void	duplicate_fd(int old_fd, int new_fd)
+int	duplicate_fd(int old_fd, int new_fd, int custom)
 {
 	if (dup2(old_fd, new_fd) == -1)
 	{
-		/* error ERROR*/
+		if (!custom)
+			exit(1);
+		return (1);
 	}
 	close (old_fd);
+	return (0);
 }
 
-void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i)
+int	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i)
 {
 	int	stdout_fd;
 
 	exec->pid[i] = -1;
 	stdout_fd = dup(1);
+	if (stdout_fd == -1)
+		return (1);
 	if (cmd->output)
 		redirection(cmd->output, 1);
 	else if (cmd->redirection_append)
 		redirection(cmd->redirection_append, 2);
 	if (cmd->next != NULL)
-		duplicate_fd(exec->fd[1], 1);
+	{
+		if (duplicate_fd(exec->fd[1], 1, 1) == 1)
+			return (1);
+	}
 	custom_exec(cmd, env);
-	duplicate_fd(stdout_fd, 1);
+	if (duplicate_fd(stdout_fd, 1, 1) == 1)
+		return (1);
 	close (stdout_fd);
 	if (cmd->next != NULL)
 	{
@@ -31,32 +40,33 @@ void	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i)
 	}
 	exec->old_fd[0] = exec->fd[0];
 	exec->old_fd[1] = exec->fd[1];
+	return (0);
 }
 
-void	handle_pipe(t_exec *exec, int i)
+int	handle_pipe(t_exec *exec, int i, char *cmd_path)
 {
 	if (pipe(exec->fd) == -1)
 	{
-		/* error ERROR */
+		if (cmd_path != NULL)
+			exit (1);
+		return (1);
 	}
 	exec->open_fds[i * 2] = exec->fd[0];
 	exec->open_fds[i * 2 + 1] = exec->fd[1];
+	return (0);
 }
 
-int count_processes(t_cmd *cmd)
+int	count_processes(t_cmd *cmd)
 {
-    int processes = 0;
+	int	processes;
 
-    while (cmd != NULL && cmd->next != NULL)
-    {
-        cmd = cmd->next;
-        processes++;
-    }
-
-    if (cmd != NULL)
-    {
-        processes++;
-    }
-
-    return processes;
+	processes = 0;
+	if (cmd == NULL)
+		return (processes);
+	while (cmd->next != NULL)
+	{
+		cmd = cmd->next;
+		processes++;
+	}
+	return (processes + 1);
 }
