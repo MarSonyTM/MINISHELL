@@ -62,7 +62,8 @@ t_cmd *new_cmd(t_cmd **cmd)
     new_cmd->cmd_arr[0] = NULL; // Initialize to NULL for safety
     new_cmd->input = NULL;
     new_cmd->exit_status_token = NULL;
-    new_cmd->env_var = NULL;
+    new_cmd->env_vars = malloc(sizeof(char *) * 1); // Initial size for NULL
+    new_cmd->env_vars[0] = NULL;
     new_cmd->output = NULL;
     new_cmd->exit_status = 0;
     new_cmd->next = NULL;
@@ -85,6 +86,7 @@ void parse(t_token *tokens, t_cmd **cmd)
 {
 	t_cmd *current_cmd = NULL;
 	int arg_count = 0; // To keep track of the number of arguments
+
 	 
 	t_token *current = tokens;
 	while (current != NULL) 
@@ -253,8 +255,25 @@ if (current == NULL || current->value == NULL)
     {
         if (current->type == TOKEN_ENV_VAR)
         {
-            current_cmd->env_var = ft_strdup(current->value);
-			printf("Parser env_var: %s\n", current_cmd->env_var);
+            // Add the env_var to the array env_var
+            int env_var_count = 0;
+            while (current_cmd->env_vars[env_var_count] != NULL) 
+            {
+                env_var_count++;
+            }
+            current_cmd->env_vars = realloc(current_cmd->env_vars, sizeof(char *) * (env_var_count + 2)); // Resize for new env_var
+            if (!current_cmd->env_vars) 
+            {
+                // Handle realloc failure
+                printf("Error: Memory allocation failed\n");
+                free_cmds(cmd);
+                free(tokens);    
+                return ;
+                // Clean up and exit or return an error
+            }
+            current_cmd->env_vars[env_var_count] = ft_strdup(current->value);
+            current_cmd->env_vars[env_var_count + 1] = NULL; // NULL terminate the array
+            printf("Parser env_var: %s\n", current_cmd->env_vars[env_var_count]);
         }
         else if (current->type == TOKEN_EXIT_STATUS)
         {
