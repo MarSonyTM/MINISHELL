@@ -13,13 +13,13 @@
 
 /* error messages */
 # define ERROR "Error"
-# define ERR_FIL "No such file or directory"
-# define ERR_CMD "Command not found"
-# define ERR_PERM "Permission denied"
-# define ERR_INT "Interrupted system call"
-# define ERR_ARG "Invalid argument"
-# define ERR_ARGS "Arg list too long"
-# define ERR_ADDR "Bad address"
+# define ERR_FIL "no such file or directory"
+# define ERR_CMD "command not found"
+# define ERR_PERM "permission denied"
+# define ERR_INT "interrupted system call"
+# define ERR_ARG "invalid argument"
+# define ERR_ARGS "arg list too long"
+# define ERR_ADDR "bad address"
 
 /* holds information of each separate token */
 
@@ -108,20 +108,21 @@ t_env	*arr_to_linked_list(char **envp);
 
 /* customs */
 void	echo_cmd(t_cmd *cmd);
-void	cd_cmd(t_cmd *cmd);
-void	pwd_cmd(void);
-void	env_cmd(t_cmd *cmd, t_env *env);
+int	    cd_cmd(t_cmd *cmd);
+int 	pwd_cmd(void);
+int 	env_cmd(t_cmd *cmd, t_env *env);
 void	unset_cmd(t_cmd *cmd, t_env **env);
-void	exit_cmd(t_cmd *cmd, t_env *env);
-void	export_cmd(t_cmd *cmd, t_env **env);
+int 	exit_cmd(t_cmd *cmd, t_env *env);
+int 	export_cmd(t_cmd *cmd, t_env **env);
 
 /* error management */
 void	clean_up(t_cmd *cmd, t_env *env);
 void	close_fds(int *open_fds, int processes);
 void	close_and_free(t_exec *exec);
+void	error(char *msg, char *ft);
 
 /* utils */
-void	redirection(char *file, int mode);
+int 	redirection(char *file, int mode, int custom);
 char	**env_to_array(t_cmd *cmd, t_env **env);
 int		get_len(t_env *env);
 int		count_processes(t_cmd *cmd);

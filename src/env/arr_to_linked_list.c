@@ -21,6 +21,20 @@ char    *get_value(char *cmd, int *j)
     return (ft_substr(cmd, *j, ft_strlen(cmd) - *j));
 }
 
+void    free_env(t_env *env)
+{
+    t_env	*tmp;
+
+    while (env != NULL)
+    {
+        tmp = env;
+        env = env->next;
+        free(tmp->key);
+        free(tmp->value);
+        free(tmp);
+    }
+}
+
 t_env	*arr_to_linked_list(char **envp)
 {
     t_env	*env;
@@ -32,9 +46,7 @@ t_env	*arr_to_linked_list(char **envp)
 
     env = malloc(sizeof(t_env));
     if (!env)
-    {
-        /* error ERROR */
-    }
+        exit (1);
     tmp = env;
     i = 0;
     while (envp[i] != NULL)
@@ -49,7 +61,8 @@ t_env	*arr_to_linked_list(char **envp)
             tmp->next = malloc(sizeof(t_env));
             if (!tmp->next)
             {
-                /* error ERROR */
+                free_env(env);
+                exit (1);
             }
             tmp = tmp->next;
         }

@@ -95,7 +95,7 @@ static void	concatenate_env_var(char *cmd, t_env **env, int j)
 		*env = add_env_node(env, key, value);
 }
 
-void	export_cmd(t_cmd *cmd, t_env **env)
+int	export_cmd(t_cmd *cmd, t_env **env)
 {
 	int	i;
 
@@ -103,11 +103,12 @@ void	export_cmd(t_cmd *cmd, t_env **env)
 	if (!cmd->cmd_arr[1]) //export command with no argument
 	{
 		env_cmd(cmd, *env);
-		return ;
+		return (1);
 	}
 	if (cmd->cmd_arr[1][0] == '=' || ft_isdigit(cmd->cmd_arr[1][0]))
 	{
-		/* error ERR_ARG*/
+		error(ERR_ARG, "export");
+		return (1);
 	}
 	while (cmd->cmd_arr[i])
 	{
@@ -122,4 +123,5 @@ void	export_cmd(t_cmd *cmd, t_env **env)
 			add_empty_env_var(cmd->cmd_arr[i], env);
 		i++;
 	}
+	return (0);
 }

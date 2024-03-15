@@ -23,42 +23,42 @@ void	echo_cmd(t_cmd *cmd)
 		ft_putchar_fd('\n', 1);
 }
 
-void	cd_cmd(t_cmd *cmd)
+int	cd_cmd(t_cmd *cmd)
 {
 	if (cmd->cmd_arr[1] == NULL)
 	{
 		if (chdir(getenv("HOME")) == -1)
-		{
-			/* error ERROR*/
-		}
+			return (1);
 	}
 	else if (chdir(cmd->cmd_arr[1]) == -1)
 	{
-		/* error ERR_FIL*/
+		error(ERR_FIL, cmd->cmd_arr[0]);
+		return (1);
 	}
+	return (0);
 }
 
-void	pwd_cmd(void)
+int	pwd_cmd(void)
 {
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
 	if (pwd == NULL)
-	{
-		/* error ERROR*/
-	}
+		return (1);
 	ft_putstr_fd(pwd, 1);
 	ft_putchar_fd('\n', 1);
 	free(pwd);
+	return (0);
 }
 
-void	env_cmd(t_cmd *cmd, t_env *env)
+int	env_cmd(t_cmd *cmd, t_env *env)
 {
 	t_env	*tmp;
 
 	if (cmd->cmd_arr[1] != NULL)
 	{
-		/* error ERR_ARGS*/
+		error(ERR_ARGS, cmd->cmd_arr[0]);
+		return (1);
 	}
 	tmp = env;
 	while (tmp != NULL)
@@ -68,4 +68,5 @@ void	env_cmd(t_cmd *cmd, t_env *env)
 		ft_putendl_fd(tmp->value, 1);
 		tmp = tmp->next;
 	}
+	return (0);
 }

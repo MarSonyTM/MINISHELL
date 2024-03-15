@@ -13,11 +13,11 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 		exec->open_fds[i * 2] = -1;
 	}
 	if (cmd->input)
-		redirection(cmd->input, 0);
+		redirection(cmd->input, 0, 0);
 	if (cmd->output)
-		redirection(cmd->output, 1);
+		redirection(cmd->output, 1, 0);
 	if (cmd->redirection_append)
-		redirection(cmd->redirection_append, 2);
+		redirection(cmd->redirection_append, 2, 0);
 	envp = env_to_array(cmd, env);
 	if (execve(cmd->cmd_path, cmd->cmd_arr, envp) == -1)
 		exit (cmd->exit_status);

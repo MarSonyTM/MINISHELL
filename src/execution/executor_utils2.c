@@ -20,10 +20,21 @@ int	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i)
 	stdout_fd = dup(1);
 	if (stdout_fd == -1)
 		return (1);
+	if (cmd->input)
+	{
+		if (redirection(cmd->input, 0, 1) == 1)
+			return (1);
+	}
 	if (cmd->output)
-		redirection(cmd->output, 1);
+	{
+		if (redirection(cmd->output, 1, 1) == 1)
+			return (1);
+	}
 	else if (cmd->redirection_append)
-		redirection(cmd->redirection_append, 2);
+	{
+		if (redirection(cmd->redirection_append, 2, 1) == 1)
+			return (1);
+	}
 	if (cmd->next != NULL)
 	{
 		if (duplicate_fd(exec->fd[1], 1, 1) == 1)

@@ -11,7 +11,7 @@ static int	check_for_digit(char *str)
 	{
 		if (!ft_isdigit(str[i]))
 		{
-			/* error ERR_ARG */
+			error(ERR_ARG, "exit");
 			return (0);
 		}
 		i++;
@@ -19,14 +19,15 @@ static int	check_for_digit(char *str)
 	return (1);
 }
 
-void	exit_cmd(t_cmd *cmd, t_env *env)
+int	exit_cmd(t_cmd *cmd, t_env *env)
 {
 	int	exit_code;
 
 	exit_code = EXIT_SUCCESS;
 	if (cmd->cmd_arr[1] && cmd->cmd_arr[2])
 	{
-		/* error ERR_ARGS*/
+		error(ERR_ARGS, "exit");
+		return (1);
 	}
 	else if (cmd->cmd_arr[1] && check_for_digit(cmd->cmd_arr[1]))
 	{
@@ -39,6 +40,7 @@ void	exit_cmd(t_cmd *cmd, t_env *env)
 	clean_up(cmd, env);
 	ft_putstr_fd("exit\n", 1);
 	exit(exit_code);
+	return (0);
 }
 
 static void	free_env_node(t_env **env, t_env *tmp, t_env *prev)
