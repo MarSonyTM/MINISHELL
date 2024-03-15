@@ -41,12 +41,12 @@ void	free_array(char **arr)
 	free(arr);
 }
 
-void	error(char *msg, t_cmd *cmd, t_env *env)
+void	error(char *msg, char *ft)
 {
-	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(msg, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(ft, 2);
 	ft_putstr_fd("\n", 2);
-	clean_up(cmd, env);
 }
 
 /* figure out how to close all open fds */
