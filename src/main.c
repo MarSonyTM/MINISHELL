@@ -170,7 +170,7 @@ int main(int argc, char **argv, char **envp)
             free(input);
             continue ;
         }
-        expand_env_vars(cmd); // Expand environment variables
+        expand_env_vars(cmd, env); // Expand environment variables
         print_commands(cmd); // Print the commands
 		exit_status = executor(cmd, &env); // Execute the commands & get the exit status
         reset_cmd(cmd); // Reset the commands        
