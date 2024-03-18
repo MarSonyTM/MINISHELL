@@ -16,16 +16,18 @@ void	free_tokens(t_token **tokens)
 	*tokens = NULL;
 }
 
-void	add_token(t_token **tokens, t_token_type type, char *value)
+int	add_token(t_token **tokens, t_token_type type, char *value)
 {
 	t_token	*new_token;
 	t_token	*temp;
 
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
-		return ;
+		return (1);
 	new_token->type = type;
 	new_token->value = ft_strdup(value);
+	if (!new_token->value)
+		return (1);
 	new_token->next = NULL;
 	if (*tokens == NULL)
 	{
@@ -40,4 +42,5 @@ void	add_token(t_token **tokens, t_token_type type, char *value)
 		}
 		temp->next = new_token;
 	}
+	return (0);
 }

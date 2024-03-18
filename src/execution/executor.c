@@ -39,7 +39,7 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 			cmd->exit_status = 1;
 		return ;
 	}
-	exec->pid[i] = fork();	
+	exec->pid[i] = fork();
 	if (exec->pid[i] == -1)
 		exit(1);
 	if (exec->pid[i] == 0) //if this is the child process
@@ -112,8 +112,7 @@ int	executor(t_cmd *cmd, t_env **env)
 	{
 		if (exec.pid[i] != -1)
 		{
-			waitpid(exec.pid[i], &exec.status[i], 0); // Wait for each child process to finish
-			
+			waitpid(exec.pid[i], &exec.status[i], 0); // Wait for each child process to finish			
 			if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
 				last_exit_status = cmd->exit_status; // Capture the exit status of the child process
 		}

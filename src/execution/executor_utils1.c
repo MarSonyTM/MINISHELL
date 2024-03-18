@@ -49,7 +49,6 @@ static int	handle_redirect(int fd, int mode, char *file)
 {
 	if (fd == -1)
 	{
-		ft_putendl_fd("error", 2);
 		if (mode == 0)
 			error(ERR_FIL, file);
 		else
@@ -74,7 +73,6 @@ int	redirection(char *file, int mode, int custom)
 {
 	int	fd;
 
-	ft_putendl_fd("redirection", 1);
 	if (mode == 0)
 		fd = open(file, O_RDONLY);
 	else if (mode == 2)
