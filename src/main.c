@@ -92,11 +92,12 @@ int main(int argc, char **argv, char **envp)
             break;
         }
         t_token *tokens = NULL; // initialize tokens 
-        if (lexer(input, &tokens) == 1) // Tokenize the input
+        int lexer_status = lexer(input, &tokens); // Tokenize the input
+        if (lexer_status == 1) // malloc fail
         {
             free_tokens(&tokens);
             free(input);
-            continue;
+            exit(1);
         }
         t_token *current = tokens;
         while (current != NULL)
@@ -152,7 +153,21 @@ int main(int argc, char **argv, char **envp)
         }
         
         t_cmd *cmd = NULL; // Initialize commands
-        parse(tokens, &cmd); // Parse the tokens into commands
+        int parse_status = parse(tokens, &cmd);// Parse the tokens into commands
+        if (parse_status == 1) // malloc fail
+        {
+            free_cmds(&cmd);
+            free_tokens(&tokens);
+            free(input);
+            exit(1);
+        }
+        else if (parse_status == 2) // syntax error
+        {
+            free_cmds(&cmd);
+            free_tokens(&tokens);
+            free(input);
+            continue ;
+        }
         expand_env_vars(cmd); // Expand environment variables
         print_commands(cmd); // Print the commands
 		exit_status = executor(cmd, &env); // Execute the commands & get the exit status

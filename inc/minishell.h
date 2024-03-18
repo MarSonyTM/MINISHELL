@@ -21,6 +21,7 @@
 # define ERR_ARGS "arg list too long"
 # define ERR_ADDR "bad address"
 # define ERR_QUOT "unclosed quote"
+# define ERR_PARS "syntax error near unexpected token"
 
 /* holds information of each separate token */
 
@@ -97,7 +98,7 @@ t_token_type determine_token_type(char *token);
 
 /*Functions prototypes for Parser*/
 
-void parse(t_token *tokens, t_cmd **cmd);
+int parse(t_token *tokens, t_cmd **cmd);
 void free_cmds(t_cmd **cmd);
 
 
