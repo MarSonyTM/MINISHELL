@@ -39,6 +39,13 @@ void free_cmds(t_cmd **cmd)
             free(temp->cmd_arr[i]);
             i++;
         }
+        i = 0;
+        // Free environment variables
+        while(temp->env_vars[i] != NULL) 
+        {
+            free(temp->env_vars[i]);
+            i++;
+        }
         // Free input and output redirection 
         free(temp->input);
         free(temp->output);
@@ -51,7 +58,8 @@ void free_cmds(t_cmd **cmd)
 
 static void reset_cmd(t_cmd *cmd) 
 {
-    while (cmd != NULL) {
+    while (cmd != NULL) 
+    {
         cmd->input = NULL;
         cmd->output = NULL;
         cmd->redirection_append = NULL;
@@ -84,13 +92,7 @@ int main(int argc, char **argv, char **envp)
             break ;
         }
         add_history(input);
-        // check if user wants to exit
-        if (ft_strcmp(input, "exit") == 0)
-        {
-            printf("exit\n");
-            free(input);
-            break;
-        }
+ 
         t_token *tokens = NULL; // initialize tokens 
         lexer(input, &tokens); // Tokenize the input
      
@@ -149,7 +151,7 @@ int main(int argc, char **argv, char **envp)
         
         t_cmd *cmd = NULL; // Initialize commands
         parse(tokens, &cmd); // Parse the tokens into commands
-        expand_env_vars(cmd); // Expand environment variables
+        expand_env_vars(cmd, env); // Expand environment variables
         print_commands(cmd); // Print the commands
 		exit_status = executor(cmd, &env); // Execute the commands & get the exit status
         reset_cmd(cmd); // Reset the commands        

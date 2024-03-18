@@ -66,7 +66,7 @@ typedef struct s_cmd
 {
     char            *cmd_path; //for execve, else NULL
     char            **cmd_arr; //holds flags and arguments
-    char            *env_var; //for env var expansion, else NULL
+    char            **env_vars; //for env var expansion, else NULL
     char            *exit_status_token; //for exit status expansion, else NULL
     char            *input; //for input redirection, else NULL
     char            *output; //for output redirection, else NULL
@@ -138,6 +138,6 @@ void	handle_sigint(int sig);
 void	handle_sigquit(int sig);
 
 /* expansion */
-void expand_env_vars(t_cmd *cmd);
+void expand_env_vars(t_cmd *cmd, t_env *env);
 
 #endif
