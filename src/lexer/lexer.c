@@ -17,9 +17,11 @@ void lexer(char *input, t_token **tokens)
 
     while ((currentChar = input[i]) != '\0' && !quote_error) 
     {
-        if ((currentChar == ' ' || currentChar == '\t' || currentChar == '\n') && inQuote == 0) {
+        if ((currentChar == ' ' || currentChar == '\t' || currentChar == '\n') && inQuote == 0) 
+        {
             // Whitespace, outside of quotes
-            if (bufIndex > 0) {
+            if (bufIndex > 0)
+             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
                 add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
@@ -154,12 +156,21 @@ t_token_type determine_token_type(char *token)
     else if (ft_strcmp(token, ">>") == 0) return TOKEN_REDIRECT_OUT_APPEND;
     else if (ft_strcmp(token, "<<") == 0) return TOKEN_HEREDOC;
     else if (ft_strcmp(token, ",") == 0) return TOKEN_COMMA;
-    else if (token[0] == '$') 
+        if (token[0] == '$') 
+{
+    // Directly check the next character in the token for a quote
+    if (token[1] == '\"' || token[1] == '\'') 
     {
-        // Check for exit status specifically, or default to env var
-        if (ft_strcmp(token, "$?") == 0) return TOKEN_EXIT_STATUS;
+        // This means we have something like $"..." or $'...', treat as ARG
+        return TOKEN_ARG;
+    } 
+    else 
+    {
+        // Handling other $ cases, such as $USER or $? which are ENV_VAR or special
+        if (strcmp(token, "$?") == 0) return TOKEN_EXIT_STATUS;
         else return TOKEN_ENV_VAR;
     }
+}
     else if (token[0] == '\"') return TOKEN_DQUOTE;
     else if (token[0] == '\'') return TOKEN_QUOTE;
     // Check for specific commands
