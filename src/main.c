@@ -75,7 +75,7 @@ int main(int argc, char **argv, char **envp)
 	env = arr_to_linked_list(envp);
 	
     if (argc > 1 || argv[1] != NULL)
-        exit(printf("This program takes no arguments\n"));
+       
    
      // Set up signal handlers
     signal(SIGINT, handle_sigint);   
