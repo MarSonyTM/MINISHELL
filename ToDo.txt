@@ -1,0 +1,2 @@
+token exit code needs to be parsed to arguments inc CMD struct.
+clean lexer and parser .
