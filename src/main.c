@@ -79,7 +79,7 @@ int main(int argc, char **argv, char **envp)
    
      // Set up signal handlers
     signal(SIGINT, handle_sigint);   
-    signal(SIGQUIT, handle_sigquit); 
+        signal(SIGQUIT, handle_sigquit); 
 
     while (1)
     {
@@ -88,13 +88,13 @@ int main(int argc, char **argv, char **envp)
         if (!input)
         {
             free(input);
-            printf("exit\n");
+            printf("exit1\n");
             break ;
         }
         add_history(input);
  
         t_token *tokens = NULL; // initialize tokens 
-        int lexer_status = lexer(input, &tokens); // Tokenize the input
+        int lexer_status = lexer(input, &tokens, env); // Tokenize the input
         if (lexer_status == 1) // malloc fail
         {
             free_tokens(&tokens);
@@ -155,7 +155,7 @@ int main(int argc, char **argv, char **envp)
         }
         
         t_cmd *cmd = NULL; // Initialize commands
-        int parse_status = parse(tokens, &cmd);// Parse the tokens into commands
+        int parse_status = parse(tokens, &cmd, env);// Parse the tokens into commands
         if (parse_status == 1) // malloc fail
         {
             free_cmds(&cmd);

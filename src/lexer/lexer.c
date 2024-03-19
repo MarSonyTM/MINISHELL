@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-int lexer(char *input, t_token **tokens) 
+int lexer(char *input, t_token **tokens, t_env *env) 
 {
     int i = 0; // Index for input string
     char currentChar; // Current character being processed
@@ -23,8 +23,8 @@ int lexer(char *input, t_token **tokens)
             if (bufIndex > 0)
              {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote), ft_strdup(buffer)) == 1)
-                    return (1); // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
+                    return (1); // Error
                 bufIndex = 0; // Reset buffer index for the next token
             }
         } 
@@ -53,7 +53,7 @@ int lexer(char *input, t_token **tokens)
             {
                 // Add the current token before the comma
                 buffer[bufIndex] = '\0';
-                if (add_token(tokens, determine_token_type(buffer, inQuote), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0;
             }
@@ -68,7 +68,7 @@ int lexer(char *input, t_token **tokens)
             if (bufIndex > 0) 
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0; // Reset buffer index for the next token
             }
@@ -83,7 +83,7 @@ int lexer(char *input, t_token **tokens)
             if (bufIndex > 0)
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0; // Reset buffer index for the next token
             }
@@ -106,7 +106,7 @@ int lexer(char *input, t_token **tokens)
             if (bufIndex > 0) 
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0; // Reset buffer index for the next token
             }
@@ -122,7 +122,7 @@ int lexer(char *input, t_token **tokens)
             if (bufIndex > 0)
          {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0; // Reset buffer index for the next token
             }
@@ -147,7 +147,7 @@ int lexer(char *input, t_token **tokens)
         else 
         {
             buffer[bufIndex] = '\0'; // Null-terminate the current token
-            if (add_token(tokens, determine_token_type(buffer, inQuote), ft_strdup(buffer)) == 1) // Add the token
+            if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
                 return (1); // Error
         }
     } 
@@ -168,7 +168,7 @@ int lexer(char *input, t_token **tokens)
 }
 
 // Placeholder for determine_token_type function
-t_token_type determine_token_type(char *token, int inQuote)
+t_token_type determine_token_type(char *token, int inQuote, t_env *env)
 {
     // Check for specific commands or symbols
     if (ft_strcmp(token, "|") == 0) return TOKEN_PIPE;
@@ -197,17 +197,17 @@ t_token_type determine_token_type(char *token, int inQuote)
         else return TOKEN_ENV_VAR;
     }
 }
-    else if (token[0] == '\"') return TOKEN_DQUOTE;
-    else if (token[0] == '\'') return TOKEN_QUOTE;
+        else if (token[0] == '\"') return TOKEN_DQUOTE;
+        else if (token[0] == '\'') return TOKEN_QUOTE;
     // Check for specific commands
-    else if (ft_strcmp(token, "echo") == 0 || ft_strcmp(token, "cd") == 0 ||
+        else if (ft_strcmp(token, "echo") == 0 || ft_strcmp(token, "cd") == 0 ||
              ft_strcmp(token, "pwd") == 0 || ft_strcmp(token, "export") == 0 ||
              ft_strcmp(token, "unset") == 0 || ft_strcmp(token, "env") == 0 ||
              ft_strcmp(token, "exit") == 0) 
     {
         return TOKEN_BUILTIN;
     }
-char *path = getenv("PATH");
+char *path = ft_getenv("PATH", env);
 char *pathCopy = ft_strdup(path);
 if (!pathCopy)
 {
