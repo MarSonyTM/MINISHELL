@@ -51,7 +51,7 @@ t_cmd *new_command(t_cmd **cmd)
     new_cmd->cmd_arr[0] = NULL; // Initialize to NULL for safety
     new_cmd->input = NULL;
     new_cmd->exit_status_token = NULL;
-    new_cmd->env_var = NULL;
+    new_cmd->env_vars = NULL;
     new_cmd->output = NULL;
     new_cmd->exit_status = 0;
     new_cmd->next = NULL;
@@ -253,10 +253,10 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
             {
                 if (current->type == TOKEN_ENV_VAR)
                 {
-                    current_cmd->env_var = ft_strdup(current->value);
-                    if (!current_cmd->env_var)
+                    current_cmd->env_vars = ft_strdup(current->value);
+                    if (!current_cmd->env_vars)
                         return (1);
-                    printf("Parser env_var: %s\n", current_cmd->env_var);
+                    printf("Parser env_var: %s\n", current_cmd->env_vars);
                 }
                 else if (current->type == TOKEN_EXIT_STATUS)
                 {
