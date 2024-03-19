@@ -175,8 +175,9 @@ t_token_type determine_token_type(char *token, int inQuote, t_env *env)
     else if (ft_strcmp(token, "<") == 0) return TOKEN_REDIRECT_IN;
     else if (ft_strcmp(token, ">") == 0) return TOKEN_REDIRECT_OUT;
     else if (ft_strcmp(token, ">>") == 0) return TOKEN_REDIRECT_OUT_APPEND;
-    else if (ft_strcmp(token, "<<") == 0) return TOKEN_HEREDOC;
+    else if (ft_strcmp(token, "<<") == 0) return TOKEN_HEREDOC; 
     else if (ft_strcmp(token, ",") == 0) return TOKEN_COMMA;
+    else if (ft_strcmp(token, "..") == 0) return TOKEN_ARG;    
         if (token[0] == '$' ) 
 {
     // Directly check the next character in the token for a quote
