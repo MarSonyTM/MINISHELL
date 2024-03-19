@@ -6,7 +6,7 @@ void	custom_exec(t_cmd *cmd, t_env **env)
 		echo_cmd(cmd);
 	else if (ft_strncmp(cmd->cmd_arr[0], "cd", 3) == 0)
 	{
-		if (cd_cmd(cmd) == 1)
+		if (cd_cmd(cmd, *env) == 1)
 			cmd->exit_status = 1;
 	}
 	else if (ft_strncmp(cmd->cmd_arr[0], "pwd", 4) == 0)

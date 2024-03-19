@@ -1,8 +1,8 @@
 #include "../../inc/minishell.h"
 
-char *resolve_command_path(char *command) 
+char *resolve_command_path(char *command, t_env *env) 
 {
-    char *path = getenv("PATH"); // Get the PATH environment variable value
+    char *path = ft_getenv("PATH", env); // Get the PATH environment variable value
     char *pathCopy = ft_strdup(path); // Duplicate since strtok modifies the string
     if (!pathCopy)
         return (NULL); // Handle memory allocation failure
@@ -51,8 +51,7 @@ t_cmd *new_command(t_cmd **cmd)
     new_cmd->cmd_arr[0] = NULL; // Initialize to NULL for safety
     new_cmd->input = NULL;
     new_cmd->exit_status_token = NULL;
-    new_cmd->env_vars = malloc(sizeof(char *) * 1); // Initial size for NULL
-    new_cmd->env_vars[0] = NULL;
+    new_cmd->env_var = NULL;
     new_cmd->output = NULL;
     new_cmd->exit_status = 0;
     new_cmd->next = NULL;
@@ -71,11 +70,10 @@ t_cmd *new_command(t_cmd **cmd)
 }
 
 // Main parse function
-int parse(t_token *tokens, t_cmd **cmd)
+int parse(t_token *tokens, t_cmd **cmd, t_env *env)
 {
 	t_cmd *current_cmd = NULL;
 	int arg_count = 0; // To keep track of the number of arguments
-
 	 
 	t_token *current = tokens;
 	while (current != NULL) 
@@ -101,7 +99,7 @@ int parse(t_token *tokens, t_cmd **cmd)
                 return (1);
 			current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
 			arg_count = 1; // Reset argument count for the new command
-			char *cmd_path = resolve_command_path(current->value); // Resolve the command's path
+			char *cmd_path = resolve_command_path(current->value, env); // Resolve the command's path
             if (!cmd_path) 
                 return (1);
 			current_cmd->cmd_path = cmd_path; // Set the command's path
@@ -126,7 +124,7 @@ int parse(t_token *tokens, t_cmd **cmd)
             {
                 return (1);
             }
-		}
+		} 
 		else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_REDIRECT_OUT_APPEND) 
         {
             // Store the current token type before moving to the next token
@@ -250,25 +248,24 @@ int parse(t_token *tokens, t_cmd **cmd)
 		}
 		else if (current->type == TOKEN_ENV_VAR || current->type == TOKEN_EXIT_STATUS)
         {
- 
-            // Add the env_var to the array env_var
-            int env_var_count = 0;
-            while (current_cmd->env_vars[env_var_count] != NULL) 
+            // Mark these tokens for later expansion
+            if (current_cmd != NULL)
             {
-                env_var_count++;
+                if (current->type == TOKEN_ENV_VAR)
+                {
+                    current_cmd->env_var = ft_strdup(current->value);
+                    if (!current_cmd->env_var)
+                        return (1);
+                    printf("Parser env_var: %s\n", current_cmd->env_var);
+                }
+                else if (current->type == TOKEN_EXIT_STATUS)
+                {
+                    current_cmd->exit_status_token = ft_strdup(current->value);
+                    if (!current_cmd->exit_status_token)
+                        return (1);
+                    printf("Parser exit_status_token: %s\n", current_cmd->exit_status_token);
+                }
             }
-            current_cmd->env_vars = realloc(current_cmd->env_vars, sizeof(char *) * (env_var_count + 2)); // Resize for new env_var
-            if (!current_cmd->env_vars) 
-            {  
-                return (1);
-                // Clean up and exit or return an error
-            }
-            current_cmd->env_vars[env_var_count] = ft_strdup(current->value);
-            if (!current_cmd->env_vars[env_var_count])
-                return (1);
-            current_cmd->env_vars[env_var_count + 1] = NULL; // NULL terminate the array
-            printf("Parser env_var: %s\n", current_cmd->env_vars[env_var_count]);
- 
         }
 		else if (current->type == TOKEN_PIPE)
 		{
@@ -289,7 +286,7 @@ int parse(t_token *tokens, t_cmd **cmd)
             current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
 
 			// Resolve the command's path
-			char *cmd_path = resolve_command_path(current->value);
+			char *cmd_path = resolve_command_path(current->value, env);
             if (!cmd_path) 
                 return (1);
 			current_cmd->cmd_path = cmd_path;

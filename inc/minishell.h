@@ -91,14 +91,14 @@ typedef struct s_exec
 
 /*Functions prototypes for Lexer*/
 
-int     lexer(char *input, t_token **tokens); 
+int     lexer(char *input, t_token **tokens, t_env *env);
 void	free_tokens(t_token **tokens);
 int 	add_token(t_token **tokens, t_token_type type, char *value);
-t_token_type determine_token_type(char *token);
+t_token_type determine_token_type(char *token, t_env *env);
 
 /*Functions prototypes for Parser*/
 
-int parse(t_token *tokens, t_cmd **cmd);
+int parse(t_token *tokens, t_cmd **cmd, t_env *env);
 void free_cmds(t_cmd **cmd);
 
 
@@ -110,7 +110,7 @@ t_env	*arr_to_linked_list(char **envp);
 
 /* customs */
 void	echo_cmd(t_cmd *cmd);
-int	    cd_cmd(t_cmd *cmd);
+int	    cd_cmd(t_cmd *cmd, t_env *env);
 int 	pwd_cmd(void);
 int 	env_cmd(t_cmd *cmd, t_env *env);
 void	unset_cmd(t_cmd *cmd, t_env **env);
@@ -134,6 +134,7 @@ char	*get_value_concat(char *cmd, int *j);
 int 	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
 int	    handle_pipe(t_exec *exec, int i, char *cmd_path);
 int 	duplicate_fd(int old_fd, int new_fd, int custom);
+char    *ft_getenv(const char *name, t_env *env);
 
 /* signal management */
 void	handle_sigint(int sig);

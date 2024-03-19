@@ -23,11 +23,11 @@ void	echo_cmd(t_cmd *cmd)
 		ft_putchar_fd('\n', 1);
 }
 
-int	cd_cmd(t_cmd *cmd)
+int	cd_cmd(t_cmd *cmd, t_env *env)
 {
 	if (cmd->cmd_arr[1] == NULL)
 	{
-		if (chdir(getenv("HOME")) == -1)
+		if (chdir(ft_getenv("HOME", env)) == -1)
 			return (1);
 	}
 	else if (chdir(cmd->cmd_arr[1]) == -1)
