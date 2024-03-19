@@ -34,7 +34,7 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 		}
 	}
 	if (cmd->cmd_path == NULL) //if command is custom
-	{
+	{		
 		if (handle_custom(cmd, env, exec, i) == 1 && cmd->exit_status == 0)
 			cmd->exit_status = 1;
 		return ;
@@ -112,9 +112,11 @@ int	executor(t_cmd *cmd, t_env **env)
 	{
 		if (exec.pid[i] != -1)
 		{
+			ft_putnbr_fd(exec.pid[i], 1);
+			ft_putchar_fd('\n', 1);
 			waitpid(exec.pid[i], &exec.status[i], 0); // Wait for each child process to finish			
 			if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
-				last_exit_status = cmd->exit_status; // Capture the exit status of the child process
+				last_exit_status = WEXITSTATUS(exec.status[i]); // Capture the exit status of the child process
 		}
 		if (cmd->exit_status != 0)
 			last_exit_status = cmd->exit_status;

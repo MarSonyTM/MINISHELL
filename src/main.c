@@ -173,6 +173,8 @@ int main(int argc, char **argv, char **envp)
         expand_env_vars(cmd, env); // Expand environment variables
         print_commands(cmd); // Print the commands
 		exit_status = executor(cmd, &env); // Execute the commands & get the exit status
+        ft_putnbr_fd(exit_status, 1); // for debugging
+        ft_putchar_fd('\n', 1);
         reset_cmd(cmd); // Reset the commands        
         // clean_up(cmd, env);          
         // Free the tokens and commands
