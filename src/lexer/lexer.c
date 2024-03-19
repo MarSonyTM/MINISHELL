@@ -23,7 +23,7 @@ void lexer(char *input, t_token **tokens)
             if (bufIndex > 0)
              {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
+                add_token(tokens, determine_token_type(buffer, inQuote), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
             }
         } 
@@ -52,7 +52,7 @@ void lexer(char *input, t_token **tokens)
             {
                 // Add the current token before the comma
                 buffer[bufIndex] = '\0';
-                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer));
+                add_token(tokens, determine_token_type(buffer,inQuote), ft_strdup(buffer));
                 bufIndex = 0;
             }
             // Add the comma as a separate token
@@ -65,7 +65,7 @@ void lexer(char *input, t_token **tokens)
             if (bufIndex > 0) 
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
+                add_token(tokens, determine_token_type(buffer,inQuote), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
             }
             // Add the redirect in token
@@ -78,12 +78,22 @@ void lexer(char *input, t_token **tokens)
             if (bufIndex > 0)
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
+                add_token(tokens, determine_token_type(buffer,inQuote), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
             }
             // Add the redirect out token
             add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(">"));
-        } 
+        }
+        else if (currentChar == '$' && inQuote > 0 && !quote_error)
+        {
+            // Check if the current character is a '$' and in a quote
+            add_token(tokens, TOKEN_ARG, ft_strdup("$"));
+            bufIndex = 0; // Reset buffer index for the next token
+        }
+        else if (currentChar == '$' && ft_isalpha(input[i + 1]) == 0)
+        {
+            buffer[bufIndex] = '\0';
+        }
         else if (currentChar == '<' && input[i + 1] == '<' && inQuote == 0)
         {
             // Check if the next character is also '<' and not in a quote
@@ -91,7 +101,7 @@ void lexer(char *input, t_token **tokens)
             if (bufIndex > 0) 
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
+                add_token(tokens, determine_token_type(buffer,inQuote), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
             }
             // Add the heredoc token
@@ -105,7 +115,7 @@ void lexer(char *input, t_token **tokens)
             if (bufIndex > 0)
          {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
+                add_token(tokens, determine_token_type(buffer, inQuote), ft_strdup(buffer)); // Add the token
                 bufIndex = 0; // Reset buffer index for the next token
             }
             // Add the redirect out append token
@@ -123,12 +133,15 @@ void lexer(char *input, t_token **tokens)
         if (inQuote != 0) 
         { // If we ended in a quote, it's an unclosed quote error
             printf("Error: Unclosed quote\n");
+            free(buffer);
+            free_tokens(tokens);
+            return ; // Return without processing the tokens
             quote_error = true; // Set error to prevent adding the token
         } 
         else 
         {
             buffer[bufIndex] = '\0'; // Null-terminate the current token
-            add_token(tokens, determine_token_type(buffer), ft_strdup(buffer)); // Add the token
+            add_token(tokens, determine_token_type(buffer,inQuote), ft_strdup(buffer)); // Add the token
         }
     } 
     else if (inQuote != 0 && !quote_error) 
@@ -147,7 +160,7 @@ void lexer(char *input, t_token **tokens)
 }
 
 // Placeholder for determine_token_type function
-t_token_type determine_token_type(char *token)
+t_token_type determine_token_type(char *token, int inQuote)
 {
     // Check for specific commands or symbols
     if (ft_strcmp(token, "|") == 0) return TOKEN_PIPE;
@@ -156,10 +169,15 @@ t_token_type determine_token_type(char *token)
     else if (ft_strcmp(token, ">>") == 0) return TOKEN_REDIRECT_OUT_APPEND;
     else if (ft_strcmp(token, "<<") == 0) return TOKEN_HEREDOC;
     else if (ft_strcmp(token, ",") == 0) return TOKEN_COMMA;
-        if (token[0] == '$') 
+        if (token[0] == '$' ) 
 {
     // Directly check the next character in the token for a quote
-    if (token[1] == '\"' || token[1] == '\'') 
+    if (inQuote == 2) 
+    {
+        // This means we have something like $"..." or $'...', treat as ARG
+        return TOKEN_ARG;
+    } 
+    else if (inQuote == 1)
     {
         // This means we have something like $"..." or $'...', treat as ARG
         return TOKEN_ARG;
