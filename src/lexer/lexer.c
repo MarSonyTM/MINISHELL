@@ -84,12 +84,12 @@ void lexer(char *input, t_token **tokens)
             // Add the redirect out token
             add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(">"));
         }
-        else if (currentChar == '$' && inQuote > 0 && !quote_error)
-        {
-            // Check if the current character is a '$' and in a quote
-            add_token(tokens, TOKEN_ARG, ft_strdup("$"));
-            bufIndex = 0; // Reset buffer index for the next token
-        }
+        // else if (currentChar == '$' && inQuote > 0 && !quote_error)
+        // {
+        //     // Check if the current character is a '$' and in a quote
+        //     add_token(tokens, TOKEN_ARG, ft_strdup("$"));
+        //     bufIndex = 0; // Reset buffer index for the next token
+        // }
         else if (currentChar == '$' && ft_isalpha(input[i + 1]) == 0)
         {
             buffer[bufIndex] = '\0';
