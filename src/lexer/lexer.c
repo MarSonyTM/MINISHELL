@@ -91,6 +91,10 @@ int lexer(char *input, t_token **tokens)
             if (add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(">")) == 1) // Add the token
                 return (1); // Error
         }
+        else if (currentChar == '$' && input[i + 1] == '\0')
+        {
+            add_token(tokens, TOKEN_ARG, ft_strdup("$"));
+        }
         else if (currentChar == '$' && ft_isalpha(input[i + 1]) == 0)
         {
             buffer[bufIndex] = '\0';
