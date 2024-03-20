@@ -25,6 +25,8 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 
 static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
+	int	custom_exit;
+
 	if (cmd->next != NULL)
 	{
 		if (handle_pipe(exec, i, cmd->next->cmd_path) == 1)
@@ -34,9 +36,12 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 		}
 	}
 	if (cmd->cmd_path == NULL) //if command is custom
-	{		
-		if (handle_custom(cmd, env, exec, i) == 1 && cmd->exit_status == 0)
+	{
+		custom_exit = handle_custom(cmd, env, exec, i);	
+		if (custom_exit == 1 && cmd->exit_status == 0)
 			cmd->exit_status = 1;
+		else if (custom_exit == 0)
+			cmd->exit_status = 0;
 		return ;
 	}
 	exec->pid[i] = fork();
@@ -86,7 +91,7 @@ static void	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
 		exec->open_fds[i++] = -1;
 }
 
-int	executor(t_cmd *cmd, t_env **env)
+int	executor(t_cmd *cmd, t_env **env, int exit_status)
 {
 	t_exec	exec;
 	t_cmd	*tmp;
@@ -96,6 +101,7 @@ int	executor(t_cmd *cmd, t_env **env)
 
 	init_exec(&exec, cmd, env);
 	last_exit_status = 0;
+	cmd->exit_status = exit_status;
 	i = 0; //initialize i to 0, siginifies process number
 	j = exec.processes; //initialize j to number of processes
 	tmp = cmd;
@@ -112,11 +118,11 @@ int	executor(t_cmd *cmd, t_env **env)
 	{
 		if (exec.pid[i] != -1)
 		{
-			ft_putnbr_fd(exec.pid[i], 1);
-			ft_putchar_fd('\n', 1);
 			waitpid(exec.pid[i], &exec.status[i], 0); // Wait for each child process to finish			
 			if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
 				last_exit_status = WEXITSTATUS(exec.status[i]); // Capture the exit status of the child process
+			else
+				last_exit_status = 0;
 		}
 		if (cmd->exit_status != 0)
 			last_exit_status = cmd->exit_status;

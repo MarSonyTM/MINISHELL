@@ -20,7 +20,6 @@
 # define ERR_ARG "invalid argument"
 # define ERR_ARGS "arg list too long"
 # define ERR_ADDR "bad address"
-# define ERR_QUOT "unclosed quote"
 # define ERR_PARS "syntax error near unexpected token"
 
 /* holds information of each separate token */
@@ -105,7 +104,7 @@ void free_cmds(t_cmd **cmd);
 /*Functions prototypes for Execution*/
 
 void	custom_exec(t_cmd *cmd, t_env **env);
-int		executor(t_cmd *cmd, t_env **env);
+int	    executor(t_cmd *cmd, t_env **env, int exit_status);
 t_env	*arr_to_linked_list(char **envp);
 
 /* customs */

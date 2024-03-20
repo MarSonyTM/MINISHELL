@@ -178,7 +178,7 @@ int main(int argc, char **argv, char **envp)
         }
         expand_env_vars(cmd, env); // Expand environment variables
         print_commands(cmd); // Print the commands
-		exit_status = executor(cmd, &env); // Execute the commands & get the exit status
+		exit_status = executor(cmd, &env, exit_status); // Execute the commands & get the exit status
         reset_cmd(cmd); // Reset the commands        
         // clean_up(cmd, env);          
         // Free the tokens and commands
