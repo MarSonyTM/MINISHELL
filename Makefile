@@ -6,14 +6,14 @@
 #    By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/03/20 13:35:10 by mafurnic         ###   ########.fr        #
+#    Updated: 2024/03/19 17:50:38 by mafurnic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Project Name and Compiler Settings
 NAME := minishell
 COMPILER := cc
-FLAGS := -Wall -Wextra -Werror 
+FLAGS := -Wall -Wextra -Werror -g 
 CLEANUP_CMD := rm -rf
 
 # Directory Paths
@@ -23,7 +23,7 @@ LIBFT_PATH := libft/
 
 # Source and Object Files
 
-SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c lexer/lexer_utils1.c lexer/lexer_utils2.c lexer/lexer_utils3.c  parser/parser.c custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
+SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c lexer/lexer_utils1.c lexer/lexer_utils2.c  parser/parser.c custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
 				custom/export.c error/closing.c error/error.c error/freeing.c execution/executor.c execution/executor_utils1.c \
 				env/arr_to_linked_list.c execution/executor_utils2.c /signals/signals.c expansion/expansion.c\
 
