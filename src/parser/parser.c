@@ -253,7 +253,18 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
 				current_cmd->cmd_arr[arg_count] = NULL; // NULL terminate the array
 			} 
 		}
-		else if (current->type == TOKEN_ENV_VAR || current->type == TOKEN_EXIT_STATUS)
+        else if (current->type == TOKEN_EXIT_STATUS)
+        {
+            // Store the exit status token in the command structure
+            if (current_cmd != NULL) 
+            {
+                current_cmd->cmd_arr = realloc(current_cmd->cmd_arr, sizeof(char *) * (arg_count + 1)); // Resize for new arg
+                current_cmd->cmd_arr[arg_count] = ft_strdup(current->value);
+                if (!current_cmd->cmd_arr[arg_count])
+                    return (1);
+            }
+        }
+		else if (current->type == TOKEN_ENV_VAR)
         {
             int env_var_count = 0;
             while (current_cmd->env_vars[env_var_count] != NULL) 

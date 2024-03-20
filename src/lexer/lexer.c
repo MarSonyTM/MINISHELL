@@ -91,6 +91,22 @@ int lexer(char *input, t_token **tokens, t_env *env)
             if (add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(">")) == 1) // Add the token
                 return (1); // Error
         }
+        else if (currentChar == '$' && input[i + 1] == '?')
+        {
+            // Check if the next character is '?' and not in a quote
+            // This indicates an exit status token
+            if (bufIndex > 0) 
+            {
+                buffer[bufIndex] = '\0'; // Null-terminate the current token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
+                    return (1); // Error
+                bufIndex = 0; // Reset buffer index for the next token
+            }
+            // Add the exit status token
+            if (add_token(tokens, TOKEN_EXIT_STATUS, ft_strdup("$?")) == 1) // Add the token
+                return (1); // Error
+            i++; // Move past the '?'
+        }
         else if (currentChar == '$' && input[i + 1] == '\0')
         {
             add_token(tokens, TOKEN_ARG, ft_strdup("$"));
@@ -147,8 +163,9 @@ int lexer(char *input, t_token **tokens, t_env *env)
         else 
         {
             buffer[bufIndex] = '\0'; // Null-terminate the current token
+
             if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
-                return (1); // Error
+                return (2); // Error
         }
     } 
     else if (inQuote != 0 && !quote_error) 
