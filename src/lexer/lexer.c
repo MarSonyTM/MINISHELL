@@ -164,7 +164,7 @@ int lexer(char *input, t_token **tokens)
         {
             buffer[bufIndex] = '\0'; // Null-terminate the current token
             if (add_token(tokens, determine_token_type(buffer, inQuote), ft_strdup(buffer)) == 1) // Add the token
-                return (1); // Error
+                return (2); // Error
         }
     } 
     else if (inQuote != 0 && !quote_error) 

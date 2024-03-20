@@ -101,6 +101,12 @@ int main(int argc, char **argv, char **envp)
             free(input);
             exit(1);
         }
+        else if (lexer_status == 2) // syntax error
+        {
+            free_tokens(&tokens);
+            free(input);
+            continue ;
+        }
         t_token *current = tokens;
         while (current != NULL)
         {

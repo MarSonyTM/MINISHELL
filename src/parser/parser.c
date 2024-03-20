@@ -253,6 +253,7 @@ int parse(t_token *tokens, t_cmd **cmd)
             // Store the exit status token in the command structure
             if (current_cmd != NULL) 
             {
+                current_cmd->cmd_arr = realloc(current_cmd->cmd_arr, sizeof(char *) * (arg_count + 1)); // Resize for new arg
                 current_cmd->cmd_arr[arg_count] = ft_strdup(current->value);
                 if (!current_cmd->cmd_arr[arg_count])
                     return (1);
