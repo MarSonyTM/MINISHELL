@@ -100,9 +100,14 @@ t_token_type handle_variable_tokens(char *token, int inQuote);
 t_token_type check_for_quotes(char firstChar);
 t_token_type check_for_built_in_commands(char *token);
 t_token_type search_for_commands_in_path(char *token);
-
-
-
+int handle_redirect_in(char *buffer, int *bufIndex, t_token **tokens, int inQuote);
+int handle_redirect_out(char *buffer, int *bufIndex, t_token **tokens, int inQuote);
+int handle_exit_status(char *buffer, int *bufIndex, t_token **tokens, int inQuote, int *i);
+int handle_heredoc(char *buffer, int *bufIndex, t_token **tokens, int inQuote, int *i);
+int handle_redirect_out_append(char *buffer, int *bufIndex, t_token **tokens, int inQuote, int *i);
+int handle_whitespace(char *buffer, int *bufIndex, t_token **tokens, int inQuote);
+int handle_quotes(char *buffer, int *bufIndex, char currentChar, int *inQuote);
+int handle_comma(char *buffer, int *bufIndex, t_token **tokens, int inQuote);
 /*Functions prototypes for Parser*/
 
 int parse(t_token *tokens, t_cmd **cmd);
