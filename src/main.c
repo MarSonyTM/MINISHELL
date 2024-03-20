@@ -88,7 +88,7 @@ int main(int argc, char **argv, char **envp)
         if (!input)
         {
             free(input);
-            printf("exit1\n");
+            printf("exit\n");
             break ;
         }
         add_history(input);
@@ -100,6 +100,12 @@ int main(int argc, char **argv, char **envp)
             free_tokens(&tokens);
             free(input);
             exit(1);
+        }
+        else if (lexer_status == 2) // syntax error
+        {
+            free_tokens(&tokens);
+            free(input);
+            continue ;
         }
         t_token *current = tokens;
         while (current != NULL)
@@ -173,8 +179,6 @@ int main(int argc, char **argv, char **envp)
         expand_env_vars(cmd, env); // Expand environment variables
         print_commands(cmd); // Print the commands
 		exit_status = executor(cmd, &env); // Execute the commands & get the exit status
-        ft_putnbr_fd(exit_status, 1); // for debugging
-        ft_putchar_fd('\n', 1);
         reset_cmd(cmd); // Reset the commands        
         // clean_up(cmd, env);          
         // Free the tokens and commands

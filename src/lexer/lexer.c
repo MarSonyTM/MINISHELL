@@ -162,7 +162,7 @@ int lexer(char *input, t_token **tokens, t_env *env)
         // Free the tokens if there was an error
         //  free_tokens(tokens); //segfaults here!!!!
          free(buffer);
-        return (1); // Return without processing the tokens
+        return (2); // Return without processing the tokens
     }
     return (0);
 }
