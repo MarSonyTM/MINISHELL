@@ -100,6 +100,11 @@ t_token_type handle_variable_tokens(char *token, int inQuote);
 t_token_type check_for_quotes(char firstChar);
 t_token_type check_for_built_in_commands(char *token);
 t_token_type search_for_commands_in_path(char *token);
+int process_whitespace(char **buffer, int *bufIndex, t_token **tokens, int inQuote);
+void handle_quote(char currentChar, int *inQuote, char **buffer, int *bufIndex);
+int process_special_character(char **buffer, int *bufIndex, t_token **tokens, char currentChar, char nextChar, int *i, int inQuote);
+int handle_variable(char **buffer, int *bufIndex, t_token **tokens, char currentChar, char nextChar, int *i, int inQuote);
+int finalize_token_addition(char **buffer, int bufIndex, t_token **tokens, int inQuote);
 
 
 
