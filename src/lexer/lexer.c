@@ -5,6 +5,7 @@ int lexer(char *input, t_token **tokens, t_env *env)
     int i = 0; // Index for input string
     char currentChar; // Current character being processed
     char *buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
+
     if (buffer == NULL) 
     {
         // Handle memory allocation error
@@ -200,12 +201,12 @@ t_token_type determine_token_type(char *token, int inQuote, t_env *env)
     // Directly check the next character in the token for a quote
     if (inQuote == 2) 
     {
-        // This means we have something like $"..." or $'...', treat as ARG
+        // This means we have something like $"..."  treat as ARG
         return TOKEN_ARG;
     } 
     else if (inQuote == 1)
     {
-        // This means we have something like $"..." or $'...', treat as ARG
+        // This means we have something like  $'...', treat as ARG
         return TOKEN_ARG;
     } 
     else 
