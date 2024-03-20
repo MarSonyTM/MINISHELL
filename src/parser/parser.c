@@ -248,7 +248,7 @@ int parse(t_token *tokens, t_cmd **cmd)
 				current_cmd->cmd_arr[arg_count] = NULL; // NULL terminate the array
 			} 
 		}
-		else if (current->type == TOKEN_ENV_VAR)
+		else if (current->type == TOKEN_ENV_VAR || current->type == TOKEN_EXIT_STATUS)
         {
  
             // Add the env_var to the array env_var

@@ -6,7 +6,7 @@
 #    By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/03/19 17:50:38 by mafurnic         ###   ########.fr        #
+#    Updated: 2024/03/18 18:10:35 by mafurnic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ LIBFT_PATH := libft/
 
 # Source and Object Files
 
-SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c lexer/lexer_utils1.c lexer/lexer_utils2.c  parser/parser.c custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
+SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c parser/parser.c custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
 				custom/export.c error/closing.c error/error.c error/freeing.c execution/executor.c execution/executor_utils1.c \
 				env/arr_to_linked_list.c execution/executor_utils2.c /signals/signals.c expansion/expansion.c\
 
