@@ -30,7 +30,23 @@ int lexer(char *input, t_token **tokens, t_env *env)
                 bufIndex = 0; // Reset buffer index for the next token
                 TokenCount++;
             }
-        } 
+        }
+        else if (currentChar == '|') {
+    // Handle adding the pipe token here
+    buffer[bufIndex] = '\0'; // Null-terminate the current token if there is any
+    if (bufIndex > 0) {
+        if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) {
+            free(buffer);
+            return (1); // Error
+        }
+        bufIndex = 0; // Reset buffer index for the next token
+    }
+    if (add_token(tokens, TOKEN_PIPE, ft_strdup("|")) == 1) {
+        free(buffer);
+        return (1); // Error
+    }
+    TokenCount = 0; // Reset TokenCount after adding a pipe token
+}
         else if (currentChar == '\'' || currentChar == '\"') 
         {
             // Quote handling
