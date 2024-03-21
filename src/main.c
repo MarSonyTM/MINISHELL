@@ -183,27 +183,9 @@ int main(int argc, char **argv, char **envp)
             continue ;
         }
         expand_env_vars(cmd, env); // Expand environment variables
-        print_commands(cmd); // Print the commands
-        int i = 0;
-        while (cmd->cmd_arr[i] != NULL)
-        {
-            ft_putendl_fd(cmd->cmd_arr[i], 1);
-            i++;
-        }
+        // print_commands(cmd); // Print the commands
 		exit_status = executor(cmd, &env, exit_status); // Execute the commands & get the exit status
-        i = 0;
-        while (cmd->cmd_arr[i] != NULL)
-        {
-            ft_putendl_fd(cmd->cmd_arr[i], 1);
-            i++;
-        }
-        reset_cmd(cmd); // Reset the commands
-        i = 0;
-        while (cmd->cmd_arr[i] != NULL)
-        {
-            ft_putendl_fd(cmd->cmd_arr[i], 1);
-            i++;
-        }   
+        reset_cmd(cmd); // Reset the commands 
         // clean_up(cmd, env);          
         // Free the tokens and commands
         free_tokens(&tokens);
