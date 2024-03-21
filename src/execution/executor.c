@@ -68,6 +68,8 @@ static void	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
 	int	i;
 
 	exec->processes = count_processes(cmd);
+	exec->fd[0] = -1;
+	exec->fd[1] = -1;
 	exec->old_fd[0] = -1;
 	exec->old_fd[1] = -1;
 	exec->pid = (int *)malloc(sizeof(int) * exec->processes);

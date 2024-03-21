@@ -58,11 +58,20 @@ void free_cmds(t_cmd **cmd)
 
 static void reset_cmd(t_cmd *cmd) 
 {
+    int i;
+
     while (cmd != NULL) 
     {
         cmd->input = NULL;
         cmd->output = NULL;
         cmd->redirection_append = NULL;
+        cmd->cmd_path = NULL;
+        i = 0;
+        while (cmd->cmd_arr[i] != NULL) 
+        {
+            cmd->cmd_arr[i] = NULL;
+            i++;
+        }
         cmd = cmd->next;
     }
 }
@@ -75,8 +84,6 @@ int main(int argc, char **argv, char **envp)
 	env = arr_to_linked_list(envp);
 	
     if (argc > 1 || argv[1] != NULL)
-       
-   
      // Set up signal handlers
     signal(SIGINT, handle_sigint);   
         signal(SIGQUIT, handle_sigquit); 
@@ -87,8 +94,7 @@ int main(int argc, char **argv, char **envp)
         sleep(0);
         if (!input)
         {
-            free(input);
-            printf("exit\n");
+            ft_putendl_fd("exit", 1);
             break ;
         }
         add_history(input);
@@ -178,8 +184,26 @@ int main(int argc, char **argv, char **envp)
         }
         expand_env_vars(cmd, env); // Expand environment variables
         print_commands(cmd); // Print the commands
+        int i = 0;
+        while (cmd->cmd_arr[i] != NULL)
+        {
+            ft_putendl_fd(cmd->cmd_arr[i], 1);
+            i++;
+        }
 		exit_status = executor(cmd, &env, exit_status); // Execute the commands & get the exit status
-        reset_cmd(cmd); // Reset the commands        
+        i = 0;
+        while (cmd->cmd_arr[i] != NULL)
+        {
+            ft_putendl_fd(cmd->cmd_arr[i], 1);
+            i++;
+        }
+        reset_cmd(cmd); // Reset the commands
+        i = 0;
+        while (cmd->cmd_arr[i] != NULL)
+        {
+            ft_putendl_fd(cmd->cmd_arr[i], 1);
+            i++;
+        }   
         // clean_up(cmd, env);          
         // Free the tokens and commands
         free_tokens(&tokens);

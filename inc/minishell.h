@@ -121,6 +121,7 @@ void	clean_up(t_cmd *cmd, t_env *env);
 void	close_fds(int *open_fds, int processes);
 void	close_and_free(t_exec *exec);
 void	error(char *msg, char *ft);
+void	free_array(char **arr);
 
 /* utils */
 int 	redirection(char *file, int mode, int custom);
