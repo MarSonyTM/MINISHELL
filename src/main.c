@@ -67,6 +67,7 @@ static void reset_cmd(t_cmd *cmd)
     }
 }
 
+
 int main(int argc, char **argv, char **envp)
 {
     
@@ -76,7 +77,7 @@ int main(int argc, char **argv, char **envp)
 	
     if (argc > 1 || argv[1] != NULL)
        
-   
+    check_blocked_signals();
      // Set up signal handlers
     signal(SIGINT, handle_sigint);   
         signal(SIGQUIT, handle_sigquit); 

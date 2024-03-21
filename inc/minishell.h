@@ -139,6 +139,7 @@ char    *ft_getenv(const char *name, t_env *env);
 /* signal management */
 void	handle_sigint(int sig);
 void	handle_sigquit(int sig);
+void check_blocked_signals();
 
 /* expansion */
 void expand_env_vars(t_cmd *cmd, t_env *env);
