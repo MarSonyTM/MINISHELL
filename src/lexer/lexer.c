@@ -221,86 +221,86 @@ t_token_type determine_token_type(char *token, int inQuote, t_env *env, int Toke
     else if (ft_strcmp(token, "<<") == 0) return TOKEN_HEREDOC; 
     else if (ft_strcmp(token, ",") == 0) return TOKEN_COMMA;
     else if (ft_strcmp(token, "..") == 0) return TOKEN_ARG;    
-        if (token[0] == '$' ) 
-{
-    // Directly check the next character in the token for a quote
-    if (inQuote == 2) 
+    if (token[0] == '$' ) 
     {
-        // This means we have something like $"..."  treat as ARG
-        return TOKEN_ARG;
-    } 
-    else if (inQuote == 1)
-    {
-        // This means we have something like  $'...', treat as ARG
-        return TOKEN_ARG;
-    } 
-    else 
-    {
-        // Handling other $ cases, such as $USER or $? which are ENV_VAR or special
-        if (strcmp(token, "$?") == 0) return TOKEN_EXIT_STATUS;
-        else return TOKEN_ENV_VAR;
+        // Directly check the next character in the token for a quote
+        if (inQuote == 2) 
+        {
+            // This means we have something like $"..."  treat as ARG
+            return TOKEN_ARG;
+        } 
+        else if (inQuote == 1)
+        {
+            // This means we have something like  $'...', treat as ARG
+            return TOKEN_ARG;
+        } 
+        else 
+        {
+            // Handling other $ cases, such as $USER or $? which are ENV_VAR or special
+            if (strcmp(token, "$?") == 0) return TOKEN_EXIT_STATUS;
+            else return TOKEN_ENV_VAR;
+        }
     }
-}
-        else if (token[0] == '\"') return TOKEN_DQUOTE;
-        else if (token[0] == '\'') return TOKEN_QUOTE;
+    else if (token[0] == '\"') return TOKEN_DQUOTE;
+    else if (token[0] == '\'') return TOKEN_QUOTE;
+    else if (TokenCount > 0) return TOKEN_ARG; // Token is not a command or builtin
     // Check for specific commands
-        else if (ft_strcmp(token, "echo") == 0 || ft_strcmp(token, "cd") == 0 ||
+    else if (ft_strcmp(token, "echo") == 0 || ft_strcmp(token, "cd") == 0 ||
              ft_strcmp(token, "pwd") == 0 || ft_strcmp(token, "export") == 0 ||
              ft_strcmp(token, "unset") == 0 || ft_strcmp(token, "env") == 0 ||
              ft_strcmp(token, "exit") == 0) 
     {
         return TOKEN_BUILTIN;
     }
-char *path = ft_getenv("PATH", env);
-char *pathCopy = ft_strdup(path);
-if (!pathCopy)
-{
-    /* error */
-}
-char *dir = ft_strtok(pathCopy, ":");
-
-while (dir != NULL)
-{
-    // Calculate the length of the directory path, token, '/' and null terminator
-    size_t fullPathLen = ft_strlen(dir) + ft_strlen(token) + 2;
-    char *fullPath = malloc(fullPathLen);
-
-    // Check if malloc succeeded
-    if (fullPath == NULL)
+    char *path = ft_getenv("PATH", env);
+    char *pathCopy = ft_strdup(path);
+    if (!pathCopy)
     {
-        printf("Error: Failed to allocate memory for fullPath\n");
-        free(pathCopy);
-        return TOKEN_ERROR; // Indicate an error condition
+        /* error */
     }
+    char *dir = ft_strtok(pathCopy, ":");
 
-    // Copy the directory path into fullPath
-    ft_strcpy(fullPath, dir);
-
-    // Append '/' if the directory path doesn't end with '/'
-    if (fullPath[ft_strlen(fullPath) - 1] != '/')
-        ft_strcat(fullPath, "/");
-    
-    // Append the token to fullPath
-    ft_strcat(fullPath, token);
-
-    // Check if the concatenated path exists and is executable
-    if (access(fullPath, F_OK) == 0 && access(fullPath, X_OK) == 0) 
+    while (dir != NULL)
     {
-        free(pathCopy);
+        // Calculate the length of the directory path, token, '/' and null terminator
+        size_t fullPathLen = ft_strlen(dir) + ft_strlen(token) + 2;
+        char *fullPath = malloc(fullPathLen);
+
+        // Check if malloc succeeded
+        if (fullPath == NULL)
+        {
+            printf("Error: Failed to allocate memory for fullPath\n");
+            free(pathCopy);
+            return TOKEN_ERROR; // Indicate an error condition
+        }
+
+        // Copy the directory path into fullPath
+        ft_strcpy(fullPath, dir);
+
+        // Append '/' if the directory path doesn't end with '/'
+        if (fullPath[ft_strlen(fullPath) - 1] != '/')
+            ft_strcat(fullPath, "/");
+        
+        // Append the token to fullPath
+        ft_strcat(fullPath, token);
+
+        // Check if the concatenated path exists and is executable
+        if (access(fullPath, F_OK) == 0 && access(fullPath, X_OK) == 0) 
+        {
+            free(pathCopy);
+            free(fullPath);
+            return TOKEN_COMMAND; // Token corresponds to an executable file
+        }
+
+        // Free the memory allocated for fullPath
         free(fullPath);
-        return TOKEN_COMMAND; // Token corresponds to an executable file
+
+        // Move to the next directory in PATH
+        dir = ft_strtok(NULL, ":");
     }
 
-    // Free the memory allocated for fullPath
-    free(fullPath);
+    // Free the memory allocated for pathCopy
+    free(pathCopy);
 
-    // Move to the next directory in PATH
-    dir = ft_strtok(NULL, ":");
+    return TOKEN_ARG; // Token is not an executable file
 }
-
-// Free the memory allocated for pathCopy
-free(pathCopy);
-
-return TOKEN_ARG; // Token is not an executable file
-}
-
