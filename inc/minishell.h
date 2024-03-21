@@ -94,7 +94,7 @@ typedef struct s_exec
 int     lexer(char *input, t_token **tokens, t_env *env);
 void	free_tokens(t_token **tokens);
 int 	add_token(t_token **tokens, t_token_type type, char *value);
-t_token_type determine_token_type(char *token, int inQuote, t_env *env);
+t_token_type determine_token_type(char *token, int inQuote, t_env *env, int TokenCount);
 
 /*Functions prototypes for Parser*/
 

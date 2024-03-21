@@ -5,6 +5,7 @@ int lexer(char *input, t_token **tokens, t_env *env)
     int i = 0; // Index for input string
     char currentChar; // Current character being processed
     char *buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
+    int TokenCount = 0; // Number of tokens
 
     if (buffer == NULL) 
     {
@@ -24,9 +25,10 @@ int lexer(char *input, t_token **tokens, t_env *env)
             if (bufIndex > 0)
              {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0; // Reset buffer index for the next token
+                TokenCount++;
             }
         } 
         else if (currentChar == '\'' || currentChar == '\"') 
@@ -54,9 +56,10 @@ int lexer(char *input, t_token **tokens, t_env *env)
             {
                 // Add the current token before the comma
                 buffer[bufIndex] = '\0';
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0;
+                TokenCount++;
             }
             // Add the comma as a separate token
             if (add_token(tokens, TOKEN_COMMA, ft_strdup(",")) == 1) // Add the token
@@ -69,13 +72,15 @@ int lexer(char *input, t_token **tokens, t_env *env)
             if (bufIndex > 0) 
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0; // Reset buffer index for the next token
+                TokenCount++;
             }
             // Add the redirect in token
             if (add_token(tokens, TOKEN_REDIRECT_IN, ft_strdup("<")) == 1) // Add the token
                 return (1); // Error
+            TokenCount++;
         } 
         else if (currentChar == '>' && input[i + 1] != '>' && inQuote == 0)
         {
@@ -84,13 +89,14 @@ int lexer(char *input, t_token **tokens, t_env *env)
             if (bufIndex > 0)
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0; // Reset buffer index for the next token
             }
             // Add the redirect out token
             if (add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(">")) == 1) // Add the token
                 return (1); // Error
+            TokenCount++;
         }
         else if (currentChar == '$' && input[i + 1] == '?')
         {
@@ -99,18 +105,21 @@ int lexer(char *input, t_token **tokens, t_env *env)
             if (bufIndex > 0) 
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0; // Reset buffer index for the next token
+                TokenCount++;   
             }
             // Add the exit status token
             if (add_token(tokens, TOKEN_EXIT_STATUS, ft_strdup("$?")) == 1) // Add the token
                 return (1); // Error
             i++; // Move past the '?'
+            TokenCount++;   
         }
         else if (currentChar == '$' && input[i + 1] == '\0')
         {
             add_token(tokens, TOKEN_ARG, ft_strdup("$"));
+            TokenCount++;
         }
         else if (currentChar == '$' && ft_isalpha(input[i + 1]) == 0)
         {
@@ -123,13 +132,15 @@ int lexer(char *input, t_token **tokens, t_env *env)
             if (bufIndex > 0) 
             {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
+                TokenCount++;
                 bufIndex = 0; // Reset buffer index for the next token
             }
             // Add the heredoc token
             if (add_token(tokens, TOKEN_HEREDOC, ft_strdup("<<")) == 1) // Add the token
                 return (1); // Error
+            TokenCount++;
             i++; // Move past the second '<'
         } 
         else if (currentChar == '>' && input[i + 1] == '>' && inQuote == 0)
@@ -139,13 +150,15 @@ int lexer(char *input, t_token **tokens, t_env *env)
             if (bufIndex > 0)
          {
                 buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
                     return (1); // Error
                 bufIndex = 0; // Reset buffer index for the next token
+                TokenCount++;
             }
             // Add the redirect out append token
             if (add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) == 1) // Add the token
                 return (1); // Error
+            TokenCount++;
             i++; // Move past the second '>'
         }
         else
@@ -165,8 +178,9 @@ int lexer(char *input, t_token **tokens, t_env *env)
         {
             buffer[bufIndex] = '\0'; // Null-terminate the current token
 
-            if (add_token(tokens, determine_token_type(buffer, inQuote, env), ft_strdup(buffer)) == 1) // Add the token
+            if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
                 return (2); // Error
+            TokenCount++;
         }
     } 
     else if (inQuote != 0 && !quote_error) 
@@ -186,8 +200,19 @@ int lexer(char *input, t_token **tokens, t_env *env)
 }
 
 // Placeholder for determine_token_type function
-t_token_type determine_token_type(char *token, int inQuote, t_env *env)
+t_token_type determine_token_type(char *token, int inQuote, t_env *env, int TokenCount)
 {
+    if (TokenCount == 0)
+    {
+        if (ft_strcmp(token, "echo") == 0 || ft_strcmp(token, "cd") == 0 ||
+             ft_strcmp(token, "pwd") == 0 || ft_strcmp(token, "export") == 0 ||
+             ft_strcmp(token, "unset") == 0 || ft_strcmp(token, "env") == 0 ||
+             ft_strcmp(token, "exit") == 0) 
+        {
+            return TOKEN_BUILTIN;
+        }
+        return TOKEN_COMMAND;
+    }
     // Check for specific commands or symbols
     if (ft_strcmp(token, "|") == 0) return TOKEN_PIPE;
     else if (ft_strcmp(token, "<") == 0) return TOKEN_REDIRECT_IN;
