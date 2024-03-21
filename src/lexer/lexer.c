@@ -188,14 +188,6 @@ int lexer(char *input, t_token **tokens, t_env *env)
 // Placeholder for determine_token_type function
 t_token_type determine_token_type(char *token, int inQuote, t_env *env)
 {
-     int isFirstToken = 1; // Flag to indicate if it's the first token
-
-                    
-                        if (isFirstToken)
-                         {
-                            isFirstToken = 0;
-                            return TOKEN_COMMAND; // First token is always COMMAND
-                         }
     // Check for specific commands or symbols
     if (ft_strcmp(token, "|") == 0) return TOKEN_PIPE;
     else if (ft_strcmp(token, "<") == 0) return TOKEN_REDIRECT_IN;
