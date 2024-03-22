@@ -107,7 +107,7 @@ int	export_cmd(t_cmd *cmd, t_env **env)
 	}
 	if (cmd->cmd_arr[1][0] == '=' || ft_isdigit(cmd->cmd_arr[1][0]))
 	{
-		error(ERR_ARG, "export");
+		error(ERR_VAL, "export", cmd->cmd_arr[1], 1);
 		return (1);
 	}
 	while (cmd->cmd_arr[i])

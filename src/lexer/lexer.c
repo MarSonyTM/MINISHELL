@@ -187,7 +187,7 @@ int lexer(char *input, t_token **tokens, t_env *env)
     {
         if (inQuote != 0) 
         { // If we ended in a quote, it's an unclosed quote error
-            error(ERROR, "Unclosed quote");
+            error("Unclosed quote", ERROR, NULL, 0);
             quote_error = true; // Set error to prevent adding the token
         } 
         else 
@@ -199,10 +199,10 @@ int lexer(char *input, t_token **tokens, t_env *env)
             TokenCount++;
         }
     } 
-    else if (inQuote != 0 && !quote_error) 
+    else if (inQuote != 0 && !quote_error)
     {
         // Handle the case where the input ends while still in a quote
-        error(ERROR, "Unclosed quote");
+        error("Unclosed Quote", ERROR, NULL, 0);
         quote_error = true; // Set error to prevent adding the token
     }
     if (quote_error) 

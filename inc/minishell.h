@@ -18,9 +18,11 @@
 # define ERR_PERM "permission denied"
 # define ERR_INT "interrupted system call"
 # define ERR_ARG "invalid argument"
-# define ERR_ARGS "arg list too long"
+# define ERR_ARGS "too many arguments"
 # define ERR_ADDR "bad address"
 # define ERR_PARS "syntax error near unexpected token"
+# define ERR_NUM "numeric argument required"
+# define ERR_VAL "not a valid identifier"
 
 /* holds information of each separate token */
 
@@ -120,11 +122,11 @@ int 	export_cmd(t_cmd *cmd, t_env **env);
 void	clean_up(t_cmd *cmd, t_env *env);
 void	close_fds(int *open_fds, int processes);
 void	close_and_free(t_exec *exec);
-void	error(char *msg, char *ft);
+void	error(char *msg, char *command, char *argument, int custom);
 void	free_array(char **arr);
 
 /* utils */
-int 	redirection(char *file, int mode, int custom);
+int	    redirection(t_cmd *cmd, int mode, int custom);
 char	**env_to_array(t_cmd *cmd, t_env **env);
 int		get_len(t_env *env);
 int		count_processes(t_cmd *cmd);

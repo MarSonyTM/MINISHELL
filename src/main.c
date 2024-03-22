@@ -106,6 +106,7 @@ int main(int argc, char **argv, char **envp)
         {
             free_tokens(&tokens);
             free(input);
+            exit_status = 1;
             continue ;
         }
         t_token *current = tokens;
@@ -175,6 +176,7 @@ int main(int argc, char **argv, char **envp)
             free_cmds(&cmd);
             free_tokens(&tokens);
             free(input);
+            exit_status = 127;
             continue ;
         }
         expand_env_vars(cmd, env); // Expand environment variables

@@ -11,7 +11,7 @@ static int	check_for_digit(char *str)
 	{
 		if (!ft_isdigit(str[i]))
 		{
-			error(ERR_ARG, "exit");
+			error(ERR_NUM, "exit", str, 1);
 			return (0);
 		}
 		i++;
@@ -26,7 +26,7 @@ int	exit_cmd(t_cmd *cmd, t_env *env)
 	exit_code = EXIT_SUCCESS;
 	if (cmd->cmd_arr[1] && cmd->cmd_arr[2])
 	{
-		error(ERR_ARGS, "exit");
+		error(ERR_ARGS, "exit", NULL, 1);
 		return (1);
 	}
 	else if (cmd->cmd_arr[1] && check_for_digit(cmd->cmd_arr[1]))
@@ -37,6 +37,8 @@ int	exit_cmd(t_cmd *cmd, t_env *env)
 		if (exit_code > 255)
 			exit_code = exit_code % 256;
 	}
+	else
+		exit_code = 2;
 	clean_up(cmd, env);
 	ft_putstr_fd("exit\n", 1);
 	exit(exit_code);

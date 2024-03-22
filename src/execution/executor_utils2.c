@@ -22,17 +22,17 @@ int	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i)
 		return (1);
 	if (cmd->input)
 	{
-		if (redirection(cmd->input, 0, 1) == 1)
+		if (redirection(cmd, 0, 1) == 1)
 			return (1);
 	}
 	if (cmd->output)
 	{
-		if (redirection(cmd->output, 1, 1) == 1)
+		if (redirection(cmd, 1, 1) == 1)
 			return (1);
 	}
 	else if (cmd->redirection_append)
 	{
-		if (redirection(cmd->redirection_append, 2, 1) == 1)
+		if (redirection(cmd, 2, 1) == 1)
 			return (1);
 	}
 	if (cmd->next != NULL)
