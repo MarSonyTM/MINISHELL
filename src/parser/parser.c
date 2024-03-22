@@ -262,6 +262,7 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
                 current_cmd->cmd_arr[arg_count] = ft_strdup(current->value);
                 if (!current_cmd->cmd_arr[arg_count])
                     return (1);
+                current_cmd->cmd_arr[arg_count + 1] = NULL; // NULL terminate the array
             }
         }
 		else if (current->type == TOKEN_ENV_VAR)

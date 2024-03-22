@@ -58,24 +58,15 @@ void free_cmds(t_cmd **cmd)
 
 static void reset_cmd(t_cmd *cmd) 
 {
-    int i;
-
     while (cmd != NULL) 
     {
         cmd->input = NULL;
         cmd->output = NULL;
         cmd->redirection_append = NULL;
         cmd->cmd_path = NULL;
-        i = 0;
-        while (cmd->cmd_arr[i] != NULL) 
-        {
-            cmd->cmd_arr[i] = NULL;
-            i++;
-        }
         cmd = cmd->next;
     }
 }
-
 
 int main(int argc, char **argv, char **envp)
 {

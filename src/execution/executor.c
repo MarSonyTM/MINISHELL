@@ -52,11 +52,13 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 		child_process(cmd, i, exec, env);
 		exit(0);
 	}
-	close (exec->fd[1]); //close write end of pipe
+	if (exec->fd[1] != -1) //if write end of pipe is open
+		close(exec->fd[1]); //close write end of pipe
 	exec->open_fds[i * 2 + 1] = -1;
 	if (i != 0) //if this is not the first process
 	{
-		close(exec->old_fd[0]); //close read end of old pipe
+		if (exec->old_fd[0] != -1) //if read end of old pipe is open
+			close(exec->old_fd[0]); //close read end of old pipe
 		exec->open_fds[i * 2 - 2] = -1;
 	}
 	exec->old_fd[0] = exec->fd[0]; //set old read end of pipe to current read end of pipe
