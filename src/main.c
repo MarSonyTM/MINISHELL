@@ -76,6 +76,7 @@ static void reset_cmd(t_cmd *cmd)
     }
 }
 
+
 int main(int argc, char **argv, char **envp)
 {
     
@@ -84,6 +85,8 @@ int main(int argc, char **argv, char **envp)
 	env = arr_to_linked_list(envp);
 	
     if (argc > 1 || argv[1] != NULL)
+       
+    check_blocked_signals();
      // Set up signal handlers
     signal(SIGINT, handle_sigint);   
         signal(SIGQUIT, handle_sigquit); 
@@ -94,7 +97,8 @@ int main(int argc, char **argv, char **envp)
         sleep(0);
         if (!input)
         {
-            ft_putendl_fd("exit", 1);
+            free(input);
+            printf("exit\n");
             break ;
         }
         add_history(input);
@@ -183,9 +187,9 @@ int main(int argc, char **argv, char **envp)
             continue ;
         }
         expand_env_vars(cmd, env); // Expand environment variables
-        // print_commands(cmd); // Print the commands
+        print_commands(cmd); // Print the commands
 		exit_status = executor(cmd, &env, exit_status); // Execute the commands & get the exit status
-        reset_cmd(cmd); // Reset the commands 
+        reset_cmd(cmd); // Reset the commands        
         // clean_up(cmd, env);          
         // Free the tokens and commands
         free_tokens(&tokens);

@@ -49,7 +49,6 @@ t_cmd *new_command(t_cmd **cmd)
         return (NULL); // Error handling for malloc failure
     }
     new_cmd->cmd_arr[0] = NULL; // Initialize to NULL for safety
-    new_cmd->cmd_arr[1] = NULL; // Initialize to NULL for safety
     new_cmd->input = NULL;
     new_cmd->exit_status_token = NULL;
     new_cmd->env_vars = malloc(sizeof(char *) * 1); // Initial size for NULL

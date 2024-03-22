@@ -93,7 +93,7 @@ typedef struct s_exec
 int     lexer(char *input, t_token **tokens, t_env *env);
 void	free_tokens(t_token **tokens);
 int 	add_token(t_token **tokens, t_token_type type, char *value);
-t_token_type determine_token_type(char *token, int inQuote, t_env *env);
+t_token_type determine_token_type(char *token, int inQuote, t_env *env, int TokenCount);
 
 /*Functions prototypes for Parser*/
 
@@ -139,6 +139,7 @@ char    *ft_getenv(const char *name, t_env *env);
 /* signal management */
 void	handle_sigint(int sig);
 void	handle_sigquit(int sig);
+void check_blocked_signals();
 
 /* expansion */
 void expand_env_vars(t_cmd *cmd, t_env *env);
