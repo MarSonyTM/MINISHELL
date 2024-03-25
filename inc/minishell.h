@@ -95,6 +95,13 @@ int     lexer(char *input, t_token **tokens, t_env *env);
 void	free_tokens(t_token **tokens);
 int 	add_token(t_token **tokens, t_token_type type, char *value);
 t_token_type determine_token_type(char *token, int inQuote, t_env *env, int TokenCount);
+// Helper functions
+t_token_type handle_first_token(char *token);
+t_token_type handle_subsequent_tokens(char *token, int inQuote, t_env *env);
+t_token_type check_special_tokens(char *token);
+t_token_type handle_dollar_tokens(char *token, int inQuote);
+bool is_command(char *token, t_env *env);
+char *construct_full_path(char *dir, char *token);
 
 /*Functions prototypes for Parser*/
 
