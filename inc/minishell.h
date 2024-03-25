@@ -109,7 +109,9 @@ void process_quotes(char currentChar, char **buffer, int *bufIndex, int *inQuote
 void process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 void process_single_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 void process_double_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
-
+void process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+void finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, char *tokenValue, int inQuote);
+void process_dollar_conditions(char *input, int *i, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
 /*Functions prototypes for Parser*/
 
 int parse(t_token *tokens, t_cmd **cmd, t_env *env);

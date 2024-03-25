@@ -1,41 +1,5 @@
 #include "../../inc/minishell.h"
 
-void process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env) {
-    if (*bufIndex > 0) {
-        buffer[*bufIndex] = '\0'; // Null-terminate the current token
-        add_token(*tokens, determine_token_type(buffer, 0, env, *TokenCount), ft_strdup(buffer));
-        *bufIndex = 0; // Reset buffer index for the next token
-        (*TokenCount)++;
-    }
-    add_token(*tokens, TOKEN_COMMA, ft_strdup(","));
-    (*TokenCount)++;
-}
-
-void process_single_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env) {
-    if (*bufIndex > 0) {
-        buffer[*bufIndex] = '\0';
-        add_token(*tokens, determine_token_type(buffer, 0, env, *TokenCount), ft_strdup(buffer));
-        *bufIndex = 0;
-    }
-    t_token_type type = currentChar == '<' ? TOKEN_REDIRECT_IN : TOKEN_REDIRECT_OUT;
-    add_token(*tokens, type, ft_strdup(&currentChar));
-    (*TokenCount)++;
-}
-
-void process_double_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i) {
-    if (*bufIndex > 0) {
-        buffer[*bufIndex] = '\0';
-        add_token(*tokens, determine_token_type(buffer, 0, env, *TokenCount), ft_strdup(buffer));
-        *bufIndex = 0;
-    }
-    t_token_type type = currentChar == '<' ? TOKEN_HEREDOC : TOKEN_REDIRECT_OUT_APPEND;
-    char redirection[3] = {currentChar, currentChar, '\0'};
-    add_token(*tokens, type, ft_strdup(redirection));
-    (*TokenCount)++;
-    (*i)++; // Skip the next character
-}
-
-
 
 int lexer(char *input, t_token **tokens, t_env *env) 
 {
@@ -82,32 +46,9 @@ int lexer(char *input, t_token **tokens, t_env *env)
         {
             process_double_char_redirection(currentChar, buffer, &bufIndex, &tokens, &TokenCount, env, &i);
         }
-        else if (currentChar == '$' && input[i + 1] == '?')
+        else if (currentChar == '$')
         {
-            // Check if the next character is '?' and not in a quote
-            // This indicates an exit status token
-            if (bufIndex > 0) 
-            {
-                buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
-                    return (1); // Error
-                bufIndex = 0; // Reset buffer index for the next token
-                TokenCount++;   
-            }
-            // Add the exit status token
-            if (add_token(tokens, TOKEN_EXIT_STATUS, ft_strdup("$?")) == 1) // Add the token
-                return (1); // Error
-            i++; // Move past the '?'
-            TokenCount++;   
-        }
-        else if (currentChar == '$' && input[i + 1] == '\0')
-        {
-            add_token(tokens, TOKEN_ARG, ft_strdup("$"));
-            TokenCount++;
-        }
-        else if (currentChar == '$' && ft_isalpha(input[i + 1]) == 0)
-        {
-            buffer[bufIndex] = '\0';
+            process_dollar_conditions(input, &i, &buffer, &bufIndex, &tokens, &TokenCount, env, inQuote);
         }
         else if (currentChar == '<' && input[i + 1] == '<' && inQuote == 0)
         {
