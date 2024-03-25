@@ -1,7 +1,0 @@
-Makefile
-inc
-libft
-ls.txt
-minishell
-obj
-src

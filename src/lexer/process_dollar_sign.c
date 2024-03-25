@@ -4,13 +4,13 @@
 void finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, char *tokenValue, int inQuote) {
     if (*bufIndex > 0) {
         (*buffer)[*bufIndex] = '\0';
-        add_token(*tokens, determine_token_type(*buffer, inQuote, env, *TokenCount), ft_strdup(*buffer));
+        add_token(*tokens, determine_token_type(*buffer, inQuote, env, TokenCount), ft_strdup(*buffer));
         *bufIndex = 0;
     }
     if (tokenValue != NULL) {
-        add_token(*tokens, determine_token_type(tokenValue, inQuote, env, *TokenCount), ft_strdup(tokenValue));
+        add_token(*tokens, determine_token_type(tokenValue, inQuote, env, TokenCount), ft_strdup(tokenValue));
     }
-    TokenCount++;
+    (*TokenCount)++;
 }
 
 // Processes conditions related to the dollar sign ($)

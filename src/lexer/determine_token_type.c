@@ -1,15 +1,15 @@
 #include "../../inc/minishell.h"
  
-t_token_type	determine_token_type(char *token, int inQuote, t_env *env, int TokenCount) 
+t_token_type	determine_token_type(char *token, int inQuote, t_env *env, int *TokenCount) 
 {
-	if (TokenCount == 0)
+	if (*TokenCount == 0)
 	{
-		return (handle_first_token(token, TokenCount));
+return (handle_first_token(token, TokenCount));
 	}
 	return (handle_subsequent_tokens(token, inQuote, env));
 }
 
-t_token_type	handle_first_token(char *token, int TokenCount) 
+t_token_type	handle_first_token(char *token, int *TokenCount) 
 {
 	const char *builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit", NULL};
 	int i = 0;
@@ -17,12 +17,12 @@ t_token_type	handle_first_token(char *token, int TokenCount)
     {
 		if (ft_strcmp(token, builtins[i]) == 0) 
 		{
-            TokenCount++;
+            (*TokenCount)++;
             return (TOKEN_BUILTIN);
 		}
 		i++;
 	}
-    TokenCount++;
+    (*TokenCount)++;
 	return (TOKEN_COMMAND);
 }
 
