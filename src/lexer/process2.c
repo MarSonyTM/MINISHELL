@@ -8,7 +8,7 @@ void process_single_char_redirection(char currentChar, char *buffer, int *bufInd
     }
     t_token_type type = currentChar == '<' ? TOKEN_REDIRECT_IN : TOKEN_REDIRECT_OUT;
     add_token(*tokens, type, ft_strdup(&currentChar));
-    (*TokenCount)++;
+    TokenCount++;
 }
 
 void process_double_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i) {
@@ -20,6 +20,6 @@ void process_double_char_redirection(char currentChar, char *buffer, int *bufInd
     t_token_type type = currentChar == '<' ? TOKEN_HEREDOC : TOKEN_REDIRECT_OUT_APPEND;
     char redirection[3] = {currentChar, currentChar, '\0'};
     add_token(*tokens, type, ft_strdup(redirection));
-    (*TokenCount)++;
+    TokenCount++;
     (*i)++; // Skip the next character
 }

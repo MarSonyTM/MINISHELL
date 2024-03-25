@@ -1,5 +1,25 @@
 #include "../../inc/minishell.h"
 
+// Definition
+void process_double_redirect_out(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i) {
+    // Check if there is a token before '>>'
+    if (*bufIndex > 0) {
+        (*buffer)[*bufIndex] = '\0'; // Null-terminate the current token
+        if (add_token(*tokens, determine_token_type(*buffer, 0, env, *TokenCount), ft_strdup(*buffer)) == 1) {
+            free(*buffer); // Ensure to free the buffer on error
+            exit(1); // Or handle the error as needed
+        }
+        *bufIndex = 0; // Reset buffer index for the next token
+        (*TokenCount)++;
+    }
+    // Add the '>>' token
+    if (add_token(*tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) == 1) {
+        free(*buffer); // Ensure to free the buffer on error
+        exit(1); // Or handle the error as needed
+    }
+    (*TokenCount)++;
+    (*i)++; // Move past the second '>'
+}
 
 int lexer(char *input, t_token **tokens, t_env *env) 
 {
@@ -52,39 +72,11 @@ int lexer(char *input, t_token **tokens, t_env *env)
         }
         else if (currentChar == '<' && input[i + 1] == '<' && inQuote == 0)
         {
-            // Check if the next character is also '<' and not in a quote
-            // This indicates a heredoc token
-            if (bufIndex > 0) 
-            {
-                buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
-                    return (1); // Error
-                TokenCount++;
-                bufIndex = 0; // Reset buffer index for the next token
-            }
-            // Add the heredoc token
-            if (add_token(tokens, TOKEN_HEREDOC, ft_strdup("<<")) == 1) // Add the token
-                return (1); // Error
-            TokenCount++;
-            i++; // Move past the second '<'
+            process_heredoc(&buffer, &bufIndex, &tokens, &TokenCount, env, &i);
         } 
         else if (currentChar == '>' && input[i + 1] == '>' && inQuote == 0)
         {
-            // Check if the next character is also '>' and not in a quote
-            // This indicates a redirect out append token
-            if (bufIndex > 0)
-         {
-                buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
-                    return (1); // Error
-                bufIndex = 0; // Reset buffer index for the next token
-                TokenCount++;
-            }
-            // Add the redirect out append token
-            if (add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) == 1) // Add the token
-                return (1); // Error
-            TokenCount++;
-            i++; // Move past the second '>'
+            process_double_redirect_out(&buffer, &bufIndex, &tokens, &TokenCount, env, &i);
         }
         else
             // Regular character, add to the buffer

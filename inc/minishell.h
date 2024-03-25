@@ -96,7 +96,7 @@ void	free_tokens(t_token **tokens);
 int 	add_token(t_token **tokens, t_token_type type, char *value);
 t_token_type determine_token_type(char *token, int inQuote, t_env *env, int TokenCount);
 // Helper functions
-t_token_type handle_first_token(char *token);
+t_token_type handle_first_token(char *token, int TokenCount);
 t_token_type handle_subsequent_tokens(char *token, int inQuote, t_env *env);
 t_token_type check_special_tokens(char *token);
 t_token_type handle_dollar_tokens(char *token, int inQuote);
@@ -112,6 +112,8 @@ void process_double_char_redirection(char currentChar, char *buffer, int *bufInd
 void process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 void finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, char *tokenValue, int inQuote);
 void process_dollar_conditions(char *input, int *i, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
+void process_heredoc(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
+
 /*Functions prototypes for Parser*/
 
 int parse(t_token *tokens, t_cmd **cmd, t_env *env);

@@ -10,7 +10,7 @@ void finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***toke
     if (tokenValue != NULL) {
         add_token(*tokens, determine_token_type(tokenValue, inQuote, env, *TokenCount), ft_strdup(tokenValue));
     }
-    (*TokenCount)++;
+    TokenCount++;
 }
 
 // Processes conditions related to the dollar sign ($)
