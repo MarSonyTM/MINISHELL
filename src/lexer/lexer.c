@@ -1,5 +1,28 @@
 #include "../../inc/minishell.h"
 
+void process_double_redirect_out(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i) {
+    // Ensure the buffer contains a token before adding it
+    if (*bufIndex > 0) {
+        (*buffer)[*bufIndex] = '\0'; // Null-terminate
+        if (add_token(*tokens, determine_token_type(*buffer, 0, env, TokenCount), ft_strdup(*buffer)) != 1) {
+            *bufIndex = 0; // Reset for next token
+            (*TokenCount)++; // Increment only on successful add
+        } else {
+            free(*buffer); // Handle error: Free buffer if needed
+            exit(1); // Exit or handle error appropriately
+        }
+    }
+
+    // Add the redirect token '>>'
+    if (add_token(*tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) != 1) {
+        (*TokenCount)++; // Increment on successful add
+    } else {
+        free(*buffer); // Handle error: Free buffer if needed
+        exit(1); // Exit or handle error appropriately
+    }
+
+    (*i) += 1; // Skip past the next '>' character to avoid double processing
+}
 
 int lexer(char *input, t_token **tokens, t_env *env) 
 {
