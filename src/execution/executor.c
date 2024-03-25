@@ -4,12 +4,12 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
 	char	**envp;
 
-	if (i != exec->processes - 1) //if this is not the last process
-		duplicate_fd(exec->fd[1], 1, 0); //duplicate write end of pipe to stdout
-	if (i != 0) //if this is not the first process
+	if (i != exec->processes - 1)
+		duplicate_fd(exec->fd[1], 1, 0);
+	if (i != 0)
 	{
-		duplicate_fd(exec->old_fd[0], 0, 0); //duplicate read end of old pipe to stdin
-		close(exec->fd[0]); //close read end of pipe
+		duplicate_fd(exec->old_fd[0], 0, 0);
+		close(exec->fd[0]);
 		exec->open_fds[i * 2] = -1;
 	}
 	if (cmd->input)
@@ -35,9 +35,9 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 			return ;
 		}
 	}
-	if (cmd->cmd_path == NULL) //if command is custom
+	if (cmd->cmd_path == NULL)
 	{
-		custom_exit = handle_custom(cmd, env, exec, i);	
+		custom_exit = handle_custom(cmd, env, exec, i);
 		if (custom_exit == 1 && cmd->exit_status == 0)
 			cmd->exit_status = 1;
 		else if (custom_exit == 0)
@@ -47,25 +47,25 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 	exec->pid[i] = fork();
 	if (exec->pid[i] == -1)
 		exit(1);
-	if (exec->pid[i] == 0) //if this is the child process
+	if (exec->pid[i] == 0)
 	{
 		child_process(cmd, i, exec, env);
 		exit(0);
 	}
-	if (exec->fd[1] != -1) //if write end of pipe is open
-		close(exec->fd[1]); //close write end of pipe
+	if (exec->fd[1] != -1)
+		close(exec->fd[1]);
 	exec->open_fds[i * 2 + 1] = -1;
-	if (i != 0) //if this is not the first process
+	if (i != 0)
 	{
-		if (exec->old_fd[0] != -1) //if read end of old pipe is open
-			close(exec->old_fd[0]); //close read end of old pipe
+		if (exec->old_fd[0] != -1)
+			close(exec->old_fd[0]);
 		exec->open_fds[i * 2 - 2] = -1;
 	}
-	exec->old_fd[0] = exec->fd[0]; //set old read end of pipe to current read end of pipe
-	exec->old_fd[1] = exec->fd[1]; //set old write end of pipe to current write end of pipe
+	exec->old_fd[0] = exec->fd[0];
+	exec->old_fd[1] = exec->fd[1];
 }
 
-static void	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
+static int	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
 {
 	int	i;
 
@@ -76,12 +76,16 @@ static void	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
 	exec->old_fd[1] = -1;
 	exec->pid = (int *)malloc(sizeof(int) * exec->processes);
 	if (!exec->pid)
+	{
 		clean_up(cmd, *env);
+		return (1);
+	}
 	exec->status = (int *)malloc(sizeof(int) * exec->processes);
 	if (!exec->status)
 	{
 		free(exec->pid);
 		clean_up(cmd, *env);
+		return (1);
 	}
 	exec->open_fds = (int *)malloc(sizeof(int) * exec->processes * 2);
 	if (!exec->open_fds)
@@ -89,10 +93,12 @@ static void	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
 		free(exec->pid);
 		free(exec->status);
 		clean_up(cmd, *env);
+		return (1);
 	}
 	i = 0;
 	while (i < exec->processes * 2)
 		exec->open_fds[i++] = -1;
+	return (0);
 }
 
 int	executor(t_cmd *cmd, t_env **env, int exit_status)
@@ -103,34 +109,36 @@ int	executor(t_cmd *cmd, t_env **env, int exit_status)
 	int		j;
 	int		last_exit_status;
 
-	init_exec(&exec, cmd, env);
+	if (init_exec(&exec, cmd, env) == 1)
+		return (1);
 	last_exit_status = 0;
 	cmd->exit_status = exit_status;
-	i = 0; //initialize i to 0, siginifies process number
-	j = exec.processes; //initialize j to number of processes
+	i = 0;
+	j = exec.processes;
 	tmp = cmd;
-	while (j > 0) //while there are still processes to execute
+	while (j > 0)
 	{
 		create_child_process(tmp, i, &exec, env);
 		j--;
 		i++;
-		if (tmp->next != NULL) //if there are still commands to execute
-			tmp = tmp->next; //move to next command
+		if (tmp->next != NULL)
+			tmp = tmp->next;
 	}
 	i = 0;
+	tmp = cmd;
 	while (i < exec.processes)
 	{
 		if (exec.pid[i] != -1)
 		{
-			waitpid(exec.pid[i], &exec.status[i], 0); // Wait for each child process to finish			
+			waitpid(exec.pid[i], &exec.status[i], 0);
 			if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
-				last_exit_status = WEXITSTATUS(exec.status[i]); // Capture the exit status of the child process
+				last_exit_status = WEXITSTATUS(exec.status[i]);
 			else
 				last_exit_status = 0;
 		}
-		if (cmd->exit_status != 0)
-			last_exit_status = cmd->exit_status;
-		cmd = cmd->next;
+		if (tmp->exit_status != 0)
+			last_exit_status = tmp->exit_status;
+		tmp = tmp->next;
 		i++;
 	}
 	close_and_free(&exec);

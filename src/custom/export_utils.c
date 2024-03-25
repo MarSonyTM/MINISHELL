@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-static t_env	*add_env_node(t_env **env, char *key, char *value)
+t_env	*add_env_node(t_env **env, char *key, char *value)
 {
 	t_env	*new;
 	t_env	*tmp;
@@ -18,7 +18,7 @@ static t_env	*add_env_node(t_env **env, char *key, char *value)
 	return (*env);
 }
 
-static void	add_empty_env_var(char *cmd, t_env **env)
+void	add_empty_env_var(char *cmd, t_env **env)
 {
 	t_env	*tmp;
 	char	*key;
@@ -41,7 +41,7 @@ static void	add_empty_env_var(char *cmd, t_env **env)
 		*env = add_env_node(env, key, value);
 }
 
-static void	add_new_env_var(char *cmd, t_env **env, int j)
+void	add_new_env_var(char *cmd, t_env **env, int j)
 {
 	t_env	*tmp;
 	char	*key;
@@ -68,7 +68,7 @@ static void	add_new_env_var(char *cmd, t_env **env, int j)
 		*env = add_env_node(env, key, value);
 }
 
-static void	concatenate_env_var(char *cmd, t_env **env, int j)
+void	concatenate_env_var(char *cmd, t_env **env, int j)
 {
 	t_env	*tmp;
 	char	*key;
@@ -95,33 +95,15 @@ static void	concatenate_env_var(char *cmd, t_env **env, int j)
 		*env = add_env_node(env, key, value);
 }
 
-int	export_cmd(t_cmd *cmd, t_env **env)
+void	handle_export_args(t_cmd *cmd, t_env **env, int i)
 {
-	int	i;
-
-	i = 1;
-	if (!cmd->cmd_arr[1]) //export command with no argument
+	if (ft_strchr(cmd->cmd_arr[i], '='))
 	{
-		env_cmd(cmd, *env);
-		return (1);
-	}
-	if (cmd->cmd_arr[1][0] == '=' || ft_isdigit(cmd->cmd_arr[1][0]))
-	{
-		error(ERR_VAL, "export", cmd->cmd_arr[1], 1);
-		return (1);
-	}
-	while (cmd->cmd_arr[i])
-	{
-		if (ft_strchr(cmd->cmd_arr[i], '='))
-		{
-			if (ft_strchr(cmd->cmd_arr[i], '$'))
-				concatenate_env_var(cmd->cmd_arr[i], env, 0);
-			else
-				add_new_env_var(cmd->cmd_arr[i], env, 0);
-		}
+		if (ft_strchr(cmd->cmd_arr[i], '$'))
+			concatenate_env_var(cmd->cmd_arr[i], env, 0);
 		else
-			add_empty_env_var(cmd->cmd_arr[i], env);
-		i++;
+			add_new_env_var(cmd->cmd_arr[i], env, 0);
 	}
-	return (0);
+	else
+		add_empty_env_var(cmd->cmd_arr[i], env);
 }

@@ -137,6 +137,11 @@ int 	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
 int	    handle_pipe(t_exec *exec, int i, char *cmd_path);
 int 	duplicate_fd(int old_fd, int new_fd, int custom);
 char    *ft_getenv(const char *name, t_env *env);
+t_env	*add_env_node(t_env **env, char *key, char *value);
+void	add_empty_env_var(char *cmd, t_env **env);
+void	add_new_env_var(char *cmd, t_env **env, int j);
+void	concatenate_env_var(char *cmd, t_env **env, int j);
+void	handle_export_args(t_cmd *cmd, t_env **env, int i);
 
 /* signal management */
 void	handle_sigint(int sig);
