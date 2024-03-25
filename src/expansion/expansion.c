@@ -1,58 +1,63 @@
 #include "../../inc/minishell.h"
-
-void expand_env_vars(t_cmd *cmd, t_env *env)
+ 
+ void expand_env_vars(t_cmd *cmd, t_env *env)
 {
-    t_env *tmp = env;
-    char *var_value = NULL;
-
     while (cmd != NULL)
     {
-        int i = 0;
-        while (cmd->env_vars[i] != NULL) 
+        int i = 0; // Index for env_vars
+        while (cmd->env_vars[i] != NULL)
         {
             // Remove the $ symbol from the environment variable name
             char *env_var_name = cmd->env_vars[i] + 1;
-
             printf("Expanding variable: %s\n", env_var_name); // Debug print
 
-            while (tmp != NULL)
+            // Find the value of the environment variable
+            char *var_value = NULL;
+            for (t_env *tmp = env; tmp != NULL; tmp = tmp->next)
             {
                 if (ft_strcmp(tmp->key, env_var_name) == 0)
                 {
                     var_value = ft_strdup(tmp->value);
                     break;
                 }
-                tmp = tmp->next;
             }
+
             if (var_value != NULL)
-{
-    printf("Variable value: %s\n", var_value); // Debug print
+            {
+                printf("Variable value: %s\n", var_value); // Debug print
 
-    // Replace the env_var field with the environment variable's value
-    free(cmd->env_vars[i]);
-    cmd->env_vars[i] = ft_strdup(var_value);
+                // Replace the env_var field with the environment variable's value
+                free(cmd->env_vars[i]);
+                cmd->env_vars[i] = ft_strdup(var_value);
 
-    // Resize cmd_arr to accommodate the new value
-    cmd->cmd_arr = realloc(cmd->cmd_arr, sizeof(char *) * (i + 3));
-    if (cmd->cmd_arr == NULL) 
-    {
-        // Handle realloc failure
-        printf("Error: Memory allocation failed\n");
-        return;
-    }
+                // Find the length of cmd_arr
+                int cmd_arr_len = 0;
+                while (cmd->cmd_arr[cmd_arr_len] != NULL) 
+                {
+                    cmd_arr_len++;
+                }
 
-    // Add the new value to cmd_arr
-    cmd->cmd_arr[i + 1] = ft_strdup(var_value);
+                // Resize cmd_arr to accommodate the new value
+                cmd->cmd_arr = realloc(cmd->cmd_arr, sizeof(char *) * (cmd_arr_len + 2));
+                if (cmd->cmd_arr == NULL)
+                {
+                    // Handle realloc failure
+                    printf("Error: Memory allocation failed\n");
+                    return;
+                }
 
-    // NULL-terminate cmd_arr
-    cmd->cmd_arr[i + 2] = NULL;
-}
-            else 
+                // Append the new value to cmd_arr
+                cmd->cmd_arr[cmd_arr_len] = ft_strdup(var_value);
+                // NULL-terminate cmd_arr
+                cmd->cmd_arr[cmd_arr_len + 1] = NULL;
+
+                free(var_value); // Remember to free the duplicated value after use
+            }
+            else
             {
                 // Handle error: Environment variable not found
                 printf("Error: Environment variable '%s' not found\n", env_var_name); // Debug print
             }
-            tmp = env;
             i++;
         }
         cmd = cmd->next;

@@ -112,8 +112,8 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
 			current_cmd->cmd_path = cmd_path; // Set the command's path
 			if (cmd_path == NULL)
                 return (1);
-		} 
-		else if (current->type == TOKEN_ARG && current_cmd != NULL) 
+		}
+		else if (current->type == TOKEN_ARG /*&& current_cmd != NULL*/) 
 		{
 			arg_count++;
 			current_cmd->cmd_arr = realloc(current_cmd->cmd_arr, sizeof(char *) * (arg_count + 1)); // Resize for new arg
