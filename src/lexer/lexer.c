@@ -1,5 +1,42 @@
 #include "../../inc/minishell.h"
 
+void process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env) {
+    if (*bufIndex > 0) {
+        buffer[*bufIndex] = '\0'; // Null-terminate the current token
+        add_token(*tokens, determine_token_type(buffer, 0, env, *TokenCount), ft_strdup(buffer));
+        *bufIndex = 0; // Reset buffer index for the next token
+        (*TokenCount)++;
+    }
+    add_token(*tokens, TOKEN_COMMA, ft_strdup(","));
+    (*TokenCount)++;
+}
+
+void process_single_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env) {
+    if (*bufIndex > 0) {
+        buffer[*bufIndex] = '\0';
+        add_token(*tokens, determine_token_type(buffer, 0, env, *TokenCount), ft_strdup(buffer));
+        *bufIndex = 0;
+    }
+    t_token_type type = currentChar == '<' ? TOKEN_REDIRECT_IN : TOKEN_REDIRECT_OUT;
+    add_token(*tokens, type, ft_strdup(&currentChar));
+    (*TokenCount)++;
+}
+
+void process_double_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i) {
+    if (*bufIndex > 0) {
+        buffer[*bufIndex] = '\0';
+        add_token(*tokens, determine_token_type(buffer, 0, env, *TokenCount), ft_strdup(buffer));
+        *bufIndex = 0;
+    }
+    t_token_type type = currentChar == '<' ? TOKEN_HEREDOC : TOKEN_REDIRECT_OUT_APPEND;
+    char redirection[3] = {currentChar, currentChar, '\0'};
+    add_token(*tokens, type, ft_strdup(redirection));
+    (*TokenCount)++;
+    (*i)++; // Skip the next character
+}
+
+
+
 int lexer(char *input, t_token **tokens, t_env *env) 
 {
     int i = 0; // Index for input string
@@ -30,70 +67,20 @@ int lexer(char *input, t_token **tokens, t_env *env)
 }
         else if (currentChar == '\'' || currentChar == '\"') 
         {
-            // Quote handling
-            if (inQuote == 0) 
-            { // Starting a quote
-                if (currentChar == '\'') 
-                    inQuote = 1;
-                else 
-                    inQuote = 2;
-                
-            } 
-            else if ((inQuote == 1 && currentChar == '\'') || (inQuote == 2 && currentChar == '\"'))
-                // Ending a quote
-                inQuote = 0;
-            else 
-                // Inside quotes, treat as part of the token
-                buffer[bufIndex++] = currentChar;
+            // Call the helper function instead of inline code
+            process_quotes(currentChar, &buffer, &bufIndex, &inQuote);
         } 
         else if (currentChar == ',' && inQuote == 0) 
         {
-            // Commas outside of quotes are treated as separate tokens
-            if (bufIndex > 0) 
-            {
-                // Add the current token before the comma
-                buffer[bufIndex] = '\0';
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
-                    return (1); // Error
-                bufIndex = 0;
-                TokenCount++;
-            }
-            // Add the comma as a separate token
-            if (add_token(tokens, TOKEN_COMMA, ft_strdup(",")) == 1) // Add the token
-                return (1); // Error
+             process_comma(buffer, &bufIndex, &tokens, &TokenCount, env);
         } 
         else if (currentChar == '<' && input[i + 1] != '<' && inQuote == 0)
          {
-            // Check if the next character is not '<' and not in a quote
-            // This indicates a redirect in token
-            if (bufIndex > 0) 
-            {
-                buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
-                    return (1); // Error
-                bufIndex = 0; // Reset buffer index for the next token
-                TokenCount++;
-            }
-            // Add the redirect in token
-            if (add_token(tokens, TOKEN_REDIRECT_IN, ft_strdup("<")) == 1) // Add the token
-                return (1); // Error
-            TokenCount++;
+             process_single_char_redirection(currentChar, buffer, &bufIndex, &tokens, &TokenCount, env);
         } 
         else if (currentChar == '>' && input[i + 1] != '>' && inQuote == 0)
         {
-            // Check if the next character is not '>' and not in a quote
-            // This indicates a redirect out token
-            if (bufIndex > 0)
-            {
-                buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
-                    return (1); // Error
-                bufIndex = 0; // Reset buffer index for the next token
-            }
-            // Add the redirect out token
-            if (add_token(tokens, TOKEN_REDIRECT_OUT, ft_strdup(">")) == 1) // Add the token
-                return (1); // Error
-            TokenCount++;
+            process_double_char_redirection(currentChar, buffer, &bufIndex, &tokens, &TokenCount, env, &i);
         }
         else if (currentChar == '$' && input[i + 1] == '?')
         {

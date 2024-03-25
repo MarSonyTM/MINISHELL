@@ -105,6 +105,10 @@ char *construct_full_path(char *dir, char *token);
 void process_whitespace(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 bool is_whitespace(char c);
 void process_pipe(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+void process_quotes(char currentChar, char **buffer, int *bufIndex, int *inQuote);
+void process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+void process_single_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+void process_double_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
 
 /*Functions prototypes for Parser*/
 

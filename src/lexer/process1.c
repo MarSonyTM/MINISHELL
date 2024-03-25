@@ -22,3 +22,16 @@ void process_pipe(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCoun
     add_token(*tokens, TOKEN_PIPE, ft_strdup("|"));
     *TokenCount = 0; // Reset TokenCount after adding a pipe token
 }
+
+void process_quotes(char currentChar, char **buffer, int *bufIndex, int *inQuote) {
+    if (*inQuote == 0) {
+        // Starting a quote
+        *inQuote = (currentChar == '\'') ? 1 : 2;
+    } else if ((*inQuote == 1 && currentChar == '\'') || (*inQuote == 2 && currentChar == '\"')) {
+        // Ending a quote
+        *inQuote = 0;
+    } else {
+        // Inside quotes, treat as part of the token
+        (*buffer)[(*bufIndex)++] = currentChar;
+    }
+}
