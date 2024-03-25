@@ -102,6 +102,9 @@ t_token_type check_special_tokens(char *token);
 t_token_type handle_dollar_tokens(char *token, int inQuote);
 bool is_command(char *token, t_env *env);
 char *construct_full_path(char *dir, char *token);
+void process_whitespace(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+bool is_whitespace(char c);
+void process_pipe(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 
 /*Functions prototypes for Parser*/
 
