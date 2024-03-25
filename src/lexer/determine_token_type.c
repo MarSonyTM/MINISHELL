@@ -6,7 +6,7 @@ t_token_type	determine_token_type(char *token, int inQuote, t_env *env, int *Tok
 	{
 return (handle_first_token(token, TokenCount));
 	}
-	return (handle_subsequent_tokens(token, inQuote, env));
+	return (handle_subsequent_tokens(token, inQuote, env, TokenCount));
 }
 
 t_token_type	handle_first_token(char *token, int *TokenCount) 
@@ -26,22 +26,22 @@ t_token_type	handle_first_token(char *token, int *TokenCount)
 	return (TOKEN_COMMAND);
 }
 
-t_token_type handle_subsequent_tokens(char *token, int inQuote, t_env *env) 
-{
+t_token_type handle_subsequent_tokens(char *token, int inQuote, t_env *env, int *TokenCount) {
     t_token_type specialToken = check_special_tokens(token);
-    if (specialToken != TOKEN_ARG) 
-    {
-        return (specialToken);
+    if (specialToken != TOKEN_ARG) {
+        return specialToken;
     }
-    if (token[0] == '$') 
-    {
+
+    // Assuming you have a reason to check the command only if it's the first token
+    // which seems counter-intuitive given the function's purpose.
+    if (*TokenCount == 0 && is_command(token, env)) {
+        return TOKEN_COMMAND;
+    }
+
+    if (token[0] == '$') {
         return handle_dollar_tokens(token, inQuote);
     }
-    if (is_command(token, env)) 
-    {
-        return (TOKEN_COMMAND);
-    }
-    return (TOKEN_ARG);
+    return TOKEN_ARG;
 }
 
 t_token_type check_special_tokens(char *token) 
