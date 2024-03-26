@@ -142,6 +142,9 @@ void	add_empty_env_var(char *cmd, t_env **env);
 void	add_new_env_var(char *cmd, t_env **env, int j);
 void	concatenate_env_var(char *cmd, t_env **env, int j);
 void	handle_export_args(t_cmd *cmd, t_env **env, int i);
+int     get_last_exit_status(t_cmd *cmd, t_exec *exec);
+int	    allocate_memory(t_exec *exec, t_cmd *cmd, t_env **env);
+void	handle_fds(t_exec *exec, int i);
 
 /* signal management */
 void	handle_sigint(int sig);

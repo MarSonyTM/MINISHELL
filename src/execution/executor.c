@@ -27,13 +27,10 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
 	int	custom_exit;
 
-	if (cmd->next != NULL)
+	if (cmd->next != NULL && handle_pipe(exec, i, cmd->next->cmd_path) == 1)
 	{
-		if (handle_pipe(exec, i, cmd->next->cmd_path) == 1)
-		{
-			cmd->exit_status = 1;
-			return ;
-		}
+		cmd->exit_status = 1;
+		return ;
 	}
 	if (cmd->cmd_path == NULL)
 	{
@@ -52,17 +49,7 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 		child_process(cmd, i, exec, env);
 		exit(0);
 	}
-	if (exec->fd[1] != -1)
-		close(exec->fd[1]);
-	exec->open_fds[i * 2 + 1] = -1;
-	if (i != 0)
-	{
-		if (exec->old_fd[0] != -1)
-			close(exec->old_fd[0]);
-		exec->open_fds[i * 2 - 2] = -1;
-	}
-	exec->old_fd[0] = exec->fd[0];
-	exec->old_fd[1] = exec->fd[1];
+	handle_fds(exec, i);
 }
 
 static int	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
@@ -74,27 +61,8 @@ static int	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
 	exec->fd[1] = -1;
 	exec->old_fd[0] = -1;
 	exec->old_fd[1] = -1;
-	exec->pid = (int *)malloc(sizeof(int) * exec->processes);
-	if (!exec->pid)
-	{
-		clean_up(cmd, *env);
+	if (allocate_memory(exec, cmd, env) == 1)
 		return (1);
-	}
-	exec->status = (int *)malloc(sizeof(int) * exec->processes);
-	if (!exec->status)
-	{
-		free(exec->pid);
-		clean_up(cmd, *env);
-		return (1);
-	}
-	exec->open_fds = (int *)malloc(sizeof(int) * exec->processes * 2);
-	if (!exec->open_fds)
-	{
-		free(exec->pid);
-		free(exec->status);
-		clean_up(cmd, *env);
-		return (1);
-	}
 	i = 0;
 	while (i < exec->processes * 2)
 		exec->open_fds[i++] = -1;
@@ -124,23 +92,7 @@ int	executor(t_cmd *cmd, t_env **env, int exit_status)
 		if (tmp->next != NULL)
 			tmp = tmp->next;
 	}
-	i = 0;
-	tmp = cmd;
-	while (i < exec.processes)
-	{
-		if (exec.pid[i] != -1)
-		{
-			waitpid(exec.pid[i], &exec.status[i], 0);
-			if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
-				last_exit_status = WEXITSTATUS(exec.status[i]);
-			else
-				last_exit_status = 0;
-		}
-		if (tmp->exit_status != 0)
-			last_exit_status = tmp->exit_status;
-		tmp = tmp->next;
-		i++;
-	}
+	last_exit_status = get_last_exit_status(cmd, &exec);
 	close_and_free(&exec);
 	return (last_exit_status);
 }
