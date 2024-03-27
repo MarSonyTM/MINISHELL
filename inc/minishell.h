@@ -116,6 +116,7 @@ void process_heredoc(char **buffer, int *bufIndex, t_token ***tokens, int *Token
 void process_double_redirect_out(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
 int process_redirect_out_append(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
 int finalize_tokens(char **buffer, int bufIndex, t_token ***tokens, int *TokenCount, int inQuote, bool quote_error, t_env *env);
+int process_input_char(char currentChar, char *input,  char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int *inQuote, bool *quote_error);
 /*Functions prototypes for Parser*/
 
 int parse(t_token *tokens, t_cmd **cmd, t_env *env);

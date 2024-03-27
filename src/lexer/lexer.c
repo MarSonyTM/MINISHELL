@@ -1,73 +1,23 @@
 #include "../../inc/minishell.h"
 
-
 int lexer(char *input, t_token **tokens, t_env *env) 
 {
     int i = 0; // Index for input string
     char currentChar; // Current character being processed
     char *buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
-    int TokenCount = 0; // Number of tokens
-
     if (buffer == NULL) 
-    {
-        // Handle memory allocation error
-        // printf("Error: Failed to allocate memory for buffer\n");
-        return (1);
-    }
+        return (1); // Handle error if malloc fails
+    int TokenCount = 0; // Number of tokens
     int bufIndex = 0; // Index for buffer
     int inQuote = 0; // 0: no quote, 1: single quote, 2: double quote
     bool quote_error = false; // Track if there's an unclosed quote error
-
     while ((currentChar = input[i]) != '\0' && !quote_error) 
     {
-        if (is_whitespace(currentChar) && inQuote == 0) {
-            // Call the helper function instead of inline code
-            process_whitespace(buffer, &bufIndex, &tokens, &TokenCount, env);
-        }
-
-        else if (currentChar == '|')
-         {
-            // Call the helper function instead of inline code
-            process_pipe(buffer, &bufIndex, &tokens, &TokenCount, env);
-}
-        else if (currentChar == '\'' || currentChar == '\"') 
-        {
-            // Call the helper function instead of inline code
-            process_quotes(currentChar, &buffer, &bufIndex, &inQuote);
-        } 
-        else if (currentChar == ',' && inQuote == 0) 
-        {
-             process_comma(buffer, &bufIndex, &tokens, &TokenCount, env);
-        } 
-        else if (currentChar == '<' && input[i + 1] != '<' && inQuote == 0)
-         {
-             process_single_char_redirection(currentChar, buffer, &bufIndex, &tokens, &TokenCount, env);
-        } 
-        else if (currentChar == '>' && input[i + 1] != '>' && inQuote == 0)
-        {
-            process_double_char_redirection(currentChar, buffer, &bufIndex, &tokens, &TokenCount, env, &i);
-        }
-        else if (currentChar == '$')
-        {
-            process_dollar_conditions(input, &i, &buffer, &bufIndex, &tokens, &TokenCount, env, inQuote);
-        }
-        else if (currentChar == '<' && input[i + 1] == '<' && inQuote == 0)
-        {
-            process_heredoc(&buffer, &bufIndex, &tokens, &TokenCount, env, &i);
-        } 
-        else if (currentChar == '>' && input[i + 1] == '>' && inQuote == 0)
-        {
-            process_redirect_out_append(&buffer, &bufIndex, &tokens, &TokenCount, env, &i, inQuote);
-        }
-        else
-            // Regular character, add to the buffer
-            buffer[bufIndex++] = currentChar;
+        process_input_char(currentChar, input, &buffer, &bufIndex, &tokens, &TokenCount, env, &i, &inQuote, &quote_error);
         i++;
     }
-     // Before the end of the lexer function, replace the existing logic with:
-int finalResult = finalize_tokens(&buffer, bufIndex, &tokens, &TokenCount, inQuote, quote_error, env);
+int finalResult = finalize_tokens(&buffer, bufIndex, &tokens, &TokenCount, inQuote, quote_error, env); // Finalize the tokens
 free(buffer); // Ensure to free the buffer if it's not needed anymore
 return finalResult;
-
 }
  

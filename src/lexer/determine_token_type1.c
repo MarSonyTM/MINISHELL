@@ -61,3 +61,30 @@ int process_redirect_out_append(char **buffer, int *bufIndex, t_token ***tokens,
     (*i)++; // Move past the second '>'
     return (0);
 }
+
+int process_input_char(char currentChar, char *input,  char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int *inQuote, bool *quote_error) {
+    (void)quote_error;
+    if (is_whitespace(currentChar) && *inQuote == 0) {
+        process_whitespace(*buffer, bufIndex, tokens, TokenCount, env);
+    } else if (currentChar == '|') {
+        process_pipe(*buffer, bufIndex, tokens, TokenCount, env);
+    } else if (currentChar == '\'' || currentChar == '\"') {
+        process_quotes(currentChar, buffer, bufIndex, inQuote);
+    } else if (currentChar == ',' && *inQuote == 0) {
+        process_comma(*buffer, bufIndex, tokens, TokenCount, env);
+    } else if (currentChar == '<' && input[*i + 1] != '<' && *inQuote == 0) {
+        process_single_char_redirection(currentChar, *buffer, bufIndex, tokens, TokenCount, env);
+    } else if (currentChar == '>' && input[*i + 1] != '>' && *inQuote == 0) {
+        process_double_char_redirection(currentChar, *buffer, bufIndex, tokens, TokenCount, env, i);
+    } else if (currentChar == '$') {
+        process_dollar_conditions(input, i, buffer, bufIndex, tokens, TokenCount, env, *inQuote);
+    } else if (currentChar == '<' && input[*i + 1] == '<' && *inQuote == 0) {
+        process_heredoc(buffer, bufIndex, tokens, TokenCount, env, i);
+    } else if (currentChar == '>' && input[*i + 1] == '>' && *inQuote == 0) {
+        process_redirect_out_append(buffer, bufIndex, tokens, TokenCount, env, i, *inQuote);
+    } else {
+        // Regular character, add to the buffer
+        (*buffer)[(*bufIndex)++] = currentChar;
+    }
+    return 0; // Return 0 to indicate success
+}

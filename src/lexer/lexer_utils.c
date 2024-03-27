@@ -67,7 +67,7 @@ int finalize_tokens(char **buffer, int bufIndex, t_token ***tokens, int *TokenCo
     if (quote_error) {
         // Assuming free_tokens is a function to free all allocated tokens
         // free_tokens(tokens);
-        free(*buffer);
+        // free(*buffer);
         return 2;
     }
     return 0;
