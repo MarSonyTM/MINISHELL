@@ -63,10 +63,10 @@ static void reset_cmd(t_cmd *cmd)
         cmd->input = NULL;
         cmd->output = NULL;
         cmd->redirection_append = NULL;
-        cmd->cmd_path = NULL;
         cmd = cmd->next;
     }
 }
+
 
 int main(int argc, char **argv, char **envp)
 {
@@ -74,8 +74,6 @@ int main(int argc, char **argv, char **envp)
 	t_env *env;
     int exit_status = 0;
 	env = arr_to_linked_list(envp);
-    if (!env)
-        exit(1);
 	
     if (argc > 1 || argv[1] != NULL)
        
@@ -108,7 +106,6 @@ int main(int argc, char **argv, char **envp)
         {
             free_tokens(&tokens);
             free(input);
-            exit_status = 1;
             continue ;
         }
         t_token *current = tokens;
@@ -178,13 +175,13 @@ int main(int argc, char **argv, char **envp)
             free_cmds(&cmd);
             free_tokens(&tokens);
             free(input);
-            exit_status = 127;
             continue ;
         }
         expand_env_vars(cmd, env); // Expand environment variables
         print_commands(cmd); // Print the commands
-		exit_status = executor(cmd, &env, exit_status); // Execute the commands & get the exit status
-        reset_cmd(cmd); // Reset the commands
+		exit_status = executor(cmd, &env); // Execute the commands & get the exit status
+        reset_cmd(cmd); // Reset the commands        
+        // clean_up(cmd, env);          
         // Free the tokens and commands
         free_tokens(&tokens);
         free(input);

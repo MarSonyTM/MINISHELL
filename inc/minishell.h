@@ -18,11 +18,10 @@
 # define ERR_PERM "permission denied"
 # define ERR_INT "interrupted system call"
 # define ERR_ARG "invalid argument"
-# define ERR_ARGS "too many arguments"
+# define ERR_ARGS "arg list too long"
 # define ERR_ADDR "bad address"
+# define ERR_QUOT "unclosed quote"
 # define ERR_PARS "syntax error near unexpected token"
-# define ERR_NUM "numeric argument required"
-# define ERR_VAL "not a valid identifier"
 
 /* holds information of each separate token */
 
@@ -95,7 +94,26 @@ typedef struct s_exec
 int     lexer(char *input, t_token **tokens, t_env *env);
 void	free_tokens(t_token **tokens);
 int 	add_token(t_token **tokens, t_token_type type, char *value);
-t_token_type determine_token_type(char *token, int inQuote, t_env *env, int TokenCount);
+t_token_type determine_token_type(char *token, int inQuote, t_env *env, int *TokenCount);
+// Helper functions
+t_token_type handle_first_token(char *token, int *TokenCount);
+t_token_type handle_subsequent_tokens(char *token, int inQuote, t_env *env, int *TokenCount);
+t_token_type check_special_tokens(char *token);
+t_token_type handle_dollar_tokens(char *token, int inQuote);
+bool is_command(char *token, t_env *env);
+char *construct_full_path(char *dir, char *token);
+void process_whitespace(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+bool is_whitespace(char c);
+void process_pipe(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+void process_quotes(char currentChar, char **buffer, int *bufIndex, int *inQuote);
+void process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+void process_single_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+void process_double_char_redirection(char currentChar, char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
+void process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+void finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, char *tokenValue, int inQuote);
+void process_dollar_conditions(char *input, int *i, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
+void process_heredoc(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
+void process_double_redirect_out(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
 
 /*Functions prototypes for Parser*/
 
@@ -106,7 +124,7 @@ void free_cmds(t_cmd **cmd);
 /*Functions prototypes for Execution*/
 
 void	custom_exec(t_cmd *cmd, t_env **env);
-int	    executor(t_cmd *cmd, t_env **env, int exit_status);
+int		executor(t_cmd *cmd, t_env **env);
 t_env	*arr_to_linked_list(char **envp);
 
 /* customs */
@@ -122,11 +140,10 @@ int 	export_cmd(t_cmd *cmd, t_env **env);
 void	clean_up(t_cmd *cmd, t_env *env);
 void	close_fds(int *open_fds, int processes);
 void	close_and_free(t_exec *exec);
-void	error(char *msg, char *command, char *argument, int custom);
-void	free_array(char **arr);
+void	error(char *msg, char *ft);
 
 /* utils */
-int	    redirection(t_cmd *cmd, int mode, int custom);
+int 	redirection(char *file, int mode, int custom);
 char	**env_to_array(t_cmd *cmd, t_env **env);
 int		get_len(t_env *env);
 int		count_processes(t_cmd *cmd);
@@ -137,14 +154,6 @@ int 	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
 int	    handle_pipe(t_exec *exec, int i, char *cmd_path);
 int 	duplicate_fd(int old_fd, int new_fd, int custom);
 char    *ft_getenv(const char *name, t_env *env);
-t_env	*add_env_node(t_env **env, char *key, char *value);
-void	add_empty_env_var(char *cmd, t_env **env);
-void	add_new_env_var(char *cmd, t_env **env, int j);
-void	concatenate_env_var(char *cmd, t_env **env, int j);
-void	handle_export_args(t_cmd *cmd, t_env **env, int i);
-int     get_last_exit_status(t_cmd *cmd, t_exec *exec);
-int	    allocate_memory(t_exec *exec, t_cmd *cmd, t_env **env);
-void	handle_fds(t_exec *exec, int i);
 
 /* signal management */
 void	handle_sigint(int sig);

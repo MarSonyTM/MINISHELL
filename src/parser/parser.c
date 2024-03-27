@@ -1,14 +1,11 @@
 #include "../../inc/minishell.h"
 
-char *resolve_command_path(char *command, t_env *env, int *error_code) 
+char *resolve_command_path(char *command, t_env *env) 
 {
     char *path = ft_getenv("PATH", env); // Get the PATH environment variable value
     char *pathCopy = ft_strdup(path); // Duplicate since strtok modifies the string
     if (!pathCopy)
-    {
-        *error_code = 1;
         return (NULL); // Handle memory allocation failure
-    }
     char *dir = ft_strtok(pathCopy, ":");
     size_t commandLen = ft_strlen(command);
 
@@ -19,7 +16,6 @@ char *resolve_command_path(char *command, t_env *env, int *error_code)
         if (fullPath == NULL) {
             // Handle memory allocation failure
             free(pathCopy);
-            *error_code = 1;
             return (NULL);
         }
         
@@ -35,8 +31,7 @@ char *resolve_command_path(char *command, t_env *env, int *error_code)
         dir = ft_strtok(NULL, ":");
     }
     free(pathCopy);  
-    error(ERR_CMD, command, NULL, 0); // Command not found
-    *error_code = 2;
+    error(ERR_CMD, command); // Command not found
     return (NULL); // Command not found
 }
 
@@ -86,7 +81,6 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
 {
 	t_cmd *current_cmd = NULL;
 	int arg_count = 0; // To keep track of the number of arguments
-    int error_code = 0;
 	 
 	t_token *current = tokens;
 	while (current != NULL) 
@@ -112,20 +106,14 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
                 return (1);
 			current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
 			arg_count = 1; // Reset argument count for the new command
-            error_code = 0;
-			char *cmd_path = resolve_command_path(current->value, env, &error_code); // Resolve the command's path
-            if (!cmd_path)
-            {
-                if (error_code == 1)
-                    return (1);
-                else if (error_code == 2)
-                    return (2);
-            }
+			char *cmd_path = resolve_command_path(current->value, env); // Resolve the command's path
+            if (!cmd_path) 
+                return (1);
 			current_cmd->cmd_path = cmd_path; // Set the command's path
 			if (cmd_path == NULL)
                 return (1);
-		} 
-		else if (current->type == TOKEN_ARG && current_cmd != NULL) 
+		}
+		else if (current->type == TOKEN_ARG /*&& current_cmd != NULL*/) 
 		{
 			arg_count++;
 			current_cmd->cmd_arr = realloc(current_cmd->cmd_arr, sizeof(char *) * (arg_count + 1)); // Resize for new arg
@@ -154,9 +142,9 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
             if (current == NULL || current->value == NULL)
             {
                 if (current_type == TOKEN_REDIRECT_OUT_APPEND) 
-                    error(ERR_PARS, "\\n", NULL, 1);
+                    error(ERR_PARS, "\n");
                 else
-                    error(ERR_PARS, "\\n", NULL, 1);
+                    error(ERR_PARS, "\n");
                 return (2);
             }
             if (current_cmd != NULL)
@@ -186,7 +174,7 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
             current = current->next;
             if (current == NULL) 
             {
-                error(ERR_PARS, "\\n", NULL, 1);
+                error(ERR_PARS, "\n");
                 return (2);
             }
 
@@ -274,7 +262,6 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
                 current_cmd->cmd_arr[arg_count] = ft_strdup(current->value);
                 if (!current_cmd->cmd_arr[arg_count])
                     return (1);
-                current_cmd->cmd_arr[arg_count + 1] = NULL; // NULL terminate the array
             }
         }
 		else if (current->type == TOKEN_ENV_VAR)
@@ -316,15 +303,9 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
             current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
 
 			// Resolve the command's path
-            error_code = 0;
-			char *cmd_path = resolve_command_path(current->value, env, &error_code);
-            if (!cmd_path)
-            {
-                if (error_code == 1)
-                    return (1);
-                else if (error_code == 2)
-                    return (2);
-            }
+			char *cmd_path = resolve_command_path(current->value, env);
+            if (!cmd_path) 
+                return (1);
 			current_cmd->cmd_path = cmd_path;
 			// Reset argument count for the new command
 			arg_count = 1;

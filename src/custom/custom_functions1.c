@@ -33,14 +33,9 @@ int	cd_cmd(t_cmd *cmd, t_env *env)
 		if (chdir(ft_getenv("HOME", env)) == -1)
 			return (1);
 	}
-	else if (cmd->cmd_arr[1] && cmd->cmd_arr[2] != NULL)
-	{
-		error(ERR_ARGS, cmd->cmd_arr[0], NULL, 1);
-		return (1);
-	}
 	else if (chdir(cmd->cmd_arr[1]) == -1)
 	{
-		error(ERR_FIL, cmd->cmd_arr[0], cmd->cmd_arr[1], 1);
+		error(ERR_FIL, cmd->cmd_arr[0]);
 		return (1);
 	}
 	return (0);
@@ -65,7 +60,7 @@ int	env_cmd(t_cmd *cmd, t_env *env)
 
 	if (cmd->cmd_arr[1] != NULL)
 	{
-		error(ERR_ARGS, cmd->cmd_arr[0], NULL, 1);
+		error(ERR_ARGS, cmd->cmd_arr[0]);
 		return (1);
 	}
 	tmp = env;
