@@ -40,3 +40,23 @@ char	*construct_full_path(char *dir, char *token)
     strcat(fullPath, token);
     return (fullPath);
 }
+
+// Helper function to process redirection append tokens
+void process_redirect_out_append(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote) {
+    if (*bufIndex > 0) {
+        (*buffer)[*bufIndex] = '\0'; // Null-terminate the current token
+        if (add_token(*tokens, determine_token_type(*buffer, inQuote, env, TokenCount), ft_strdup(*buffer)) == 1) {
+            // Handle error if adding the token fails
+            return; // Optionally, handle error
+        }
+        *bufIndex = 0; // Reset buffer index for the next token
+        (*TokenCount)++;
+    }
+    // Add the redirect out append token
+    if (add_token(*tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) == 1) {
+        // Optionally, handle error
+        return; // Optionally, handle error
+    }
+    (*TokenCount)++;
+    (*i)++; // Move past the second '>'
+}

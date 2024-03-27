@@ -114,6 +114,7 @@ void finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***toke
 void process_dollar_conditions(char *input, int *i, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
 void process_heredoc(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
 void process_double_redirect_out(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
+void process_redirect_out_append(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
 
 /*Functions prototypes for Parser*/
 
