@@ -114,7 +114,7 @@ void process_single_redirect_out(char *buffer, int *bufIndex, t_token ***tokens,
 void process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
 void process_single_redirect_in(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
 int finalize_lexer(char **buffer, int bufIndex, t_token ***tokens, int *TokenCount, int inQuote, bool quote_error, t_env *env);
-
+int process_input_loop(char *input, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int *inQuote, bool *quote_error);
 /*Functions prototypes for Parser*/
 
 int parse(t_token *tokens, t_cmd **cmd, t_env *env);
