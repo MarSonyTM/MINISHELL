@@ -75,7 +75,7 @@ int process_input_loop(char *input, char **buffer, int *bufIndex, t_token ***tok
         (*i)++;
     }
 
-    return 0; // Return 0 to indicate success
+    return (0); // Return 0 to indicate success
 }
 
 // Finalization logic for the lexer.
@@ -88,7 +88,7 @@ int finalize_lexer(char **buffer, int bufIndex, t_token ***tokens, int *TokenCou
             (*buffer)[bufIndex] = '\0';
             if (add_token(*tokens, determine_token_type(*buffer, inQuote, env, TokenCount), ft_strdup(*buffer)) == 1) {
                 free(*buffer);
-                return 2;
+                return (2);
             }
             (*TokenCount)++;
         }
@@ -98,6 +98,6 @@ int finalize_lexer(char **buffer, int bufIndex, t_token ***tokens, int *TokenCou
         return 2; // Return indicating an error occurred
     }
     free(*buffer); // Free the buffer now that we're done with it
-    return 0; // Return indicating success
+    return (0); // Return indicating success
 }
 
