@@ -112,7 +112,8 @@ int	executor(t_cmd *cmd, t_env **env)
 	{
 		if (exec.pid[i] != -1)
 		{
-			waitpid(exec.pid[i], &exec.status[i], 0); // Wait for each child process to finish			
+			waitpid(exec.pid[i], &exec.status[i], 0); // Wait for each child process to finish	
+			printf("Process %d exited with status %d\n", exec.pid[i], WEXITSTATUS(exec.status[i]));		
 			if (WIFEXITED(exec.status[i]) && WEXITSTATUS(exec.status[i]) != 0)
 				last_exit_status = WEXITSTATUS(exec.status[i]); // Capture the exit status of the child process
 		}

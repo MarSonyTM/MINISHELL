@@ -84,13 +84,13 @@ int main(int argc, char **argv, char **envp)
         signal(SIGQUIT, handle_sigquit); 
 
     while (1)
-    {   
+    {
         char *input = readline(PROMPT);
         sleep(0);
         if (!input)
         {
             free(input);
-            printf("exit\n");
+            printf("exit1\n");
             break ;
         }
         add_history(input);
