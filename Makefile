@@ -26,6 +26,7 @@ LIBFT_PATH := libft/
 SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c parser/parser.c custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
 				custom/export_utils.c error/error_management.c execution/executor.c execution/executor_utils1.c \
 				env/arr_to_linked_list.c execution/executor_utils2.c /signals/signals.c expansion/expansion.c env/env_utils.c env/linked_list_to_arr.c \
+				main_utils.c 
 
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)
 LIBFT := $(LIBFT_PATH)libft.a

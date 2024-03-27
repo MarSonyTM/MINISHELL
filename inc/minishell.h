@@ -145,6 +145,9 @@ void	handle_export_args(t_cmd *cmd, t_env **env, int i);
 int     get_last_exit_status(t_cmd *cmd, t_exec *exec);
 int	    allocate_memory(t_exec *exec, t_cmd *cmd, t_env **env);
 void	handle_fds(t_exec *exec, int i);
+void	free_cmds(t_cmd **cmd);
+void	reset_free_cmd(t_cmd **cmd, t_token **tokens, char *input);
+void	check_args(int argc, char **argv);
 
 /* signal management */
 void	handle_sigint(int sig);
