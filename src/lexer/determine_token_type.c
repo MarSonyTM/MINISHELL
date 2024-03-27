@@ -38,7 +38,9 @@ t_token_type handle_subsequent_tokens(char *token, int inQuote, t_env *env, int 
         return TOKEN_COMMAND;
     }
 
-    if (token[0] == '$') {
+
+    if (token[0] == '$' && token[1] != '\0')
+    {
         return handle_dollar_tokens(token, inQuote);
     }
     return TOKEN_ARG;
