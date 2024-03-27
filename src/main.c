@@ -90,7 +90,7 @@ int main(int argc, char **argv, char **envp)
         if (!input)
         {
             free(input);
-            printf("exit1\n");
+            printf("exit\n");
             break ;
         }
         add_history(input);
