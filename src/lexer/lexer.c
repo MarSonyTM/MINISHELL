@@ -1,23 +1,4 @@
 #include "../../inc/minishell.h"
- 
-int handle_redirect_out_append(char *input, int *i, char *buffer, int *bufIndex, t_token ***tokens, int inQuote, t_env *env, int *TokenCount) {
-    // Check if the next character is also '>' and not in a quote
-    // This indicates a redirect out append token
-    (void)input;
-    if (*bufIndex > 0) {
-        buffer[*bufIndex] = '\0'; // Null-terminate the current token
-        if (add_token(*tokens, determine_token_type(buffer, inQuote, env, TokenCount), ft_strdup(buffer)) == 1) // Add the token
-            return (1); // Error
-        *bufIndex = 0; // Reset buffer index for the next token
-        (*TokenCount)++;
-    }
-    // Add the redirect out append token
-    if (add_token(*tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) == 1) // Add the token
-        return (1); // Error
-    (*TokenCount)++;
-    (*i)++; // Move past the second '>'
-    return (0);
-}
 
 int lexer(char *input, t_token **tokens, t_env *env) 
 {
@@ -26,18 +7,14 @@ int lexer(char *input, t_token **tokens, t_env *env)
     char *buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
     int TokenCount = 0; // Number of tokens
 
-    if (buffer == NULL) 
-    {
-        // Handle memory allocation error
-        // printf("Error: Failed to allocate memory for buffer\n");
+    if (buffer == NULL) // Check for allocation error
         return (1);
-    }
     int bufIndex = 0; // Index for buffer
     int inQuote = 0; // 0: no quote, 1: single quote, 2: double quote
     bool quote_error = false; // Track if there's an unclosed quote error
 
     while ((currentChar = input[i]) != '\0' && !quote_error) {
-        if (is_whitespace(currentChar) && inQuote == 0) {
+        if (is_whitespace(currentChar) && inQuote == 0) { 
             // Call the helper function instead of inline code
             process_whitespace(buffer, &bufIndex, &tokens, &TokenCount, env);
         }
@@ -73,12 +50,22 @@ int lexer(char *input, t_token **tokens, t_env *env)
             process_heredoc(&buffer, &bufIndex, &tokens, &TokenCount, env, &i);
         } 
         else if (currentChar == '>' && input[i + 1] == '>' && inQuote == 0)
-        { 
-            if (handle_redirect_out_append(input, &i, buffer, &bufIndex, &tokens, inQuote, env, &TokenCount) == 1)
-            {
-                free(buffer);
-                return (1);
+        {
+            // Check if the next character is also '>' and not in a quote
+            // This indicates a redirect out append token
+            if (bufIndex > 0)
+         {
+                buffer[bufIndex] = '\0'; // Null-terminate the current token
+                if (add_token(tokens, determine_token_type(buffer, inQuote, env, &TokenCount), ft_strdup(buffer)) == 1) // Add the token
+                    return (1); // Error
+                bufIndex = 0; // Reset buffer index for the next token
+                TokenCount++;
             }
+            // Add the redirect out append token
+            if (add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) == 1) // Add the token
+                return (1); // Error
+            TokenCount++;
+            i++; // Move past the second '>'
         }
         else
             // Regular character, add to the buffer
@@ -117,4 +104,3 @@ int lexer(char *input, t_token **tokens, t_env *env)
     }
     return (0);
 }
- 
