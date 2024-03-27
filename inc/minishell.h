@@ -107,11 +107,11 @@ bool is_whitespace(char c);
 void process_pipe(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 void process_quotes(char currentChar, char **buffer, int *bufIndex, int *inQuote);
 void process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-void process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 void finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, char *tokenValue, int inQuote);
 void process_dollar_conditions(char *input, int *i, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
 void process_heredoc(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
-void process_double_redirect_out(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
+void process_single_redirect_out(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+void process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
 
 /*Functions prototypes for Parser*/
 
