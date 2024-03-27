@@ -1,20 +1,26 @@
 #include "../../inc/minishell.h"
 
-
-int lexer(char *input, t_token **tokens, t_env *env) 
+int	lexer(char *input, t_token **tokens, t_env *env) 
 {
-    int i = 0; // Index for input string
-    char *buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
-    int TokenCount = 0; // Number of tokens
-    int bufIndex = 0; // Index for buffer
-    int inQuote = 0; // 0: no quote, 1: single quote, 2: double quote
-    bool quote_error = false; // Track if there's an unclosed quote error
+	int		i; // Index for the input string
+	char *buffer; // Buffer to store the current token
+	int TokenCount; // Number of tokens
+	int bufIndex; // Index for the buffer
+	int inQuote; // Flag to indicate if we are in a quote
+	bool quote_error; // Flag to indicate if there was a quote error
+	i = 0; // Initialize the index to 0
+	buffer = malloc((ft_strlen(input) + 1) * sizeof(char)); // Allocate memory for the buffer
+	TokenCount = 0; // Initialize the token count to 0
+	bufIndex = 0; // Initialize the buffer index to 0
+	inQuote = 0; // Initialize the inQuote flag to 0
+	quote_error = false; // Initialize the quote error flag to false
+
     if (buffer == NULL) // Check for allocation error
         return (1);
 
     // Process the input string
     process_input_loop(input, &buffer, &bufIndex, &tokens, &TokenCount, env, &i, &inQuote, &quote_error);
-
-    return finalize_lexer(&buffer, bufIndex, &tokens, &TokenCount, inQuote, quote_error, env);
+    // Finalize the lexer
+	return (finalize_lexer(&buffer, bufIndex, &tokens, &TokenCount, inQuote, quote_error, env));
 }
 
