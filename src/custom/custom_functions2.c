@@ -37,8 +37,6 @@ int	exit_cmd(t_cmd *cmd, t_env *env)
 		if (exit_code > 255)
 			exit_code = exit_code % 256;
 	}
-	else
-		exit_code = 2;
 	clean_up(cmd, env);
 	ft_putstr_fd("exit\n", 1);
 	exit(exit_code);
