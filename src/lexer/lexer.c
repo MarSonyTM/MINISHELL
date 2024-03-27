@@ -8,10 +8,6 @@ int lexer(char *input, t_token **tokens, t_env *env)
     if (buffer == NULL) 
         return (1); // Handle error if malloc fails
     int TokenCount = 0; // Number of tokens
-    if (buffer == NULL) 
-    {
-        return (1); // Handle error if malloc fails
-    }
     int bufIndex = 0; // Index for buffer
     int inQuote = 0; // 0: no quote, 1: single quote, 2: double quote
     bool quote_error = false; // Track if there's an unclosed quote error

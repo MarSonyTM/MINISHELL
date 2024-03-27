@@ -47,7 +47,7 @@ int process_redirect_out_append(char **buffer, int *bufIndex, t_token ***tokens,
         (*buffer)[*bufIndex] = '\0'; // Null-terminate the current token
         if (add_token(*tokens, determine_token_type(*buffer, inQuote, env, TokenCount), ft_strdup(*buffer)) == 1) {
             // Handle error if adding the token fails
-            return (1); // Optionally, handle error
+            return (2); // Optionally, handle error
         }
         *bufIndex = 0; // Reset buffer index for the next token
         (*TokenCount)++;
@@ -55,7 +55,7 @@ int process_redirect_out_append(char **buffer, int *bufIndex, t_token ***tokens,
     // Add the redirect out append token
     if (add_token(*tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) == 1) {
         // Optionally, handle error
-        return (1); // Optionally, handle error
+        return (2); // Optionally, handle error
     }
     (*TokenCount)++;
     (*i)++; // Move past the second '>'
@@ -81,12 +81,11 @@ int process_input_char(char currentChar, char *input,  char **buffer, int *bufIn
         process_dollar_conditions(input, i, buffer, bufIndex, tokens, TokenCount, env, *inQuote);
     } else if (currentChar == '<' && input[*i + 1] == '<' && *inQuote == 0) {
         process_heredoc(buffer, bufIndex, tokens, TokenCount, env, i);
-    } else if (currentChar == '>' && input[*i + 1] == '>' && *inQuote == 0) {
-        process_redirect_out_append(buffer, bufIndex, tokens, TokenCount, env, i, *inQuote);
+    // } else if (currentChar == '>' && input[*i + 1] == '>' && *inQuote == 0) {
+    //     process_redirect_out_append(buffer, bufIndex, tokens, TokenCount, env, i, *inQuote);
     } else {
         // Regular character, add to the buffer
         (*buffer)[(*bufIndex)++] = currentChar;
-        i++;
     }
     return 0; // Return 0 to indicate success
 }
