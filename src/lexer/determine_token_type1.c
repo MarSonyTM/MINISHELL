@@ -67,8 +67,6 @@ int process_input_char(char currentChar, char *input,  char **buffer, int *bufIn
     (void)quote_error;
     if (is_whitespace(currentChar) && *inQuote == 0) {
         process_whitespace(*buffer, bufIndex, tokens, TokenCount, env);
-    } else if (currentChar == '>' && input[*i + 1] == '>' && *inQuote == 0) {
-        process_redirect_out_append(buffer, bufIndex, tokens, TokenCount, env, i, *inQuote);
     } else if (currentChar == '|') {
         process_pipe(*buffer, bufIndex, tokens, TokenCount, env);
     } else if (currentChar == '\'' || currentChar == '\"') {
@@ -83,6 +81,8 @@ int process_input_char(char currentChar, char *input,  char **buffer, int *bufIn
         process_dollar_conditions(input, i, buffer, bufIndex, tokens, TokenCount, env, *inQuote);
     } else if (currentChar == '<' && input[*i + 1] == '<' && *inQuote == 0) {
         process_heredoc(buffer, bufIndex, tokens, TokenCount, env, i);
+    } else if (currentChar == '>' && input[*i + 1] == '>' && *inQuote == 0) {
+        process_redirect_out_append(buffer, bufIndex, tokens, TokenCount, env, i, *inQuote);
     } else {
         // Regular character, add to the buffer
         (*buffer)[(*bufIndex)++] = currentChar;
