@@ -86,6 +86,7 @@ int process_input_char(char currentChar, char *input,  char **buffer, int *bufIn
     } else {
         // Regular character, add to the buffer
         (*buffer)[(*bufIndex)++] = currentChar;
+        i++;
     }
     return 0; // Return 0 to indicate success
 }
