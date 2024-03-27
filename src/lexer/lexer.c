@@ -14,17 +14,17 @@ int lexer(char *input, t_token **tokens, t_env *env)
     int inQuote = 0; // 0: no quote, 1: single quote, 2: double quote
     bool quote_error = false; // Track if there's an unclosed quote error
 
-    while ((currentChar = input[i]) != '\0' && !quote_error) {
+    while ((currentChar = input[i]) != '\0' && !quote_error)
+     {
         if (is_whitespace(currentChar) && inQuote == 0) { 
             // Call the helper function instead of inline code
             process_whitespace(buffer, &bufIndex, &tokens, &TokenCount, env);
         }
-
         else if (currentChar == '|')
          {
             // Call the helper function instead of inline code
             process_pipe(buffer, &bufIndex, &tokens, &TokenCount, env);
-}
+        }
         else if (currentChar == '\'' || currentChar == '\"') 
         {
             // Call the helper function instead of inline code
@@ -35,20 +35,8 @@ int lexer(char *input, t_token **tokens, t_env *env)
              process_comma(buffer, &bufIndex, &tokens, &TokenCount, env);
         } 
         else if (currentChar == '<' && input[i + 1] != '<' && inQuote == 0)
-         {
-            // Check if the next character is not '<' and not in a quote
-            // This indicates a redirect in token
-            if (bufIndex > 0) 
-            {
-                buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env, &TokenCount), ft_strdup(buffer)) == 1) // Add the token
-                    return (1); // Error
-                bufIndex = 0; // Reset buffer index for the next token
-            }
-            // Add the redirect in token
-            if (add_token(tokens, TOKEN_REDIRECT_IN, ft_strdup("<")) == 1) // Add the token
-                return (1); // Error
-            TokenCount++;
+        {
+            process_single_redirect_in(buffer, &bufIndex, &tokens, &TokenCount, env, inQuote);
         } 
         else if (currentChar == '>' && input[i + 1] != '>' && inQuote == 0)
         { 
@@ -71,35 +59,6 @@ int lexer(char *input, t_token **tokens, t_env *env)
             buffer[bufIndex++] = currentChar;
         i++;
     }
-    // Check if there's a token at the end of the input
-    if (bufIndex > 0 && !quote_error) 
-    {
-        if (inQuote != 0) 
-        { // If we ended in a quote, it's an unclosed quote error
-            error(ERR_QUOT, NULL);
-            quote_error = true; // Set error to prevent adding the token
-        } 
-        else 
-        {
-            buffer[bufIndex] = '\0'; // Null-terminate the current token
-
-            if (add_token(tokens, determine_token_type(buffer, inQuote, env, &TokenCount), ft_strdup(buffer)) == 1) // Add the token
-                return (2); // Error
-            TokenCount++;
-        }
-    } 
-    else if (inQuote != 0 && !quote_error) 
-    {
-        // Handle the case where the input ends while still in a quote
-        error(ERR_QUOT, NULL);
-        quote_error = true; // Set error to prevent adding the token
-    }
-    if (quote_error) 
-    {
-        // Free the tokens if there was an error
-        //  free_tokens(tokens); //segfaults here!!!!
-         free(buffer);
-        return (2); // Return without processing the tokens
-    }
-    return (0);
+     return finalize_lexer(&buffer, bufIndex, &tokens, &TokenCount, inQuote, quote_error, env);
 }
+
