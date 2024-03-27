@@ -76,7 +76,8 @@ int main(int argc, char **argv, char **envp)
 	env = arr_to_linked_list(envp);
 	
     if (argc > 1 || argv[1] != NULL)
-       
+        return (printf("Usage: %s\n", argv[0]),1);
+
     check_blocked_signals();
      // Set up signal handlers
     signal(SIGINT, handle_sigint);   

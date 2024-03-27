@@ -53,24 +53,24 @@ int lexer(char *input, t_token **tokens, t_env *env)
         {
             process_heredoc(&buffer, &bufIndex, &tokens, &TokenCount, env, &i);
         } 
-        else if (currentChar == '>' && input[i + 1] == '>' && inQuote == 0)
-        {
-            // Check if the next character is also '>' and not in a quote
-            // This indicates a redirect out append token
-            if (bufIndex > 0)
-         {
-                buffer[bufIndex] = '\0'; // Null-terminate the current token
-                if (add_token(tokens, determine_token_type(buffer, inQuote, env, &TokenCount), ft_strdup(buffer)) == 1) // Add the token
-                    return (1); // Error
-                bufIndex = 0; // Reset buffer index for the next token
-                TokenCount++;
-            }
-            // Add the redirect out append token
-            if (add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) == 1) // Add the token
-                return (1); // Error
-            TokenCount++;
-            i++; // Move past the second '>'
-        }
+        // else if (currentChar == '>' && input[i + 1] == '>' && inQuote == 0)
+        // {
+        //     // Check if the next character is also '>' and not in a quote
+        //     // This indicates a redirect out append token
+        //     if (bufIndex > 0)
+        //  {
+        //         buffer[bufIndex] = '\0'; // Null-terminate the current token
+        //         if (add_token(tokens, determine_token_type(buffer, inQuote, env, &TokenCount), ft_strdup(buffer)) == 1) // Add the token
+        //             return (1); // Error
+        //         bufIndex = 0; // Reset buffer index for the next token
+        //         TokenCount++;
+        //     }
+        //     // Add the redirect out append token
+        //     if (add_token(tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) == 1) // Add the token
+        //         return (1); // Error
+        //     TokenCount++;
+        //     i++; // Move past the second '>'
+        // }
         else
             // Regular character, add to the buffer
             buffer[bufIndex++] = currentChar;
