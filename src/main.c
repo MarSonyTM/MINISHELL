@@ -84,7 +84,7 @@ int main(int argc, char **argv, char **envp)
         signal(SIGQUIT, handle_sigquit); 
 
     while (1)
-    {
+    {   
         char *input = readline(PROMPT);
         sleep(0);
         if (!input)
