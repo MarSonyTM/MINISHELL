@@ -64,36 +64,10 @@ int lexer(char *input, t_token **tokens, t_env *env)
             buffer[bufIndex++] = currentChar;
         i++;
     }
-    // Check if there's a token at the end of the input
-    if (bufIndex > 0 && !quote_error) 
-    {
-        if (inQuote != 0) 
-        { // If we ended in a quote, it's an unclosed quote error
-            error(ERR_QUOT, NULL);
-            quote_error = true; // Set error to prevent adding the token
-        } 
-        else 
-        {
-            buffer[bufIndex] = '\0'; // Null-terminate the current token
+     // Before the end of the lexer function, replace the existing logic with:
+int finalResult = finalize_tokens(&buffer, bufIndex, &tokens, &TokenCount, inQuote, quote_error, env);
+free(buffer); // Ensure to free the buffer if it's not needed anymore
+return finalResult;
 
-            if (add_token(tokens, determine_token_type(buffer, inQuote, env, &TokenCount), ft_strdup(buffer)) == 1) // Add the token
-                return (2); // Error
-            TokenCount++;
-        }
-    } 
-    else if (inQuote != 0 && !quote_error) 
-    {
-        // Handle the case where the input ends while still in a quote
-        error(ERR_QUOT, NULL);
-        quote_error = true; // Set error to prevent adding the token
-    }
-    if (quote_error) 
-    {
-        // Free the tokens if there was an error
-        //  free_tokens(tokens); //segfaults here!!!!
-         free(buffer);
-        return (2); // Return without processing the tokens
-    }
-    return (0);
 }
  

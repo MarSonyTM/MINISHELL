@@ -46,3 +46,29 @@ int	add_token(t_token **tokens, t_token_type type, char *value)
 	}
 	return (0);
 }
+
+int finalize_tokens(char **buffer, int bufIndex, t_token ***tokens, int *TokenCount, int inQuote, bool quote_error, t_env *env) {
+    if (bufIndex > 0 && !quote_error) {
+        if (inQuote != 0) {
+            error(ERR_QUOT, NULL);
+            quote_error = true;
+        } else {
+            (*buffer)[bufIndex] = '\0';
+            if (add_token(*tokens, determine_token_type(*buffer, inQuote, env, TokenCount), ft_strdup(*buffer)) == 1) {
+                return 2;
+            }
+            (*TokenCount)++;
+        }
+    } 
+    if (inQuote != 0 && !quote_error) {
+        error(ERR_QUOT, NULL);
+        quote_error = true;
+    }
+    if (quote_error) {
+        // Assuming free_tokens is a function to free all allocated tokens
+        // free_tokens(tokens);
+        free(*buffer);
+        return 2;
+    }
+    return 0;
+}
