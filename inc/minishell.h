@@ -115,10 +115,14 @@ int process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, 
 int process_single_redirect_in(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
 int finalize_lexer(char **buffer, int bufIndex, t_token ***tokens, int *TokenCount, int inQuote, bool quote_error, t_env *env);
 int process_input_loop(char *input, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int *inQuote, bool *quote_error);
+
+
 /*Functions prototypes for Parser*/
 
 int parse(t_token *tokens, t_cmd **cmd, t_env *env);
 void free_cmds(t_cmd **cmd);
+char *resolve_command_path(char *command, t_env *env);
+t_cmd *new_command(t_cmd **cmd);
 
 
 /*Functions prototypes for Execution*/
