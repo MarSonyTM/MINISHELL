@@ -95,7 +95,6 @@ int     lexer(char *input, t_token **tokens, t_env *env);
 void	free_tokens(t_token **tokens);
 int 	add_token(t_token **tokens, t_token_type type, char *value);
 t_token_type determine_token_type(char *token, int inQuote, t_env *env, int *TokenCount);
-// Helper functions
 t_token_type handle_first_token(char *token, int *TokenCount);
 t_token_type handle_subsequent_tokens(char *token, int inQuote, t_env *env, int *TokenCount);
 t_token_type check_special_tokens(char *token);
