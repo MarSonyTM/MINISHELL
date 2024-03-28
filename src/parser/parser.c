@@ -11,35 +11,15 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
 	t_token *current = tokens;
 	while (current != NULL) 
 	{
-		if (current->type == TOKEN_BUILTIN) 
+		while (current != NULL) 
 		{
-			current_cmd = new_command(cmd); // Create a new command
+        if (current->type == TOKEN_BUILTIN || current->type == TOKEN_COMMAND)
+		{
+            current_cmd = initialize_new_command(cmd, current, env);
             if (!current_cmd)
-                return (1);
-			current_cmd->cmd_arr[0] = ft_strdup(current->value); // Command name
-            if (!current_cmd->cmd_arr[0])
-                return (1);
-			current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
-			arg_count = 1; // Reset argument count for the new command
-		}
-		else if (current->type == TOKEN_COMMAND)
-		{
-			current_cmd = new_command(cmd); // Create a new command
-            if (!current_cmd) 
-                return (1);
-			current_cmd->cmd_arr[0] = ft_strdup(current->value); // Command name
-            if (!current_cmd->cmd_arr[0])
-                return (1);
-			current_cmd->cmd_arr[1] = NULL; // NULL terminate the array
-			arg_count = 1; // Reset argument count for the new command
-			char *cmd_path = resolve_command_path(current->value, env); // Resolve the command's path
-            if (!cmd_path) 
-                return (1);
-			current_cmd->cmd_path = cmd_path; // Set the command's path
-			if (cmd_path == NULL)
-                return (1);
-		}
-		else if (current->type == TOKEN_ARG /*&& current_cmd != NULL*/) 
+                return (1); // Handle memory allocation error
+            arg_count = 1; // Reset argument count for new command
+        }else if (current->type == TOKEN_ARG /*&& current_cmd != NULL*/) 
 		{
 			arg_count++;
 			current_cmd->cmd_arr = realloc(current_cmd->cmd_arr, sizeof(char *) * (arg_count + 1)); // Resize for new arg
@@ -49,16 +29,14 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
             if (!current_cmd->cmd_arr[arg_count - 1])
                 return (1);
 			current_cmd->cmd_arr[arg_count] = NULL; // NULL terminate the array
-		} 
-		else if (current->type == TOKEN_INPUT && current_cmd != NULL) 
+		}else if (current->type == TOKEN_INPUT && current_cmd != NULL) 
 		{
 			current_cmd->input = ft_strdup(current->value);
             if (!current_cmd->input)
             {
                 return (1);
             }
-		} 
-		else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_REDIRECT_OUT_APPEND) 
+		}else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_REDIRECT_OUT_APPEND) 
         {
             // Store the current token type before moving to the next token
             int current_type = current->type;
@@ -93,8 +71,7 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
                     printf("Parser output: %s\n", current_cmd->output); // Debugging
                 }
             }
-        }
-		else if (current->type == TOKEN_HEREDOC) 
+        }else if (current->type == TOKEN_HEREDOC) 
         {
             // Advance to the next token and use its value as the delimiter
             current = current->next;
@@ -163,8 +140,7 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
             }
             printf("heredoc_input: %s\n", heredoc_input); // Debugging
             
-        }
-		else if (current->type == TOKEN_COMMA)
+        }else if (current->type == TOKEN_COMMA)
 		{
 			// Handle commas by treating them as part of the input
 			if (current_cmd != NULL) 
@@ -188,8 +164,7 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
                 if (!current_cmd->cmd_arr[arg_count])
                     return (1);
             }
-        }
-		else if (current->type == TOKEN_ENV_VAR)
+        }else if (current->type == TOKEN_ENV_VAR)
         {
             int env_var_count = 0;
             while (current_cmd->env_vars[env_var_count] != NULL) 
@@ -208,8 +183,7 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
             current_cmd->env_vars[env_var_count + 1] = NULL; // NULL terminate the array
             printf("Parser env_var: %s\n", current_cmd->env_vars[env_var_count]);
  
-        }
-		else if (current->type == TOKEN_PIPE)
+        }else if (current->type == TOKEN_PIPE)
 		{
 			// Advance to the next token and use its value as the command for the new command structure
 			current = current->next;
@@ -237,5 +211,6 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
 		}
 		current = current->next;
 	}
-    return (0);
 } 
+    return (0);
+}

@@ -123,6 +123,7 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env);
 void free_cmds(t_cmd **cmd);
 char *resolve_command_path(char *command, t_env *env);
 t_cmd *new_command(t_cmd **cmd);
+t_cmd *initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env);
 
 
 /*Functions prototypes for Execution*/
