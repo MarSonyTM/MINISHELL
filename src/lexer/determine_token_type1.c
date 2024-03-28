@@ -6,7 +6,7 @@ bool is_command(char *token, t_env *env)
     if (!path) return (false);
 
     char *pathCopy = ft_strdup(path);
-    char *dir = strtok(pathCopy, ":");
+    char *dir = ft_strtok(pathCopy, ":");
 
     while (dir) {
         char *fullPath = construct_full_path(dir, token);
@@ -16,7 +16,7 @@ bool is_command(char *token, t_env *env)
             free(pathCopy);
             return (true);
         }
-        dir = strtok(NULL, ":");
+        dir = ft_strtok(NULL, ":");
     }
     free(pathCopy);
     return (false);

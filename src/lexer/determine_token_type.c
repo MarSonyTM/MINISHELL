@@ -63,7 +63,7 @@ t_token_type	handle_dollar_tokens(char *token, int inQuote)
 {
 	if (inQuote == 2 || inQuote == 1) 
 		return (TOKEN_ARG);
-	if (strcmp(token, "$?") == 0) 
+	if (ft_strcmp(token, "$?") == 0) 
 		return (TOKEN_EXIT_STATUS);
 	return (TOKEN_ENV_VAR);
 }
