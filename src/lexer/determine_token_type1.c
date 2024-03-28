@@ -27,7 +27,7 @@ char	*construct_full_path(char *dir, char *token)
 	size_t	fullPathLen;
 	char	*fullPath;
 
-	fullPathLen = strlen(dir) + strlen(token) + 2; // For '/' and '\0'
+	fullPathLen = ft_strlen(dir) + ft_strlen(token) + 2; // For '/' and '\0'
 	fullPath = malloc(fullPathLen);
     if (!fullPath) 
 	{
@@ -35,8 +35,8 @@ char	*construct_full_path(char *dir, char *token)
         exit(EXIT_FAILURE);
     }
     // Manually copy and concatenate strings
-    strcpy(fullPath, dir);
-    strcat(fullPath, "/");
-    strcat(fullPath, token);
+    ft_strcpy(fullPath, dir);
+    ft_strcat(fullPath, "/");
+    ft_strcat(fullPath, token);
     return (fullPath);
 }
