@@ -6,6 +6,8 @@ bool is_command(char *token, t_env *env)
     if (!path) return (false);
 
     char *pathCopy = ft_strdup(path);
+    if (!pathCopy)
+        return (1);
     char *dir = ft_strtok(pathCopy, ":");
 
     while (dir) {

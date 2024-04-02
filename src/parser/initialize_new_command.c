@@ -10,6 +10,7 @@ t_cmd *initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env) {
     if (!new_cmd->cmd_arr) return NULL; // Handle failure
 
     new_cmd->cmd_arr[0] = ft_strdup(current_token->value); // Copy command/builtin name
+    if (!new_cmd->cmd_arr[0]) return NULL; // Handle failure
     new_cmd->cmd_arr[1] = NULL; // NULL terminate the command array
 
     // For TOKEN_COMMAND, resolve the path
