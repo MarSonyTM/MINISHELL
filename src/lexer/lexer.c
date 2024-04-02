@@ -23,4 +23,3 @@ int	lexer(char *input, t_token **tokens, t_env *env)
     // Finalize the lexer
 	return (finalize_lexer(&buffer, bufIndex, &tokens, &TokenCount, inQuote, quote_error, env));
 }
-

@@ -31,41 +31,32 @@ int handleRedirection(t_cmd *current_cmd, t_token **current)
     return 0; // Success
 }
 
-int handleHeredoc(t_cmd **current_cmd, t_token **current) {
-    if (!(*current)->next) {
+int handleHeredoc(t_cmd **current_cmd, t_token **current)
+{
+    if (!(*current)->next)
+	{
         error(ERR_PARS, "\n"); // Set the specific error
         return 2; // Indicate a specific error condition
     }
     *current = (*current)->next; // Move to the delimiter token
 
     char *heredoc_input = handle_heredoc(current);
+	printf("heredoc_input: %s\n", heredoc_input); // Debugging
     if (!heredoc_input) {
         // Assuming handle_heredoc sets an appropriate error internally
         return 1; // General error for heredoc input failure
     }
 
-    if (*current_cmd) {
+    if (*current_cmd) 
+	{
         (*current_cmd)->input = heredoc_input;
-    } else {
+    }else 
+	{
         free(heredoc_input); // Cleanup heredoc input if no command to attach it to
     }
-
     return 0; // Success
 }
 
 
-int handleComma(t_cmd *current_cmd, t_token *current)
-{ 
-    if (current_cmd == NULL) return 0; // Skip if no current command
-    if (add_argument_to_command(current_cmd, current->value) != 0) return 1; // Handle error
-    return 0; // Success
-}
 
-int handleExitStatus(t_cmd *current_cmd, t_token *current)
-{
-    if (current_cmd == NULL) return 0; // Skip if no current command
-    current_cmd->exit_status_token = ft_strdup(current->value);
-    if (!current_cmd->exit_status_token) return 1; // Handle error
-    return 0; // Success
-}
 
