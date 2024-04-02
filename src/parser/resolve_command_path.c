@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   resolve_command_path.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/02 16:53:44 by mafurnic          #+#    #+#             */
+/*   Updated: 2024/04/02 17:41:40 by mafurnic         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-char *resolve_command_path(char *command, t_env *env) 
+char    *resolve_command_path(char *command, t_env *env) 
 {
     char *path = ft_getenv("PATH", env); // Get the PATH environment variable value
     char *pathCopy = ft_strdup(path); // Duplicate since strtok modifies the string
