@@ -1,44 +1,60 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   determine_token_type1.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/02 17:14:46 by mafurnic          #+#    #+#             */
+/*   Updated: 2024/04/02 17:25:02 by mafurnic         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-bool is_command(char *token, t_env *env) 
+bool	is_command(char *token, t_env *env)
 {
-    char *path = ft_getenv("PATH", env);
-    if (!path) return (false);
+	char	*path;
+	char	*path_copy;
+	char	*dir;
+	char	*full_path;
 
-    char *pathCopy = ft_strdup(path);
-    if (!pathCopy)
-        return (1);
-    char *dir = ft_strtok(pathCopy, ":");
-
-    while (dir) {
-        char *fullPath = construct_full_path(dir, token);
-        bool exists = (access(fullPath, F_OK | X_OK) == 0);
-        free(fullPath);
-        if (exists) {
-            free(pathCopy);
-            return (true);
-        }
-        dir = ft_strtok(NULL, ":");
-    }
-    free(pathCopy);
-    return (false);
+	path_copy = ft_strdup(path);
+	path = ft_getenv("PATH", env);
+	if (!path)
+		return (false);
+	if (!path_copy)
+		return (1);
+	dir = ft_strtok(path_copy, ":");
+	while (dir)
+	{
+		full_path = construct_full_path(dir, token);
+		free(full_path);
+		if (access(full_path, F_OK | X_OK) == 0)
+		{
+			free(path_copy);
+			return (true);
+		}
+		dir = ft_strtok(NULL, ":");
+	}
+	free(path_copy);
+	return (false);
 }
 
-char	*construct_full_path(char *dir, char *token) 
+char	*construct_full_path(char *dir, char *token)
 {
-	size_t	fullPathLen;
-	char	*fullPath;
+	size_t	full_path_len;
+	char	*full_path;
 
-	fullPathLen = ft_strlen(dir) + ft_strlen(token) + 2; // For '/' and '\0'
-	fullPath = malloc(fullPathLen);
-    if (!fullPath) 
+	full_path_len = ft_strlen(dir) + ft_strlen(token) + 2;
+	full_path = malloc(full_path_len);
+	if (!full_path)
 	{
-        perror("malloc failed");
-        exit(EXIT_FAILURE);
-    }
-    // Manually copy and concatenate strings
-    ft_strcpy(fullPath, dir);
-    ft_strcat(fullPath, "/");
-    ft_strcat(fullPath, token);
-    return (fullPath);
+		perror("malloc failed");
+		exit(EXIT_FAILURE);
+	}
+	ft_strcpy(full_path, dir);
+	ft_strcat(full_path, "/");
+	ft_strcat(full_path, token);
+	return (full_path);
 }
