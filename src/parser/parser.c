@@ -1,5 +1,6 @@
 #include "../../inc/minishell.h"
 
+
 // Main parse function
 int parse(t_token *tokens, t_cmd **cmd, t_env *env)
 {
@@ -43,7 +44,7 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
         if (current_cmd != NULL) 
             current_cmd->input = heredoc_input;
         else 
-            free(heredoc_input); // If there's no current command, cleanup
+        free(heredoc_input); // If there's no current command, cleanup
         }
         else if (current->type == TOKEN_COMMA)
 		{ 
@@ -57,8 +58,8 @@ int parse(t_token *tokens, t_cmd **cmd, t_env *env)
         }
         else if (current->type == TOKEN_ENV_VAR)
         {
-             if (handle_environment_variable(current_cmd, current->value) != 0)
-                return (1); // Handle error   
+             if (handle_environment_variable(current_cmd, current->value) != 0) return (1); // Handle error
+ 
         }
         else if (current->type == TOKEN_PIPE)
         {

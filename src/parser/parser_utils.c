@@ -1,7 +1,8 @@
 #include "../../inc/minishell.h"
 
 // Function to resolve the path of a command
-t_cmd *initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env) {
+t_cmd *initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env)
+{
     t_cmd *new_cmd = new_command(cmd); // Create and link a new command
     if (!new_cmd) return NULL; // Handle failure
 
@@ -93,21 +94,24 @@ char *handle_heredoc(t_token **current)
             free(input_buffer);
             break;
         }
-        char *temp = heredoc_input ? ft_strjoin(heredoc_input, "\n") : strdup("");
+        char *temp;
+        if (heredoc_input) {
+            temp = ft_strjoin(heredoc_input, "\n");
+        } else {
+            temp = ft_strdup("");
+        }
         free(heredoc_input);
         heredoc_input = ft_strjoin(temp, input_buffer);
         free(temp);
         free(input_buffer);
     }
- if (heredoc_input) 
-        printf("heredoc_input: %s\n", heredoc_input);
     return (heredoc_input);
 }
 
 int handle_environment_variable(t_cmd *current_cmd, char *value)
 {
     if (current_cmd == NULL) {
-        return -1; // Return an error if there is no command to attach the environment variable to.
+        return (1); // Return an error if there is no command to attach the environment variable to.
     }
     
     int env_var_count = 0;
