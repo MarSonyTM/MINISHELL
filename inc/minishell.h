@@ -128,6 +128,7 @@ int handle_redirection(t_cmd *current_cmd, t_token **current, int current_type);
 char *handle_heredoc(t_token **current);
 int handle_environment_variable(t_cmd *current_cmd, char *value);
 int handle_exit_status_token(t_cmd *current_cmd, char *value, int *arg_count);
+t_cmd *handle_pipe_token(t_token **current, t_cmd **cmd, t_env *env, int *arg_count);
 
 /*Functions prototypes for Execution*/
 

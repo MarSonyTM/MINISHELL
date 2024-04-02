@@ -104,7 +104,8 @@ char *handle_heredoc(t_token **current)
     return (heredoc_input);
 }
 
-int handle_environment_variable(t_cmd *current_cmd, char *value) {
+int handle_environment_variable(t_cmd *current_cmd, char *value)
+{
     if (current_cmd == NULL) {
         return -1; // Return an error if there is no command to attach the environment variable to.
     }
