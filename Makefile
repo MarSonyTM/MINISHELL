@@ -1,14 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/06 09:56:25 by mafurnic          #+#    #+#              #
-#    Updated: 2024/03/28 16:46:53 by marianfurni      ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
 # Project Name and Compiler Settings
 NAME := minishell
@@ -25,7 +14,7 @@ LIBFT_PATH := libft/
 
 SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c lexer/determine_token_type.c lexer/determine_token_type1.c lexer/process1.c lexer/process2.c \
 				lexer/process_dollar_sign.c lexer/process_heredoc.c custom/export.c error/closing.c error/error.c error/freeing.c execution/executor.c execution/executor_utils1.c \
-				parser/parser.c parser/resolve_command_path.c  parser/initialize_new_command.c  custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
+				parser/parser.c parser/resolve_command_path.c  parser/parser_utils.c parser/parser_utils2.c  custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
 				env/arr_to_linked_list.c execution/executor_utils2.c /signals/signals.c expansion/expansion.c env/ft_getenv.c \
 
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)

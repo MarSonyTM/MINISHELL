@@ -123,7 +123,11 @@ void free_cmds(t_cmd **cmd);
 char *resolve_command_path(char *command, t_env *env);
 t_cmd *new_command(t_cmd **cmd);
 t_cmd *initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env);
-
+int add_argument_to_command(t_cmd *current_cmd, const char *arg_value);
+int handle_redirection(t_cmd *current_cmd, t_token **current, int current_type);
+char *handle_heredoc(t_token **current);
+int handle_environment_variable(t_cmd *current_cmd, char *value);
+int handle_exit_status_token(t_cmd *current_cmd, char *value, int *arg_count);
 
 /*Functions prototypes for Execution*/
 
