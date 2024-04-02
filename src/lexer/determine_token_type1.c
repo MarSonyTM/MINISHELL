@@ -37,8 +37,8 @@ char	*construct_full_path(char *dir, char *token)
         exit(EXIT_FAILURE);
     }
     // Manually copy and concatenate strings
-    ft_strcpy(fullPath, dir);
-    ft_strcat(fullPath, "/");
-    ft_strcat(fullPath, token);
-    return (fullPath);
+	ft_strcpy(fullPath, dir);
+	ft_strcat(fullPath, "/");
+	ft_strcat(fullPath, token);
+	return (fullPath);
 }
