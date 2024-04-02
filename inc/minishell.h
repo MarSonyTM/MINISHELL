@@ -114,7 +114,7 @@ int process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, 
 int process_single_redirect_in(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
 int finalize_lexer(char **buffer, int bufIndex, t_token ***tokens, int *TokenCount, int inQuote, bool quote_error, t_env *env);
 int process_input_loop(char *input, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int *inQuote, bool *quote_error);
-
+int handleBuiltinOrCommand(t_cmd **cmd, t_token *current, t_env *env, t_cmd **current_cmd , int *arg_count);
 
 /*Functions prototypes for Parser*/
 
@@ -129,6 +129,14 @@ char *handle_heredoc(t_token **current);
 int handle_environment_variable(t_cmd *current_cmd, char *value);
 int handle_exit_status_token(t_cmd *current_cmd, char *value, int *arg_count);
 t_cmd *handle_pipe_token(t_token **current, t_cmd **cmd, t_env *env, int *arg_count);
+int processTokens(t_token *tokens, t_cmd **cmd, t_env *env);
+int handleArgument(t_cmd *current_cmd, t_token *current);
+int handleInput(t_cmd *current_cmd, t_token *current);
+int handleRedirection(t_cmd *current_cmd, t_token **current);
+int handleHeredoc(t_cmd **current_cmd, t_token **current);
+int handleComma(t_cmd *current_cmd, t_token *current);
+int handleExitStatus(t_cmd *current_cmd, t_token *current);
+
 
 /*Functions prototypes for Execution*/
 

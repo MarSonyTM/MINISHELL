@@ -43,3 +43,37 @@ t_cmd *handle_pipe_token(t_token **current, t_cmd **cmd, t_env *env, int *arg_co
     *arg_count = 1;
     return (current_cmd);
 }
+
+int processTokens(t_token *tokens, t_cmd **cmd, t_env *env)
+{
+    t_cmd *current_cmd = NULL;
+    int arg_count = 0; // Initialization moved inside the function
+    t_token *current = tokens;
+
+    while (current != NULL) 
+		{
+        if (current->type == TOKEN_BUILTIN || current->type == TOKEN_COMMAND)
+            handleBuiltinOrCommand(cmd, current, env, &current_cmd, &arg_count);
+        else if (current->type == TOKEN_ARG /*&& current_cmd != NULL*/)
+            handleArgument(current_cmd, current);
+        else if (current->type == TOKEN_INPUT && current_cmd != NULL) 
+			handleInput(current_cmd, current);            
+        else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_REDIRECT_OUT_APPEND) 
+            handleRedirection(current_cmd, &current);
+        else if (current->type == TOKEN_HEREDOC)
+            handleHeredoc(&current_cmd, &current);
+        else if (current->type == TOKEN_COMMA)
+            handleComma(current_cmd, current);    
+        else if (current->type == TOKEN_EXIT_STATUS)
+            handle_exit_status_token(current_cmd, current->value, &arg_count);
+        else if (current->type == TOKEN_ENV_VAR)
+            handle_environment_variable(current_cmd, current->value);
+        else if (current->type == TOKEN_PIPE)
+        {
+              current_cmd = handle_pipe_token(&current, cmd, env, &arg_count);
+              if (!current_cmd) return (1); // Handle error
+        }
+		current = current->next;
+	}
+    return (0); 
+}

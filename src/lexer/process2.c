@@ -83,7 +83,6 @@ int process_input_loop(char *input, char **buffer, int *bufIndex, t_token ***tok
             (*buffer)[(*bufIndex)++] = currentChar; // Regular character, add to the buffer
         (*i)++;
     }
-
     return (0); // Return 0 to indicate success
 }
 
