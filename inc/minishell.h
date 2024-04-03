@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 11:23:35 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/03 11:29:39 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ char *handle_heredoc(t_token **current);
 int handle_environment_variable(t_cmd *current_cmd, char *value);
 int handle_exit_status_token(t_cmd *current_cmd, char *value, int *arg_count);
 t_cmd *handle_pipe_token(t_token **current, t_cmd **cmd, t_env *env, int *arg_count);
-int processTokens(t_token *tokens, t_cmd **cmd, t_env *env);
+int process_tokens(t_token *tokens, t_cmd **cmd, t_env *env);
 int handle_argument(t_cmd *current_cmd, t_token *current);
 int handle_input(t_cmd *current_cmd, t_token *current);
 int handle_parser_redirection(t_cmd *current_cmd, t_token **current);

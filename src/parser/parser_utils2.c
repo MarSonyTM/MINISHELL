@@ -44,7 +44,7 @@ t_cmd *handle_pipe_token(t_token **current, t_cmd **cmd, t_env *env, int *arg_co
     return (current_cmd);
 }
 
-int processTokens(t_token *tokens, t_cmd **cmd, t_env *env)
+int process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 {
     t_cmd *current_cmd = NULL;
     int arg_count = 0; // Initialization moved inside the function
