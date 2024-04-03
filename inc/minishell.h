@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 11:29:39 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/03 11:39:43 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ typedef struct s_cmd
 	char			*exit_status_token; //for exit status expansion, else NULL
 	char			*input; //for input redirection, else NULL
 	char			*output; //for output redirection, else NULL
-	char			*redirection_append;//for output redirection append, else NULL
+	char			*redirection_append; //output redirection append, else NULL
 	int				exit_status;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -102,93 +102,101 @@ typedef struct s_exec
 
 /*Functions prototypes for Lexer*/
 
-int     lexer(char *input, t_token **tokens, t_env *env);
-void	free_tokens(t_token **tokens);
-int 	add_token(t_token **tokens, t_token_type type, char *value);
-t_token_type determine_token_type(char *token, int inQuote, t_env *env, int *TokenCount);
-t_token_type handle_first_token(char *token, int *TokenCount);
-t_token_type handle_subsequent_tokens(char *token, int inQuote, t_env *env, int *TokenCount);
-t_token_type check_special_tokens(char *token);
-t_token_type handle_dollar_tokens(char *token, int inQuote);
-bool is_command(char *token, t_env *env);
-char *construct_full_path(char *dir, char *token);
-int process_whitespace(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-bool is_whitespace(char c);
-int process_pipe(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-void process_quotes(char currentChar, char **buffer, int *bufIndex, int *inQuote);
-int process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-int finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, char *tokenValue, int inQuote);
-void process_dollar_conditions(char *input, int *i, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
-int process_heredoc(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
-int process_single_redirect_out(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-int process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
-int process_single_redirect_in(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
-int finalize_lexer(char **buffer, int bufIndex, t_token ***tokens, int *TokenCount, int inQuote, bool quote_error, t_env *env);
-int process_input_loop(char *input, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int *inQuote, bool *quote_error);
-int handle_builtin_or_command(t_cmd **cmd, t_token *current, t_env *env, t_cmd **current_cmd , int *arg_count);
+int				lexer(char *input, t_token **tokens, t_env *env);
+void			free_tokens(t_token **tokens);
+int				add_token(t_token **tokens, t_token_type type, char *value);
+t_token_type	determine_token_type(char *token, int inQuote,
+					t_env *env, int *TokenCount);
+t_token_type	handle_first_token(char *token, int *TokenCount);
+t_token_type	handle_subsequent_tokens(char *token, int inQuote,
+					t_env *env, int *TokenCount);
+t_token_type	check_special_tokens(char *token);
+t_token_type	handle_dollar_tokens(char *token, int inQuote);
+bool			is_command(char *token, t_env *env);
+char			*construct_full_path(char *dir, char *token);
+int				process_whitespace(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+bool			is_whitespace(char c);
+int				process_pipe(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+void			process_quotes(char currentChar, char **buffer, int *bufIndex, int *inQuote);
+int				process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+int				finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, char *tokenValue, int inQuote);
+void			process_dollar_conditions(char *input, int *i, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
+int				process_heredoc(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
+int				process_single_redirect_out(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+int				process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
+int				process_single_redirect_in(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
+int				finalize_lexer(char **buffer, int bufIndex, t_token ***tokens, int *TokenCount, int inQuote, bool quote_error, t_env *env);
+int				process_input_loop(char *input, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int *inQuote, bool *quote_error);
+int				handle_builtin_or_command(t_cmd **cmd, t_token *current, t_env *env, t_cmd **current_cmd , int *arg_count);
 
 /*Functions prototypes for Parser*/
 
-int parse(t_token *tokens, t_cmd **cmd, t_env *env);
-void free_cmds(t_cmd **cmd);
-char *resolve_command_path(char *command, t_env *env);
-t_cmd *new_command(t_cmd **cmd);
-t_cmd *initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env);
-int add_argument_to_command(t_cmd *current_cmd, const char *arg_value);
-int handle_redirection(t_cmd *current_cmd, t_token **current, int current_type);
-char *handle_heredoc(t_token **current);
-int handle_environment_variable(t_cmd *current_cmd, char *value);
-int handle_exit_status_token(t_cmd *current_cmd, char *value, int *arg_count);
-t_cmd *handle_pipe_token(t_token **current, t_cmd **cmd, t_env *env, int *arg_count);
-int process_tokens(t_token *tokens, t_cmd **cmd, t_env *env);
-int handle_argument(t_cmd *current_cmd, t_token *current);
-int handle_input(t_cmd *current_cmd, t_token *current);
-int handle_parser_redirection(t_cmd *current_cmd, t_token **current);
-int handle_parser_heredoc(t_cmd **current_cmd, t_token **current);
-int handle_comma(t_cmd *current_cmd, t_token *current);
-int handle_exit_status(t_cmd *current_cmd, t_token *current);
+int				parse(t_token *tokens, t_cmd **cmd, t_env *env);
+void			free_cmds(t_cmd **cmd);
+char			*resolve_command_path(char *command, t_env *env);
+t_cmd			*new_command(t_cmd **cmd);
+t_cmd			*initialize_new_command(t_cmd **cmd,
+					t_token *current_token, t_env *env);
+int				add_argument_to_command(t_cmd *current_cmd,
+					const char *arg_value);
+int				handle_redirection(t_cmd *current_cmd,
+					t_token **current, int current_type);
+char			*handle_heredoc(t_token **current);
+int				handle_environment_variable(t_cmd *current_cmd, char *value);
+int				handle_exit_status_token(t_cmd *current_cmd,
+					char *value, int *arg_count);
+t_cmd			*handle_pipe_token(t_token **current,
+					t_cmd **cmd, t_env *env, int *arg_count);
+int				process_tokens(t_token *tokens, t_cmd **cmd, t_env *env);
+int				handle_argument(t_cmd *current_cmd, t_token *current);
+int				handle_input(t_cmd *current_cmd, t_token *current);
+int				handle_parser_redirection(t_cmd *current_cmd,
+					t_token **current);
+int				handle_parser_heredoc(t_cmd **current_cmd, t_token **current);
+int				handle_comma(t_cmd *current_cmd, t_token *current);
+int				handle_exit_status(t_cmd *current_cmd, t_token *current);
 
 
 /*Functions prototypes for Execution*/
 
-void	custom_exec(t_cmd *cmd, t_env **env);
-int		executor(t_cmd *cmd, t_env **env);
-t_env	*arr_to_linked_list(char **envp);
+void			custom_exec(t_cmd *cmd, t_env **env);
+int				executor(t_cmd *cmd, t_env **env);
+t_env			*arr_to_linked_list(char **envp);
 
 /* customs */
-void	echo_cmd(t_cmd *cmd);
-int	    cd_cmd(t_cmd *cmd, t_env *env);
-int 	pwd_cmd(void);
-int 	env_cmd(t_cmd *cmd, t_env *env);
-void	unset_cmd(t_cmd *cmd, t_env **env);
-int 	exit_cmd(t_cmd *cmd, t_env *env);
-int 	export_cmd(t_cmd *cmd, t_env **env);
+void			echo_cmd(t_cmd *cmd);
+int				cd_cmd(t_cmd *cmd, t_env *env);
+int				pwd_cmd(void);
+int				env_cmd(t_cmd *cmd, t_env *env);
+void			unset_cmd(t_cmd *cmd, t_env **env);
+int				exit_cmd(t_cmd *cmd, t_env *env);
+int				export_cmd(t_cmd *cmd, t_env **env);
 
 /* error management */
-void	clean_up(t_cmd *cmd, t_env *env);
-void	close_fds(int *open_fds, int processes);
-void	close_and_free(t_exec *exec);
-void	error(char *msg, char *ft);
+void			clean_up(t_cmd *cmd, t_env *env);
+void			close_fds(int *open_fds, int processes);
+void			close_and_free(t_exec *exec);
+void			error(char *msg, char *ft);
 
 /* utils */
-int		redirection(char *file, int mode, int custom);
-char	**env_to_array(t_cmd *cmd, t_env **env);
-int		get_len(t_env *env);
-int		count_processes(t_cmd *cmd);
-char	*get_key(char *cmd, int *j);
-char	*get_value(char *cmd, int *j);
-char	*get_value_concat(char *cmd, int *j);
-int		handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
-int		handle_pipe(t_exec *exec, int i, char *cmd_path);
-int		duplicate_fd(int old_fd, int new_fd, int custom);
-char	*ft_getenv(const char *name, t_env *env);
+int				redirection(char *file, int mode, int custom);
+char			**env_to_array(t_cmd *cmd, t_env **env);
+int				get_len(t_env *env);
+int				count_processes(t_cmd *cmd);
+char			*get_key(char *cmd, int *j);
+char			*get_value(char *cmd, int *j);
+char			*get_value_concat(char *cmd, int *j);
+int				handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
+int				handle_pipe(t_exec *exec, int i, char *cmd_path);
+int				duplicate_fd(int old_fd, int new_fd, int custom);
+char			*ft_getenv(const char *name, t_env *env);
 
 /* signal management */
-void	handle_sigint(int sig);
-void	handle_sigquit(int sig);
-void	check_blocked_signals(void);
+void			handle_sigint(int sig);
+void			handle_sigquit(int sig);
+void			check_blocked_signals(void);
 
 /* expansion */
-void	expand_env_vars(t_cmd *cmd, t_env *env);
+void			expand_env_vars(t_cmd *cmd, t_env *env);
 
 #endif

@@ -85,7 +85,7 @@ int handle_comma(t_cmd *current_cmd, t_token *current)
     return 0; // Success
 }
 
-int handle_cxit_status(t_cmd *current_cmd, t_token *current)
+int handle_exit_status(t_cmd *current_cmd, t_token *current)
 {
     if (current_cmd == NULL) return 0; // Skip if no current command
     current_cmd->exit_status_token = ft_strdup(current->value);
