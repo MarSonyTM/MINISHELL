@@ -6,40 +6,57 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 13:49:49 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/03 15:01:44 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char *handle_heredoc(t_token **current)
+static char	*prompt_and_read_line(void)
 {
-    if (!current || !(*current)) return NULL;
+	ft_putstr_fd("> ", STDOUT_FILENO);
+	return (readline(NULL));
+}
 
-    char *delimiter = (*current)->value;
-    char *heredoc_input = NULL;
-    char *input_buffer;
+char	*append_line_to_heredoc(char *heredoc_input, const char *input_buffer)
+{
+	char	*temp;
+	char	*new_heredoc_input;
 
-    while (1)
-    {
-        ft_putstr_fd("> ", 1);
-        input_buffer = readline(NULL);
-        if (!input_buffer) return (NULL);
-        if (ft_strcmp(input_buffer, delimiter) == 0)
-        {
-            free(input_buffer);
-            break;
-        }
-        char *temp;
-        if (heredoc_input) {
-            temp = ft_strjoin(heredoc_input, "\n");
-        } else {
-            temp = ft_strdup("");
-        }
-        free(heredoc_input);
-        heredoc_input = ft_strjoin(temp, input_buffer);
-        free(temp);
-        free(input_buffer);
-    }
-    return (heredoc_input);
+	if (heredoc_input)
+		temp = ft_strjoin(heredoc_input, "\n");
+	else
+		temp = ft_strdup("");
+	new_heredoc_input = ft_strjoin(temp, input_buffer);
+	free(temp);
+	return (new_heredoc_input);
+}
+
+char	*handle_heredoc(t_token **current)
+{
+	char	*delimiter;
+	char	*heredoc_input;
+	char	*input_buffer;
+	char	*new_heredoc_input;
+
+	if (!current || !(*current))
+		return (NULL);
+	delimiter = (*current)->value;
+	heredoc_input = NULL;
+	while (1)
+	{
+		input_buffer = prompt_and_read_line();
+		if (!input_buffer)
+			return (NULL);
+		if (ft_strcmp(input_buffer, delimiter) == 0)
+		{
+			free(input_buffer);
+			break ;
+		}
+		new_heredoc_input = append_line_to_heredoc(heredoc_input, input_buffer);
+		free(heredoc_input);
+		heredoc_input = new_heredoc_input;
+		free(input_buffer);
+	}
+	return (heredoc_input);
 }
