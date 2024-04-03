@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 11:01:23 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/03 14:21:01 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ int	process_input_loop(char *input, char **buffer, int *bufIndex,
 {
 	char	current_char;
 
-	current_char = input[*i];
 	while ((current_char = input[*i]) != '\0' && !(*quote_error))
 	{
 		if (is_whitespace(current_char) && *inQuote == 0)

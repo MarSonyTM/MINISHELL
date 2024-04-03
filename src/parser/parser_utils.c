@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:51:30 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 14:00:58 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/03 14:19:20 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,15 @@ int	handle_environment_variable(t_cmd *current_cmd, char *value)
 		return (1);
 	current_cmd->env_vars[env_var_count + 1] = NULL;
 	printf("Parser env_var: %s\n", current_cmd->env_vars[env_var_count]);
+	return (0);
+}
+
+int	handle_exit_status(t_cmd *current_cmd, t_token *current)
+{
+	if (current_cmd == NULL)
+		return (0);
+	current_cmd->exit_status_token = ft_strdup(current->value);
+	if (!current_cmd->exit_status_token)
+		return (1);
 	return (0);
 }
