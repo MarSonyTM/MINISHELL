@@ -6,109 +6,84 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:44 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 12:50:24 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/03 13:48:35 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	*resolve_command_path(char *command, t_env *env)
+char    *resolve_command_path(char *command, t_env *env) 
 {
-	char	*path;
-	char	*path_copy;
-	char	*dir;
-	size_t	command_len;
-	size_t	dir_len;
-	char	*full_path;
+    char *path = ft_getenv("PATH", env); // Get the PATH environment variable value
+    char *pathCopy = ft_strdup(path); // Duplicate since strtok modifies the string
+    if (!pathCopy)
+        return (NULL); // Handle memory allocation failure
+    char *dir = ft_strtok(pathCopy, ":");
+    size_t commandLen = ft_strlen(command);
 
-	path = ft_getenv("PATH", env);
-	if (!path)
-		return (NULL);
-	path_copy = ft_strdup(path);
-	if (!path_copy)
-		return (NULL);
-	dir = ft_strtok(path_copy, ":");
-	command_len = ft_strlen(command);
-	while (dir != NULL)
-	{
-		dir_len = ft_strlen(dir);
-		full_path = malloc(dir_len + command_len + 2);
-		if (full_path == NULL)
-			return (free(path_copy), NULL);
-		ft_strcpy(full_path, dir);
-		full_path[dir_len] = '/';
-		ft_strcpy(full_path + dir_len + 1, command);
-		if (access (full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
-			return (free(path_copy), full_path);
-		free(full_path);
-		dir = ft_strtok(NULL, ":");
-	}
-	free(path_copy);
-	error(ERR_CMD, command);
-	return (NULL);
+    while (dir != NULL) 
+    {
+        size_t dirLen = ft_strlen(dir);
+        char *fullPath = malloc(dirLen + commandLen + 2); // For '/' and '\0'
+        if (fullPath == NULL) {
+            // Handle memory allocation failure
+            free(pathCopy);
+            return (NULL);
+        }
+        
+        ft_strcpy(fullPath, dir);
+        fullPath[dirLen] = '/'; // Append '/'
+        ft_strcpy(fullPath + dirLen + 1, command); // Append command
+        if (access (fullPath, F_OK) == 0 && access(fullPath, X_OK) == 0) 
+        {
+            free(pathCopy);
+            return fullPath; // Command found
+        }
+        free(fullPath); // Free the allocated memory for fullPath
+        dir = ft_strtok(NULL, ":");
+    }
+    free(pathCopy);  
+    error(ERR_CMD, command); // Command not found
+    return (NULL); // Command not found
 }
 
-static char	**init_env_vars(void)
+// Function to add a new command to the list
+t_cmd *new_command(t_cmd **cmd)
 {
-	char	**vars;
+    t_cmd *new_cmd = malloc(sizeof(t_cmd));
+    if (!new_cmd)
+        return (NULL); // Error handling for malloc failure
+    new_cmd->cmd_path = NULL;
+    new_cmd->cmd_arr = malloc(sizeof(char *) * 2); // Initial size for command + NULL
+    if (!new_cmd->cmd_arr)
+    {
+        free(new_cmd);
+        return (NULL); // Error handling for malloc failure
+    }
+    new_cmd->cmd_arr[0] = NULL; // Initialize to NULL for safety
+    new_cmd->input = NULL;
+    new_cmd->exit_status_token = NULL;
+    new_cmd->env_vars = malloc(sizeof(char *) * 1); // Initial size for NULL
+    if (!new_cmd->env_vars)
+    {
+        free(new_cmd->cmd_arr);
+        free(new_cmd);
+        return (NULL); // Error handling for malloc failure
+    }
+    new_cmd->env_vars[0] = NULL; // Initialize to NULL for safety
+    new_cmd->output = NULL;
+    new_cmd->exit_status = 0;
+    new_cmd->next = NULL;
 
-	vars = malloc(sizeof(char *) * 1);
-	if (!vars)
-		return (NULL);
-	vars[0] = NULL;
-	return (vars);
+    if (*cmd == NULL)
+        *cmd = new_cmd; // If it's the first command
+    else
+    {
+        // Append to the end of the list
+        t_cmd *last = *cmd;
+        while (last->next != NULL)
+            last = last->next;
+        last->next = new_cmd;
+    }
+    return (new_cmd);
 }
-
-static char	**init_cmd_arr(void)
-{
-	char	**arr;
-
-	arr = malloc(sizeof(char *) * 2);
-	if (!arr)
-		return (NULL);
-	arr[0] = NULL;
-	return (arr);
-}
-
-
-static int	initialize_cmd_struct(t_cmd *cmd)
-{
-	cmd->cmd_path = NULL;
-	cmd->cmd_arr = init_cmd_arr();
-	cmd->input = NULL;
-	cmd->exit_status_token = NULL;
-	cmd->env_vars = init_env_vars();
-	cmd->output = NULL;
-	cmd->exit_status = 0;
-	cmd->next = NULL;
-	if (!cmd->cmd_arr || !cmd->env_vars)
-	{
-		free(cmd->cmd_arr);
-		free(cmd->env_vars);
-		return (1);
-	}
-	return (0);
-}
-
-
-t_cmd	*new_command(t_cmd **cmd)
-{
-	t_cmd	*new_cmd;
-	t_cmd	*last;
-
-	new_cmd = malloc(sizeof(t_cmd));
-	if (!new_cmd || initialize_cmd_struct(new_cmd))
-		return (free(new_cmd), NULL);
-	if (*cmd == NULL)
-		*cmd = new_cmd;
-	else
-	{
-		last = *cmd;
-		while (last->next != NULL)
-			last = last->next;
-		last->next = new_cmd;
-	}
-	return (new_cmd);
-}
-
-

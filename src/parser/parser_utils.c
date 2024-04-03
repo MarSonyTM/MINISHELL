@@ -1,45 +1,31 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/03 11:41:32 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 11:49:38 by mafurnic         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../inc/minishell.h"
 
-
-t_cmd	*initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env)
+// Function to resolve the path of a command
+t_cmd *initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env)
 {
-	t_cmd	*new_cmd;
+    t_cmd *new_cmd = new_command(cmd); // Create and link a new command
+    if (!new_cmd) return NULL; // Handle failure
 
-	new_cmd = new_command(cmd);
-	if (!new_cmd)
-		return (NULL);
-	new_cmd->cmd_arr = malloc(sizeof(char *) * 2);
-	if (!new_cmd->cmd_arr)
-		return (NULL);
-	new_cmd->cmd_arr[0] = ft_strdup(current_token->value);
-	if (!new_cmd->cmd_arr[0])
-		return (NULL);
-	new_cmd->cmd_arr[1] = NULL;
-	if (current_token->type == TOKEN_COMMAND)
-	{
-		new_cmd->cmd_path = resolve_command_path(current_token->value, env);
-		if (!new_cmd->cmd_path)
-			return (NULL);
-	}
-	else
-	{
-		new_cmd->cmd_path = NULL;
-	}
-	return (new_cmd);
+    // Allocate space for command name and NULL terminator
+    new_cmd->cmd_arr = malloc(sizeof(char *) * 2);
+    if (!new_cmd->cmd_arr) return NULL; // Handle failure
+
+    new_cmd->cmd_arr[0] = ft_strdup(current_token->value); // Copy command/builtin name
+    if (!new_cmd->cmd_arr[0]) return NULL; // Handle failure
+    new_cmd->cmd_arr[1] = NULL; // NULL terminate the command array
+
+    // For TOKEN_COMMAND, resolve the path
+    if (current_token->type == TOKEN_COMMAND) {
+        new_cmd->cmd_path = resolve_command_path(current_token->value, env);
+        if (!new_cmd->cmd_path) return NULL; // Handle failure
+    } else {
+        new_cmd->cmd_path = NULL; // Builtin commands don't have a path
+    }
+
+    return new_cmd;
 }
 
+// Adds an argument to the current command
 int add_argument_to_command(t_cmd *current_cmd, const char *arg_value)
 {
     if (current_cmd == NULL || arg_value == NULL) 
@@ -90,37 +76,6 @@ int handle_redirection(t_cmd *current_cmd, t_token **current, int current_type)
     return (0); // Success
 }
 
-char *handle_heredoc(t_token **current)
-{
-    if (!current || !(*current)) return NULL;
-
-    char *delimiter = (*current)->value;
-    char *heredoc_input = NULL;
-    char *input_buffer;
-
-    while (1)
-    {
-        ft_putstr_fd("> ", 1);
-        input_buffer = readline(NULL);
-        if (!input_buffer) return (NULL);
-        if (ft_strcmp(input_buffer, delimiter) == 0)
-        {
-            free(input_buffer);
-            break;
-        }
-        char *temp;
-        if (heredoc_input) {
-            temp = ft_strjoin(heredoc_input, "\n");
-        } else {
-            temp = ft_strdup("");
-        }
-        free(heredoc_input);
-        heredoc_input = ft_strjoin(temp, input_buffer);
-        free(temp);
-        free(input_buffer);
-    }
-    return (heredoc_input);
-}
 
 int handle_environment_variable(t_cmd *current_cmd, char *value)
 {
