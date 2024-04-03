@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 15:12:23 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/03 15:17:17 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,12 @@ int process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
     return (0); 
 }
 
-int handle_comma(t_cmd *current_cmd, t_token *current)
-{ 
-    if (current_cmd == NULL) return 0; // Skip if no current command
-    if (add_argument_to_command(current_cmd, current->value) != 0) return 1; // Handle error
-    return 0; // Success
+int	handle_comma(t_cmd *current_cmd, t_token *current)
+{
+	if (current_cmd == NULL)
+		return (0);
+	if (add_argument_to_command(current_cmd, current->value) != 0)
+		return (1);
+	return (0);
 }
 
