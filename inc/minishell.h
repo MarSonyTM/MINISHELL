@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
+/*   Updated: 2024/04/03 11:23:35 by mafurnic         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -9,7 +21,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-#define PROMPT "minishell> "
+# define PROMPT "minishell> "
 
 /* error messages */
 # define ERROR "Error"
@@ -27,55 +39,54 @@
 
 typedef enum e_token_type
 {
-    TOKEN_COMMAND,
-    TOKEN_BUILTIN,
-    TOKEN_ARG,
-    TOKEN_PIPE,
-    TOKEN_REDIRECT_IN,
-    TOKEN_INPUT,
-    TOKEN_OUTPUT,
-    TOKEN_REDIRECT_OUT,
-    TOKEN_DOUBLE_REDIRECT_OUT,
-    TOKEN_WHITESPACE,
-    TOKEN_QUOTE,
-    TOKEN_DQUOTE,
-    TOKEN_ENV_VAR,
-    TOKEN_EXIT_STATUS,
-    TOKEN_HEREDOC,
-    TOKEN_REDIRECT_OUT_APPEND,    
-    TOKEN_COMMA,
-    TOKEN_ERROR
-    // Add more as needed
-} t_token_type;
+	TOKEN_COMMAND,
+	TOKEN_BUILTIN,
+	TOKEN_ARG,
+	TOKEN_PIPE,
+	TOKEN_REDIRECT_IN,
+	TOKEN_INPUT,
+	TOKEN_OUTPUT,
+	TOKEN_REDIRECT_OUT,
+	TOKEN_DOUBLE_REDIRECT_OUT,
+	TOKEN_WHITESPACE,
+	TOKEN_QUOTE,
+	TOKEN_DQUOTE,
+	TOKEN_ENV_VAR,
+	TOKEN_EXIT_STATUS,
+	TOKEN_HEREDOC,
+	TOKEN_REDIRECT_OUT_APPEND,
+	TOKEN_COMMA,
+	TOKEN_ERROR
+}	t_token_type;
 
 typedef struct s_token
 {
-    t_token_type type;
-    char *value;
-    struct s_token *next; // For linked list structure
-} t_token;
+	t_token_type	type;
+	char			*value;
+	struct s_token	*next; // For linked list structure
+}	t_token;
 
 /* holds information of each separate environment variable */
 typedef struct s_env
 {
-    char            *key;
-    char            *value;
-    struct s_env    *next;
-}   t_env;
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
 
 /* holds information of each separate command / child process */
 typedef struct s_cmd
 {
-    char            *cmd_path; //for execve, else NULL
-    char            **cmd_arr; //holds flags and arguments
-    char            **env_vars; //for env var expansion, else NULL
-    char            *exit_status_token; //for exit status expansion, else NULL
-    char            *input; //for input redirection, else NULL
-    char            *output; //for output redirection, else NULL
-    char            *redirection_append; //for output redirection append, else NULL
-    int             exit_status;
-    struct s_cmd    *next;
-}   t_cmd;
+	char			*cmd_path; //for execve, else NULL
+	char			**cmd_arr; //holds flags and arguments
+	char			**env_vars; //for env var expansion, else NULL
+	char			*exit_status_token; //for exit status expansion, else NULL
+	char			*input; //for input redirection, else NULL
+	char			*output; //for output redirection, else NULL
+	char			*redirection_append;//for output redirection append, else NULL
+	int				exit_status;
+	struct s_cmd	*next;
+}	t_cmd;
 
 /* just reduces variables in execution */
 typedef struct s_exec
@@ -114,7 +125,7 @@ int process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, 
 int process_single_redirect_in(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
 int finalize_lexer(char **buffer, int bufIndex, t_token ***tokens, int *TokenCount, int inQuote, bool quote_error, t_env *env);
 int process_input_loop(char *input, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int *inQuote, bool *quote_error);
-int handleBuiltinOrCommand(t_cmd **cmd, t_token *current, t_env *env, t_cmd **current_cmd , int *arg_count);
+int handle_builtin_or_command(t_cmd **cmd, t_token *current, t_env *env, t_cmd **current_cmd , int *arg_count);
 
 /*Functions prototypes for Parser*/
 
@@ -130,12 +141,12 @@ int handle_environment_variable(t_cmd *current_cmd, char *value);
 int handle_exit_status_token(t_cmd *current_cmd, char *value, int *arg_count);
 t_cmd *handle_pipe_token(t_token **current, t_cmd **cmd, t_env *env, int *arg_count);
 int processTokens(t_token *tokens, t_cmd **cmd, t_env *env);
-int handleArgument(t_cmd *current_cmd, t_token *current);
-int handleInput(t_cmd *current_cmd, t_token *current);
-int handleRedirection(t_cmd *current_cmd, t_token **current);
-int handleHeredoc(t_cmd **current_cmd, t_token **current);
-int handleComma(t_cmd *current_cmd, t_token *current);
-int handleExitStatus(t_cmd *current_cmd, t_token *current);
+int handle_argument(t_cmd *current_cmd, t_token *current);
+int handle_input(t_cmd *current_cmd, t_token *current);
+int handle_parser_redirection(t_cmd *current_cmd, t_token **current);
+int handle_parser_heredoc(t_cmd **current_cmd, t_token **current);
+int handle_comma(t_cmd *current_cmd, t_token *current);
+int handle_exit_status(t_cmd *current_cmd, t_token *current);
 
 
 /*Functions prototypes for Execution*/
@@ -160,24 +171,24 @@ void	close_and_free(t_exec *exec);
 void	error(char *msg, char *ft);
 
 /* utils */
-int 	redirection(char *file, int mode, int custom);
+int		redirection(char *file, int mode, int custom);
 char	**env_to_array(t_cmd *cmd, t_env **env);
 int		get_len(t_env *env);
 int		count_processes(t_cmd *cmd);
 char	*get_key(char *cmd, int *j);
 char	*get_value(char *cmd, int *j);
 char	*get_value_concat(char *cmd, int *j);
-int 	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
-int	    handle_pipe(t_exec *exec, int i, char *cmd_path);
-int 	duplicate_fd(int old_fd, int new_fd, int custom);
-char    *ft_getenv(const char *name, t_env *env);
+int		handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
+int		handle_pipe(t_exec *exec, int i, char *cmd_path);
+int		duplicate_fd(int old_fd, int new_fd, int custom);
+char	*ft_getenv(const char *name, t_env *env);
 
 /* signal management */
 void	handle_sigint(int sig);
 void	handle_sigquit(int sig);
-void check_blocked_signals();
+void	check_blocked_signals(void);
 
 /* expansion */
-void expand_env_vars(t_cmd *cmd, t_env *env);
+void	expand_env_vars(t_cmd *cmd, t_env *env);
 
 #endif

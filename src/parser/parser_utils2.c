@@ -53,17 +53,17 @@ int processTokens(t_token *tokens, t_cmd **cmd, t_env *env)
     while (current != NULL) 
 		{
         if (current->type == TOKEN_BUILTIN || current->type == TOKEN_COMMAND)
-            handleBuiltinOrCommand(cmd, current, env, &current_cmd, &arg_count);
+            handle_builtin_or_command(cmd, current, env, &current_cmd, &arg_count);
         else if (current->type == TOKEN_ARG /*&& current_cmd != NULL*/)
-            handleArgument(current_cmd, current);
+            handle_argument(current_cmd, current);
         else if (current->type == TOKEN_INPUT && current_cmd != NULL) 
-			handleInput(current_cmd, current);            
+			handle_input(current_cmd, current);            
         else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_REDIRECT_OUT_APPEND) 
-            handleRedirection(current_cmd, &current);
+            handle_parser_redirection(current_cmd, &current);
         else if (current->type == TOKEN_HEREDOC)
-            handleHeredoc(&current_cmd, &current);
+            handle_parser_heredoc(&current_cmd, &current);
         else if (current->type == TOKEN_COMMA)
-            handleComma(current_cmd, current);    
+            handle_comma(current_cmd, current);    
         else if (current->type == TOKEN_EXIT_STATUS)
             handle_exit_status_token(current_cmd, current->value, &arg_count);
         else if (current->type == TOKEN_ENV_VAR)
@@ -78,14 +78,14 @@ int processTokens(t_token *tokens, t_cmd **cmd, t_env *env)
     return (0); 
 }
 
-int handleComma(t_cmd *current_cmd, t_token *current)
+int handle_comma(t_cmd *current_cmd, t_token *current)
 { 
     if (current_cmd == NULL) return 0; // Skip if no current command
     if (add_argument_to_command(current_cmd, current->value) != 0) return 1; // Handle error
     return 0; // Success
 }
 
-int handleExitStatus(t_cmd *current_cmd, t_token *current)
+int handle_cxit_status(t_cmd *current_cmd, t_token *current)
 {
     if (current_cmd == NULL) return 0; // Skip if no current command
     current_cmd->exit_status_token = ft_strdup(current->value);
