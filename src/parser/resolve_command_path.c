@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:44 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 13:48:35 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/03 15:09:56 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,43 +47,62 @@ char    *resolve_command_path(char *command, t_env *env)
     return (NULL); // Command not found
 }
 
-// Function to add a new command to the list
-t_cmd *new_command(t_cmd **cmd)
+static t_cmd	*initialize_command_structure(void)
 {
-    t_cmd *new_cmd = malloc(sizeof(t_cmd));
-    if (!new_cmd)
-        return (NULL); // Error handling for malloc failure
-    new_cmd->cmd_path = NULL;
-    new_cmd->cmd_arr = malloc(sizeof(char *) * 2); // Initial size for command + NULL
-    if (!new_cmd->cmd_arr)
-    {
-        free(new_cmd);
-        return (NULL); // Error handling for malloc failure
-    }
-    new_cmd->cmd_arr[0] = NULL; // Initialize to NULL for safety
-    new_cmd->input = NULL;
-    new_cmd->exit_status_token = NULL;
-    new_cmd->env_vars = malloc(sizeof(char *) * 1); // Initial size for NULL
-    if (!new_cmd->env_vars)
-    {
-        free(new_cmd->cmd_arr);
-        free(new_cmd);
-        return (NULL); // Error handling for malloc failure
-    }
-    new_cmd->env_vars[0] = NULL; // Initialize to NULL for safety
-    new_cmd->output = NULL;
-    new_cmd->exit_status = 0;
-    new_cmd->next = NULL;
+	t_cmd	*cmd;
 
-    if (*cmd == NULL)
-        *cmd = new_cmd; // If it's the first command
-    else
-    {
-        // Append to the end of the list
-        t_cmd *last = *cmd;
-        while (last->next != NULL)
-            last = last->next;
-        last->next = new_cmd;
-    }
-    return (new_cmd);
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
+	cmd->cmd_path = NULL;
+	cmd->cmd_arr = malloc(sizeof(char *) * 2);
+	if (!cmd->cmd_arr)
+		return (NULL);
+	cmd->cmd_arr[0] = NULL;
+	cmd->input = NULL;
+	cmd->exit_status_token = NULL;
+	cmd->env_vars = malloc(sizeof(char *));
+	if (!cmd->env_vars)
+		return (NULL);
+	cmd->env_vars[0] = NULL;
+	cmd->output = NULL;
+	cmd->exit_status = 0;
+	cmd->next = NULL;
+	return (cmd);
 }
+
+void	link_command_to_list(t_cmd **cmd_list, t_cmd *new_cmd)
+{
+	t_cmd	*last;
+
+	if (*cmd_list == NULL)
+		*cmd_list = new_cmd;
+	else
+	{
+		last = *cmd_list;
+		while (last->next != NULL)
+			last = last->next;
+		last->next = new_cmd;
+	}
+}
+
+t_cmd	*new_command(t_cmd **cmd)
+{
+	t_cmd	*new_cmd;
+
+	new_cmd = initialize_command_structure();
+	if (!new_cmd || !new_cmd->cmd_arr || !new_cmd->env_vars)
+	{
+		if (new_cmd)
+		{
+			free(new_cmd->cmd_arr);
+			free(new_cmd->env_vars);
+		}
+		free(new_cmd);
+		return (NULL);
+	}
+	link_command_to_list(cmd, new_cmd);
+	return (new_cmd);
+}
+
+
