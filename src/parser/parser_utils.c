@@ -6,13 +6,12 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:04:35 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 15:05:31 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/03 15:23:51 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-// Function to resolve the path of a command
 t_cmd	*initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env)
 {
 	t_cmd	*new_cmd;
@@ -39,7 +38,6 @@ t_cmd	*initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env)
 	}
 	return (new_cmd);
 }
-
 
 int	add_argument_to_command(t_cmd *current_cmd, const char *arg_value)
 {
@@ -88,7 +86,6 @@ int	handle_redirection(t_cmd *current_cmd, t_token **current, int current_type)
 	}
 	return (0);
 }
-
 
 int	handle_environment_variable(t_cmd *current_cmd, char *value)
 {
