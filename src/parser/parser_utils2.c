@@ -6,12 +6,11 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 15:20:22 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 12:04:37 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
 
 int	handle_exit_status_token(t_cmd *current_cmd, char *value, int *arg_count)
 {
@@ -55,40 +54,6 @@ t_cmd	*handle_pipe_token(t_token **current,
 	return (current_cmd);
 }
 
-int process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
-{
-    t_cmd *current_cmd = NULL;
-    int arg_count = 0; // Initialization moved inside the function
-    t_token *current = tokens;
-
-    while (current != NULL) 
-		{
-        if (current->type == TOKEN_BUILTIN || current->type == TOKEN_COMMAND)
-            handle_builtin_or_command(cmd, current, env, &current_cmd, &arg_count);
-        else if (current->type == TOKEN_ARG /*&& current_cmd != NULL*/)
-            handle_argument(current_cmd, current);
-        else if (current->type == TOKEN_INPUT && current_cmd != NULL) 
-			handle_input(current_cmd, current);            
-        else if (current->type == TOKEN_REDIRECT_OUT || current->type == TOKEN_REDIRECT_OUT_APPEND) 
-            handle_parser_redirection(current_cmd, &current);
-        else if (current->type == TOKEN_HEREDOC)
-            handle_parser_heredoc(&current_cmd, &current);
-        else if (current->type == TOKEN_COMMA)
-            handle_comma(current_cmd, current);    
-        else if (current->type == TOKEN_EXIT_STATUS)
-            handle_exit_status_token(current_cmd, current->value, &arg_count);
-        else if (current->type == TOKEN_ENV_VAR)
-            handle_environment_variable(current_cmd, current->value);
-        else if (current->type == TOKEN_PIPE)
-        {
-              current_cmd = handle_pipe_token(&current, cmd, env, &arg_count);
-              if (!current_cmd) return (1); // Handle error
-        }
-		current = current->next;
-	}
-    return (0); 
-}
-
 int	handle_comma(t_cmd *current_cmd, t_token *current)
 {
 	if (current_cmd == NULL)
@@ -98,3 +63,45 @@ int	handle_comma(t_cmd *current_cmd, t_token *current)
 	return (0);
 }
 
+void	process_token(t_token **current, t_cmd **current_cmd,
+		t_cmd ***cmd, t_env **env, int *arg_count)
+{
+	if ((*current)->type == TOKEN_BUILTIN || (*current)->type == TOKEN_COMMAND)
+		handle_builtin_or_command(*cmd, *current, *env, current_cmd, arg_count);
+	else if ((*current)->type == TOKEN_ARG)
+		handle_argument(*current_cmd, *current);
+	else if ((*current)->type == TOKEN_INPUT && *current_cmd != NULL)
+		handle_input(*current_cmd, *current);
+	else if ((*current)->type == TOKEN_REDIRECT_OUT
+		|| (*current)->type == TOKEN_REDIRECT_OUT_APPEND)
+		handle_parser_redirection(*current_cmd, current);
+	else if ((*current)->type == TOKEN_HEREDOC)
+		handle_parser_heredoc(current_cmd, current);
+	else if ((*current)->type == TOKEN_COMMA)
+		handle_comma(*current_cmd, *current);
+	else if ((*current)->type == TOKEN_EXIT_STATUS)
+		handle_exit_status_token(*current_cmd, (*current)->value, arg_count);
+	else if ((*current)->type == TOKEN_ENV_VAR)
+		handle_environment_variable(*current_cmd, (*current)->value);
+	else if ((*current)->type == TOKEN_PIPE)
+		*current_cmd = handle_pipe_token(current, *cmd, *env, arg_count);
+}
+
+int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
+{
+	t_cmd	*current_cmd;
+	int		arg_count;
+	t_token	*current;
+
+	current_cmd = NULL;
+	arg_count = 0;
+	current = tokens;
+	while (current != NULL)
+	{
+		process_token(&current, &current_cmd, &cmd, &env, &arg_count);
+		if (!current_cmd)
+			return (1);
+		current = current->next;
+	}
+	return (0);
+}
