@@ -12,7 +12,7 @@ LIBFT_PATH := libft/
 
 # Source and Object Files
 
-SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c lexer/determine_token_type.c lexer/determine_token_type1.c lexer/process1.c lexer/process2.c \
+SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c lexer/determine_token_type.c lexer/determine_token_type1.c lexer/process1.c lexer/process2.c lexer/process_redirect.c \
 				lexer/process_dollar_sign.c lexer/process_heredoc.c custom/export.c error/closing.c error/error.c error/freeing.c execution/executor.c execution/executor_utils1.c \
 				parser/parser.c parser/resolve_command_path.c  parser/parser_utils.c parser/parser_utils2.c  custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
 				parser/handlers1.c parser/parser_heredoc.c env/arr_to_linked_list.c execution/executor_utils2.c /signals/signals.c expansion/expansion.c env/ft_getenv.c \

@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 11:39:43 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 13:40:53 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,12 @@ int				handle_parser_redirection(t_cmd *current_cmd,
 int				handle_parser_heredoc(t_cmd **current_cmd, t_token **current);
 int				handle_comma(t_cmd *current_cmd, t_token *current);
 int				handle_exit_status(t_cmd *current_cmd, t_token *current);
-
+int				process_single_redirect_out(char *buffer,
+				int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+int	process_redirect_out_append(char *buffer, int *bufIndex,
+	t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
+int	process_single_redirect_in(char *buffer, int *bufIndex,
+	t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
 
 /*Functions prototypes for Execution*/
 
