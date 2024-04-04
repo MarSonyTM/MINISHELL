@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 16:04:50 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:07:28 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,10 +147,10 @@ t_token_type	check_special_tokens(char *token);
 t_token_type	handle_dollar_tokens(char *token, int inQuote);
 bool			is_command(char *token, t_env *env);
 char			*construct_full_path(char *dir, char *token);
-int				process_whitespace(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 bool			is_whitespace(char c);
-int				process_pipe(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 void			process_quotes(char currentChar, char **buffer, int *bufIndex, int *inQuote);
+int				process_whitespace(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+int				process_pipe(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 int				process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
 int				finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, char *tokenValue, int inQuote);
 void			process_dollar_conditions(char *input, int *i, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
@@ -190,7 +190,8 @@ int				handle_comma(t_cmd *current_cmd, t_token *current);
 int				handle_exit_status(t_cmd *current_cmd, t_token *current);
 void			link_command_to_list(t_cmd **cmd_list, t_cmd *new_cmd);
 t_cmd			*new_command(t_cmd **cmd);
-char			*append_line_to_heredoc(char *heredoc_input, const char *input_buffer);
+char			*append_line_to_heredoc(char *heredoc_input,
+					const char *input_buffer);
 char			*handle_heredoc(t_token **current);
 char			*resolve_command_path(char *command, t_env *env);
 void			process_token(t_command *command);
