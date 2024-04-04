@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 14:03:48 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:24:14 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ typedef struct s_lexer
 }	t_lexer;
 
 
+
+
 /*Functions prototypes for Lexer*/
 
 int				lexer(char *input, t_token **tokens, t_env *env);
@@ -166,12 +168,16 @@ int				handle_parser_redirection(t_cmd *current_cmd,
 int				handle_parser_heredoc(t_cmd **current_cmd, t_token **current);
 int				handle_comma(t_cmd *current_cmd, t_token *current);
 int				handle_exit_status(t_cmd *current_cmd, t_token *current);
-int				process_single_redirect_out(char *buffer,
-				int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-int	process_redirect_out_append(char *buffer, int *bufIndex,
-	t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
-int	process_single_redirect_in(char *buffer, int *bufIndex,
-	t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
+void			link_command_to_list(t_cmd **cmd_list, t_cmd *new_cmd);
+t_cmd			*new_command(t_cmd **cmd);
+char			*append_line_to_heredoc(char *heredoc_input, const char *input_buffer);
+char			*handle_heredoc(t_token **current);
+char			*resolve_command_path(char *command, t_env *env);
+void			process_token(t_token **current, t_cmd **current_cmd,t_cmd ***cmd, t_env **env, int *arg_count);
+int				handle_builtin_or_command(t_cmd **cmd, t_token *current, t_env *env, t_cmd **current_cmd, int *arg_count);
+int				process_single_redirect_out(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
+int				process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
+int				process_single_redirect_in(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
 
 /*Functions prototypes for Execution*/
 

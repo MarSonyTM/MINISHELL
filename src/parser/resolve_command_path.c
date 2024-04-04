@@ -6,13 +6,13 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:44 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 14:00:00 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:22:52 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	*create_full_path(char *dir, char *command,
+static char	*create_full_path(char *dir, char *command,
 		size_t dirLen, size_t commandLen)
 {
 	char	*full_path;
@@ -28,12 +28,12 @@ char	*create_full_path(char *dir, char *command,
 	return (full_path);
 }
 
-bool	is_command_found(char *fullPath)
+static bool	is_command_found(char *fullPath)
 {
 	return (access(fullPath, F_OK) == 0 && access(fullPath, X_OK) == 0);
 }
 
-char	*find_command_in_path(char *command, char *pathCopy, size_t commandLen)
+static char	*find_command_in_path(char *command, char *pathCopy, size_t commandLen)
 {
 	char	*dir;
 	size_t	dir_len;
