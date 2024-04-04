@@ -6,46 +6,11 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:44 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 11:49:39 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 12:30:57 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-char	*resolve_command_path(char *command, t_env *env)
-{
-    char *path = ft_getenv("PATH", env); // Get the PATH environment variable value
-    char *pathCopy = ft_strdup(path); // Duplicate since strtok modifies the string
-    if (!pathCopy)
-        return (NULL); // Handle memory allocation failure
-    char *dir = ft_strtok(pathCopy, ":");
-    size_t commandLen = ft_strlen(command);
-
-    while (dir != NULL) 
-    {
-        size_t dirLen = ft_strlen(dir);
-        char *fullPath = malloc(dirLen + commandLen + 2); // For '/' and '\0'
-        if (fullPath == NULL) {
-            // Handle memory allocation failure
-            free(pathCopy);
-            return (NULL);
-        }
-        
-        ft_strcpy(fullPath, dir);
-        fullPath[dirLen] = '/'; // Append '/'
-        ft_strcpy(fullPath + dirLen + 1, command); // Append command
-        if (access (fullPath, F_OK) == 0 && access(fullPath, X_OK) == 0) 
-        {
-            free(pathCopy);
-            return fullPath; // Command found
-        }
-        free(fullPath); // Free the allocated memory for fullPath
-        dir = ft_strtok(NULL, ":");
-    }
-    free(pathCopy);  
-    error(ERR_CMD, command); // Command not found
-    return (NULL); // Command not found
-}
 
 static t_cmd	*initialize_command_structure(void)
 {
@@ -104,5 +69,3 @@ t_cmd	*new_command(t_cmd **cmd)
 	link_command_to_list(cmd, new_cmd);
 	return (new_cmd);
 }
-
-

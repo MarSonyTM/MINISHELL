@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 11:39:43 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 12:26:54 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,18 @@ typedef struct s_exec
 	int	*open_fds;
 	int	non_customs;
 }	t_exec;
+
+/* holds information of each separate command path for resolve path in parser*/
+typedef struct s_command_path
+{
+	char	*path;
+	char	*path_copy;
+	char	*dir;
+	size_t	command_len;
+	size_t	dir_len;
+	char	*full_path;
+	char	*accessible_path;
+}	t_command_path;
 
 /*Functions prototypes for Lexer*/
 

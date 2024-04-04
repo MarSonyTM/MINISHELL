@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 12:04:37 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 12:06:50 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	handle_exit_status_token(t_cmd *current_cmd, char *value, int *arg_count)
 		return (1);
 	*arg_count += 1;
 	current_cmd->cmd_arr[*arg_count] = NULL;
+	free(value);
 	return (0);
 }
 
@@ -51,6 +52,7 @@ t_cmd	*handle_pipe_token(t_token **current,
 		return (NULL);
 	current_cmd->cmd_path = cmd_path;
 	*arg_count = 1;
+	free((*current)->value);
 	return (current_cmd);
 }
 
