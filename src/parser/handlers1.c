@@ -6,19 +6,19 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:05:23 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 11:23:41 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:49:58 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	handle_builtin_or_command(t_cmd **cmd, t_token *current,
-	t_env *env, t_cmd **current_cmd, int *arg_count)
+int	handle_builtin_or_command_parser(t_command *command)
 {
-	*current_cmd = initialize_new_command(cmd, current, env);
-	if (!(*current_cmd))
+	*command->current_cmd = initialize_new_command(*command->cmd,
+			*command->current, *command->env);
+	if (!(*command->current_cmd))
 		return (1);
-	*arg_count = 1;
+	*command->arg_count = 1;
 	return (0);
 }
 

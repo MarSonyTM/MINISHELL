@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:06:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/03 10:17:53 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:03:15 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ t_token_type	check_special_tokens(char *token)
 	if (ft_strcmp(token, "<") == 0)
 		return (TOKEN_REDIRECT_IN);
 	if (ft_strcmp(token, ">") == 0)
-		return (TOKEN_REDIRECT_OUT);
+		return (T_R_OT);
 	if (ft_strcmp(token, ">>") == 0)
-		return (TOKEN_REDIRECT_OUT_APPEND);
+		return (T_R_OUT_A);
 	if (ft_strcmp(token, "<<") == 0)
 		return (TOKEN_HEREDOC);
 	if (ft_strcmp(token, ",") == 0)

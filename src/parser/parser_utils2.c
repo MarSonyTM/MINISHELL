@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 12:04:37 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:01:42 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,42 +63,53 @@ int	handle_comma(t_cmd *current_cmd, t_token *current)
 	return (0);
 }
 
-void	process_token(t_token **current, t_cmd **current_cmd,
-		t_cmd ***cmd, t_env **env, int *arg_count)
+void	process_token(t_command *command)
 {
+	t_token	**current;
+	t_cmd	**current_cmd;
+
+	current = command->current;
+	current_cmd = command->current_cmd;
 	if ((*current)->type == TOKEN_BUILTIN || (*current)->type == TOKEN_COMMAND)
-		handle_builtin_or_command(*cmd, *current, *env, current_cmd, arg_count);
+		handle_builtin_or_command_parser(command);
 	else if ((*current)->type == TOKEN_ARG)
 		handle_argument(*current_cmd, *current);
 	else if ((*current)->type == TOKEN_INPUT && *current_cmd != NULL)
 		handle_input(*current_cmd, *current);
-	else if ((*current)->type == TOKEN_REDIRECT_OUT
-		|| (*current)->type == TOKEN_REDIRECT_OUT_APPEND)
+	else if ((*current)->type == T_R_OT || (*current)->type == T_R_OUT_A)
 		handle_parser_redirection(*current_cmd, current);
 	else if ((*current)->type == TOKEN_HEREDOC)
 		handle_parser_heredoc(current_cmd, current);
 	else if ((*current)->type == TOKEN_COMMA)
 		handle_comma(*current_cmd, *current);
 	else if ((*current)->type == TOKEN_EXIT_STATUS)
-		handle_exit_status_token(*current_cmd, (*current)->value, arg_count);
+		handle_exit_status_token(*current_cmd,
+			(*current)->value, command->arg_count);
 	else if ((*current)->type == TOKEN_ENV_VAR)
 		handle_environment_variable(*current_cmd, (*current)->value);
 	else if ((*current)->type == TOKEN_PIPE)
-		*current_cmd = handle_pipe_token(current, *cmd, *env, arg_count);
+		*current_cmd = handle_pipe_token(current,
+				*command->cmd, *command->env, command->arg_count);
 }
 
 int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 {
-	t_cmd	*current_cmd;
-	int		arg_count;
-	t_token	*current;
+	t_command	command;
+	t_cmd		*current_cmd;
+	int			arg_count;
+	t_token		*current;
 
 	current_cmd = NULL;
 	arg_count = 0;
 	current = tokens;
+	command.current = &current;
+	command.current_cmd = &current_cmd;
+	command.cmd = &cmd;
+	command.env = &env;
+	command.arg_count = &arg_count;
 	while (current != NULL)
 	{
-		process_token(&current, &current_cmd, &cmd, &env, &arg_count);
+		process_token(&command);
 		if (!current_cmd)
 			return (1);
 		current = current->next;

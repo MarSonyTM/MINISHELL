@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 15:24:14 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:04:50 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef enum e_token_type
 	TOKEN_REDIRECT_IN,
 	TOKEN_INPUT,
 	TOKEN_OUTPUT,
-	TOKEN_REDIRECT_OUT,
+	T_R_OT, //token redirect out 
 	TOKEN_DOUBLE_REDIRECT_OUT,
 	TOKEN_WHITESPACE,
 	TOKEN_QUOTE,
@@ -54,7 +54,7 @@ typedef enum e_token_type
 	TOKEN_ENV_VAR,
 	TOKEN_EXIT_STATUS,
 	TOKEN_HEREDOC,
-	TOKEN_REDIRECT_OUT_APPEND,
+	T_R_OUT_A, //token redirect out append
 	TOKEN_COMMA,
 	TOKEN_ERROR
 }	t_token_type;
@@ -109,6 +109,26 @@ typedef struct s_lexer
 	int		in_quote;
 	bool	quote_error;
 }	t_lexer;
+
+typedef struct s_redirect
+{
+    char	*buffer;
+    int	buf_index;
+    t_token	***tokens;
+    int	token_count;
+    t_env	*env;
+    int	*i;
+    int	in_quote;
+}	t_redirect;
+
+typedef struct s_command
+{
+    t_token	**current;
+    t_cmd	**current_cmd;
+    t_cmd	***cmd;
+    t_env	**env;
+    int	*arg_count;
+}	t_command;
 
 
 
@@ -173,11 +193,8 @@ t_cmd			*new_command(t_cmd **cmd);
 char			*append_line_to_heredoc(char *heredoc_input, const char *input_buffer);
 char			*handle_heredoc(t_token **current);
 char			*resolve_command_path(char *command, t_env *env);
-void			process_token(t_token **current, t_cmd **current_cmd,t_cmd ***cmd, t_env **env, int *arg_count);
-int				handle_builtin_or_command(t_cmd **cmd, t_token *current, t_env *env, t_cmd **current_cmd, int *arg_count);
-int				process_single_redirect_out(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-int				process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
-int				process_single_redirect_in(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
+void			process_token(t_command *command);
+int				handle_builtin_or_command_parser(t_command *command);
 
 /*Functions prototypes for Execution*/
 

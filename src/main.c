@@ -124,7 +124,7 @@ int main(int argc, char **argv, char **envp)
                 case TOKEN_REDIRECT_IN:
                     type_str = "Input Redirection";
                     break;
-                case TOKEN_REDIRECT_OUT:
+                case T_R_OT:
                     type_str = "Output Redirection";
                     break;
                 case TOKEN_QUOTE:
@@ -148,7 +148,7 @@ int main(int argc, char **argv, char **envp)
                 case TOKEN_COMMA:
                     type_str = "Comma";
                     break;
-                case TOKEN_REDIRECT_OUT_APPEND:
+                case T_R_OUT_A:
                     type_str = "Output Redirection Append";
                     break;
                 case TOKEN_BUILTIN:

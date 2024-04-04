@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:04:35 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 15:03:52 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:04:23 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,13 @@ int	handle_redirection(t_cmd *current_cmd, t_token **current, int current_type)
 		error(ERR_PARS, "\n");
 		return (2);
 	}
-	if (current_type == TOKEN_REDIRECT_OUT_APPEND)
+	if (current_type == T_R_OUT_A)
 	{
 		current_cmd->redirection_append = ft_strdup((*current)->value);
 		if (!current_cmd->redirection_append)
 			return (1);
 	}
-	else if (current_type == TOKEN_REDIRECT_OUT)
+	else if (current_type == T_R_OT)
 	{
 		current_cmd->output = ft_strdup((*current)->value);
 		if (!current_cmd->output)

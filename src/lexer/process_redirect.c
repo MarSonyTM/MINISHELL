@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 13:32:28 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 14:08:35 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:03:54 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	process_single_redirect_out(char *buffer,
 			return (1);
 		*bufIndex = 0;
 	}
-	if (add_token(*tokens, TOKEN_REDIRECT_OUT, ft_strdup(">")) == 1)
+	if (add_token(*tokens, T_R_OT, ft_strdup(">")) == 1)
 		return (1);
 	(*TokenCount)++;
 	return (0);
@@ -42,7 +42,7 @@ int	process_redirect_out_append(char *buffer, int *bufIndex,
 			return (1);
 		*bufIndex = 0;
 	}
-	if (add_token(*tokens, TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")) == 1)
+	if (add_token(*tokens, T_R_OUT_A, ft_strdup(">>")) == 1)
 		return (1);
 	(*TokenCount)++;
 	(*i)++;
