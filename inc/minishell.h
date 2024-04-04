@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 13:40:53 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 14:03:48 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,17 @@ typedef struct s_exec
 	int	*open_fds;
 	int	non_customs;
 }	t_exec;
+
+typedef struct s_lexer
+{
+	int		i;
+	char	*buffer;
+	int		token_count;
+	int		buf_index;
+	int		in_quote;
+	bool	quote_error;
+}	t_lexer;
+
 
 /*Functions prototypes for Lexer*/
 

@@ -6,103 +6,78 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:44 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 11:49:39 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/04 14:00:00 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+char	*create_full_path(char *dir, char *command,
+		size_t dirLen, size_t commandLen)
+{
+	char	*full_path;
+
+	full_path = malloc(dirLen + commandLen + 2);
+	if (full_path == NULL)
+	{
+		return (NULL);
+	}
+	ft_strcpy(full_path, dir);
+	full_path[dirLen] = '/';
+	ft_strcpy(full_path + dirLen + 1, command);
+	return (full_path);
+}
+
+bool	is_command_found(char *fullPath)
+{
+	return (access(fullPath, F_OK) == 0 && access(fullPath, X_OK) == 0);
+}
+
+char	*find_command_in_path(char *command, char *pathCopy, size_t commandLen)
+{
+	char	*dir;
+	size_t	dir_len;
+	char	*full_path;
+
+	dir = ft_strtok(pathCopy, ":");
+	while (dir != NULL)
+	{
+		dir_len = ft_strlen(dir);
+		full_path = create_full_path(dir, command, dir_len, commandLen);
+		if (full_path == NULL)
+		{
+			return (NULL);
+		}
+		if (is_command_found(full_path))
+		{
+			return (full_path);
+		}
+		free(full_path);
+		dir = ft_strtok(NULL, ":");
+	}
+	return (NULL);
+}
+
 char	*resolve_command_path(char *command, t_env *env)
 {
-    char *path = ft_getenv("PATH", env); // Get the PATH environment variable value
-    char *pathCopy = ft_strdup(path); // Duplicate since strtok modifies the string
-    if (!pathCopy)
-        return (NULL); // Handle memory allocation failure
-    char *dir = ft_strtok(pathCopy, ":");
-    size_t commandLen = ft_strlen(command);
+	char	*path;
+	char	*path_copy;
+	size_t	command_len;
+	char	*full_path;
 
-    while (dir != NULL) 
-    {
-        size_t dirLen = ft_strlen(dir);
-        char *fullPath = malloc(dirLen + commandLen + 2); // For '/' and '\0'
-        if (fullPath == NULL) {
-            // Handle memory allocation failure
-            free(pathCopy);
-            return (NULL);
-        }
-        
-        ft_strcpy(fullPath, dir);
-        fullPath[dirLen] = '/'; // Append '/'
-        ft_strcpy(fullPath + dirLen + 1, command); // Append command
-        if (access (fullPath, F_OK) == 0 && access(fullPath, X_OK) == 0) 
-        {
-            free(pathCopy);
-            return fullPath; // Command found
-        }
-        free(fullPath); // Free the allocated memory for fullPath
-        dir = ft_strtok(NULL, ":");
-    }
-    free(pathCopy);  
-    error(ERR_CMD, command); // Command not found
-    return (NULL); // Command not found
-}
-
-static t_cmd	*initialize_command_structure(void)
-{
-	t_cmd	*cmd;
-
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->cmd_path = NULL;
-	cmd->cmd_arr = malloc(sizeof(char *) * 2);
-	if (!cmd->cmd_arr)
-		return (NULL);
-	cmd->cmd_arr[0] = NULL;
-	cmd->input = NULL;
-	cmd->exit_status_token = NULL;
-	cmd->env_vars = malloc(sizeof(char *));
-	if (!cmd->env_vars)
-		return (NULL);
-	cmd->env_vars[0] = NULL;
-	cmd->output = NULL;
-	cmd->exit_status = 0;
-	cmd->next = NULL;
-	return (cmd);
-}
-
-void	link_command_to_list(t_cmd **cmd_list, t_cmd *new_cmd)
-{
-	t_cmd	*last;
-
-	if (*cmd_list == NULL)
-		*cmd_list = new_cmd;
-	else
+	path = ft_getenv("PATH", env);
+	path_copy = ft_strdup(path);
+	if (!path_copy)
 	{
-		last = *cmd_list;
-		while (last->next != NULL)
-			last = last->next;
-		last->next = new_cmd;
-	}
-}
-
-t_cmd	*new_command(t_cmd **cmd)
-{
-	t_cmd	*new_cmd;
-
-	new_cmd = initialize_command_structure();
-	if (!new_cmd || !new_cmd->cmd_arr || !new_cmd->env_vars)
-	{
-		if (new_cmd)
-		{
-			free(new_cmd->cmd_arr);
-			free(new_cmd->env_vars);
-		}
-		free(new_cmd);
 		return (NULL);
 	}
-	link_command_to_list(cmd, new_cmd);
-	return (new_cmd);
+	command_len = ft_strlen(command);
+	full_path = find_command_in_path(command, path_copy, command_len);
+	free(path_copy);
+	if (full_path != NULL)
+	{
+		return (full_path);
+	}
+	error(ERR_CMD, command);
+	return (NULL);
 }
-
-

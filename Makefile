@@ -16,6 +16,7 @@ SOURCE_FILES := main.c lexer/lexer.c lexer/lexer_utils.c lexer/determine_token_t
 				lexer/process_dollar_sign.c lexer/process_heredoc.c custom/export.c error/closing.c error/error.c error/freeing.c execution/executor.c execution/executor_utils1.c \
 				parser/parser.c parser/resolve_command_path.c  parser/parser_utils.c parser/parser_utils2.c  custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
 				parser/handlers1.c parser/parser_heredoc.c env/arr_to_linked_list.c execution/executor_utils2.c /signals/signals.c expansion/expansion.c env/ft_getenv.c \
+				parser/initialize_command_structure.c 
 
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)
 LIBFT := $(LIBFT_PATH)libft.a
