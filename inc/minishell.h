@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 17:04:27 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/05 12:27:30 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,22 +104,13 @@ typedef struct s_lexer
 {
 	int		i;
 	char	*buffer;
-	int		token_count;
+	int		*token_count;
 	int		buf_index;
 	int		in_quote;
 	bool	quote_error;
 }	t_lexer;
 
-typedef struct s_redirect
-{
-    char	*buffer;
-    int	buf_index;
-    t_token	***tokens;
-    int	token_count;
-    t_env	*env;
-    int	*i;
-    int	in_quote;
-}	t_redirect;
+
 
 typedef struct s_command
 {
@@ -139,27 +130,27 @@ int				lexer(char *input, t_token **tokens, t_env *env);
 void			free_tokens(t_token **tokens);
 int				add_token(t_token **tokens, t_token_type type, char *value);
 t_token_type	determine_token_type(char *token, int inQuote,
-					t_env *env, int *TokenCount);
-t_token_type	handle_first_token(char *token, int *TokenCount);
+					t_env *env, t_lexer *lexer);
+t_token_type	handle_first_token(char *token, t_lexer *lexer);
 t_token_type	handle_subsequent_tokens(char *token, int inQuote,
-					t_env *env, int *TokenCount);
+					t_env *env, t_lexer *lexer);
 t_token_type	check_special_tokens(char *token);
 t_token_type	handle_dollar_tokens(char *token, int inQuote);
 bool			is_command(char *token, t_env *env);
 char			*construct_full_path(char *dir, char *token);
 bool			is_whitespace(char c);
 void			process_quotes(char currentChar, char **buffer, int *bufIndex, int *inQuote);
-int				process_whitespace(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-int				process_pipe(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-int				process_comma(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-int				finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, char *tokenValue, int inQuote);
-void			process_dollar_conditions(char *input, int *i, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
-int				process_heredoc(char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i);
-int				process_single_redirect_out(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env);
-int				process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int inQuote);
-int				process_single_redirect_in(char *buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int inQuote);
-int				finalize_lexer(char **buffer, int bufIndex, t_token ***tokens, int *TokenCount, int inQuote, bool quote_error, t_env *env);
-int				process_input_loop(char *input, char **buffer, int *bufIndex, t_token ***tokens, int *TokenCount, t_env *env, int *i, int *inQuote, bool *quote_error);
+int				process_whitespace(char *buffer, int *bufIndex, t_token ***tokens,t_lexer *lexer, t_env *env);
+int				process_pipe(char *buffer, int *bufIndex, t_token ***tokens, t_lexer *lexer, t_env *env);
+int				process_comma(char *buffer, int *bufIndex, t_token ***tokens, t_lexer *lexer, t_env *env);
+int				finalize_buffer_and_add_token(char **buffer, int *bufIndex, t_token ***tokens, t_lexer *lexer, t_env *env, char *tokenValue, int inQuote);
+void			process_dollar_conditions(char *input, int *i, char **buffer, int *bufIndex, t_token ***tokens, t_lexer *lexer, t_env *env, int inQuote);
+int				process_heredoc(char **buffer, int *bufIndex, t_token ***tokens, t_lexer *lexer, t_env *env, int *i);
+int				process_single_redirect_out(char *buffer, int *bufIndex, t_token ***tokens, t_lexer *lexer, t_env *env);
+int				process_redirect_out_append(char *buffer, int *bufIndex, t_token ***tokens, t_lexer *lexer, t_env *env, int *i, int inQuote);
+int				process_single_redirect_in(char *buffer, int *bufIndex, t_token ***tokens, t_lexer *lexer, t_env *env, int inQuote);
+int				finalize_lexer(char **buffer, int bufIndex, t_token ***tokens, t_lexer *lexer, int inQuote, bool quote_error, t_env *env);
+int				process_input_loop(char *input, char **buffer, int *bufIndex, t_token ***tokens, t_lexer *lexer, t_env *env, int *i, int *inQuote, bool *quote_error);
 int				handle_builtin_or_command(t_cmd **cmd, t_token *current, t_env *env, t_cmd **current_cmd , int *arg_count);
 
 /*Functions prototypes for Parser*/
