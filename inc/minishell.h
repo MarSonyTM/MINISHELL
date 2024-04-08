@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 11:33:15 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 11:37:18 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ t_token_type	determine_token_type(char *token, int inQuote,
 					t_lexer *lexer);
 t_token_type	handle_first_token(char *token, t_lexer *lexer);
 t_token_type	handle_subsequent_tokens(char *token, int inQuote,
-					 t_lexer *lexer);
+					t_lexer *lexer);
 t_token_type	check_special_tokens(char *token);
 t_token_type	handle_dollar_tokens(char *token, int inQuote);
 bool			is_command(char *token, t_lexer *lexer);
