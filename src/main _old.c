@@ -94,7 +94,8 @@ int	main(int argc, char **argv, char **envp)
 		}
 		add_history(input);
 		tokens = NULL;
-		lexer_status = lexer(input, &tokens, env);
+		t_lexer lexer_instance;
+		lexer_status = lexer(input, &tokens, &lexer_instance);
 		if (lexer_status == 1)
 		{
 			free_tokens(&tokens);
@@ -146,7 +147,7 @@ int	main(int argc, char **argv, char **envp)
 				case TOKEN_COMMA:
 					type_str = "Comma";
 					break;
-				case TOKEN_REDIRECT_OUT_APPEND:
+				case T_R_OUT_A:
 					type_str = "Output Redirection Append";
 					break;
 				case TOKEN_BUILTIN:
