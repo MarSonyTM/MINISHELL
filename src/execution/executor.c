@@ -34,11 +34,9 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 	}
 	if (cmd->cmd_path == NULL)
 	{
-		custom_exit = handle_custom(cmd, env, exec, i);
-		if (custom_exit == 1 && cmd->exit_status == 0)
+		custom_exit = handle_custom(cmd, env, exec, i); // handle_custom fails if malloc dup or open fails
+		if (custom_exit == 1 && cmd->exit_status == 0) // if there is an error in handle_custom and no error in custom_exec
 			cmd->exit_status = 1;
-		else if (custom_exit == 0)
-			cmd->exit_status = 0;
 		return ;
 	}
 	exec->pid[i] = fork();
@@ -80,7 +78,7 @@ int	executor(t_cmd *cmd, t_env **env, int exit_status)
 	if (init_exec(&exec, cmd, env) == 1)
 		return (1);
 	last_exit_status = 0;
-	cmd->exit_status = exit_status;
+	cmd->prev_exit_status = exit_status;
 	i = 0;
 	j = exec.processes;
 	tmp = cmd;

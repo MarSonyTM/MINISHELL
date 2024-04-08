@@ -34,6 +34,7 @@ t_env	*arr_to_linked_list(char **envp)
 	int		i;
 	int		j;
 
+	j = 0;
 	env = create_env_node(envp[0], &j);
 	if (!env)
 		exit (1);

@@ -75,6 +75,7 @@ typedef struct s_cmd
     char            *output; //for output redirection, else NULL
     char            *redirection_append; //for output redirection append, else NULL
     int             exit_status;
+    int             prev_exit_status;
     struct s_cmd    *next;
 }   t_cmd;
 
