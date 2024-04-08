@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:26:16 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 10:46:22 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 11:48:41 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,5 @@ int	process_heredoc(char **buffer,
 		return (1);
 	(lexer->token_count)++;
 	(lexer->i)++;
-	free(*buffer);
 	return (0);
 }
