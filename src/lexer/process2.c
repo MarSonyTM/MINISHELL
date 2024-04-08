@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 10:45:38 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:34:26 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void	process_character(char current_char, char *input,
 		process_pipe(*buffer, tokens, lexer);
 	else if (current_char == '\'' || current_char == '\"')
 		process_quotes(current_char, buffer, lexer, inQuote);
-	else if (current_char == ',' && *inQuote == 0)
-		process_comma(*buffer, tokens, lexer);
 	else if (current_char == '<' && input[lexer->i + 1] != '<' && *inQuote == 0)
 		process_single_redirect_in(*buffer,
 			tokens, lexer, *inQuote);

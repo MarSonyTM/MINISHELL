@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:25:58 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:34:18 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,6 @@ void			process_quotes(char currentChar,
 int				process_whitespace(char *buffer,
 					t_token ***tokens, t_lexer *lexer);
 int				process_pipe(char *buffer,
-					t_token ***tokens, t_lexer *lexer);
-int				process_comma(char *buffer,
 					t_token ***tokens, t_lexer *lexer);
 int				process_heredoc(char **buffer,
 					t_token ***tokens, t_lexer *lexer );
