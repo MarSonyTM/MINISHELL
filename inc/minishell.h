@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/05 12:27:30 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:03:48 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,19 @@ typedef struct s_exec
 	int	non_customs;
 }	t_exec;
 
+
+
+
+typedef struct s_command
+{
+	t_token	**current;
+	t_cmd	**current_cmd;
+	t_cmd	***cmd;
+	t_env	**env;
+	int		*arg_count;
+}	t_command;
+
+
 typedef struct s_lexer
 {
 	int		i;
@@ -109,19 +122,6 @@ typedef struct s_lexer
 	int		in_quote;
 	bool	quote_error;
 }	t_lexer;
-
-
-
-typedef struct s_command
-{
-    t_token	**current;
-    t_cmd	**current_cmd;
-    t_cmd	***cmd;
-    t_env	**env;
-    int	*arg_count;
-}	t_command;
-
-
 
 
 /*Functions prototypes for Lexer*/
