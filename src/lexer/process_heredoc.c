@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_heredoc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:26:16 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:51:33 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 20:11:59 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	process_heredoc(char **buffer,
 		lexer->buf_index = 0;
 		(lexer->token_count)++;
 	}
-	if (add_token(*tokens, TOKEN_HEREDOC, strdup("<<")) == 1)
+	if (add_token(*tokens, TOKEN_HEREDOC, ft_strdup("<<")) == 1)
 		return (1);
 	(lexer->token_count)++;
 	(lexer->i)++;
