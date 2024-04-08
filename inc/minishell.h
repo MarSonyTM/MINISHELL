@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 13:33:28 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 14:16:07 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ typedef struct s_command
 typedef struct s_lexer
 {
 	t_env	*env;
+	char	*input;
 	int		i;
 	char	*buffer;
 	int		*token_count;
