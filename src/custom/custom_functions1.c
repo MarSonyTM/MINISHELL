@@ -15,7 +15,7 @@ void	echo_cmd(t_cmd *cmd)
 	while (cmd->cmd_arr[i] != NULL)
 	{
 		if (ft_strncmp(cmd->cmd_arr[i], "$?", 3) == 0)
-			ft_putstr_fd(ft_itoa(cmd->exit_status), 1);
+			ft_putstr_fd(ft_itoa(cmd->prev_exit_status), 1);
 		else
 			ft_putstr_fd(cmd->cmd_arr[i], 1);
 		if (cmd->cmd_arr[i + 1] != NULL)

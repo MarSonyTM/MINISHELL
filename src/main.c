@@ -156,12 +156,14 @@ int	main(int argc, char **argv, char **envp)
 		}
 		cmd = NULL;
 		if (handle_parser(parse(tokens, &cmd, env), &cmd, &tokens, &input))
+		{
+			exit_status = 127;
 			continue ;
+		}
 		print_commands(cmd);
 		expand_env_vars(cmd, env);
 		exit_status = executor(cmd, &env, exit_status);
 		reset_free_cmd(&cmd, &tokens, input);
-
 	}
 	return (0);
 }

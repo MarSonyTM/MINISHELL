@@ -29,16 +29,19 @@ int	exit_cmd(t_cmd *cmd, t_env *env)
 		error(ERR_ARGS, "exit", NULL, 1);
 		return (1);
 	}
-	else if (cmd->cmd_arr[1] && check_for_digit(cmd->cmd_arr[1]))
+	else if (cmd->cmd_arr[1])
 	{
-		exit_code = ft_atoi(cmd->cmd_arr[1]);
-		while (exit_code < 0)
-			exit_code = 256 + exit_code;
-		if (exit_code > 255)
-			exit_code = exit_code % 256;
+		if (check_for_digit(cmd->cmd_arr[1]))
+		{
+			exit_code = ft_atoi(cmd->cmd_arr[1]);
+			while (exit_code < 0)
+				exit_code = 256 + exit_code;
+			if (exit_code > 255)
+				exit_code = exit_code % 256;
+		}
+		else
+			exit_code = 2;
 	}
-	else
-		exit_code = 2;
 	clean_up(cmd, env);
 	ft_putstr_fd("exit\n", 1);
 	exit(exit_code);

@@ -78,16 +78,17 @@ typedef struct s_env
 /* holds information of each separate command / child process */
 typedef struct s_cmd
 {
-	char			*cmd_path; //for execve, else NULL
-	char			**cmd_arr; //holds flags and arguments
-	char			**env_vars; //for env var expansion, else NULL
-	char			*exit_status_token; //for exit status expansion, else NULL
-	char			*input; //for input redirection, else NULL
-	char			*output; //for output redirection, else NULL
-	char			*redirection_append; //output redirection append, else NULL
-	int				exit_status;
-	struct s_cmd	*next;
-}	t_cmd;
+    char            *cmd_path; //for execve, else NULL
+    char            **cmd_arr; //holds flags and arguments
+    char            **env_vars; //for env var expansion, else NULL
+    char            *exit_status_token; //for exit status expansion, else NULL
+    char            *input; //for input redirection, else NULL
+    char            *output; //for output redirection, else NULL
+    char            *redirection_append; //for output redirection append, else NULL
+    int             exit_status;
+    int             prev_exit_status;
+    struct s_cmd    *next;
+}   t_cmd;
 
 /* just reduces variables in execution */
 typedef struct s_exec
