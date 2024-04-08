@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:06:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:46:28 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:00:06 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,3 @@ t_token_type	handle_dollar_tokens(char *token, t_lexer *lexer)
 		return (TOKEN_EXIT_STATUS);
 	return (TOKEN_ENV_VAR);
 }
-

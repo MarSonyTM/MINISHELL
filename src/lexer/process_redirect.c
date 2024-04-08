@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 13:32:28 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:50:49 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:00:02 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	process_single_redirect_in(char *buffer,
 	{
 		buffer[lexer->buf_index] = '\0';
 		if (add_token(*tokens,
-				determine_token_type(buffer,lexer),
+				determine_token_type(buffer, lexer),
 				ft_strdup(buffer)) == 1)
 			return (1);
 		lexer->buf_index = 0;
