@@ -6,23 +6,23 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:29:15 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/05 12:23:34 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:29:57 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	finalize_buffer_and_add_token(char **buffer, int *bufIndex,
+int	finalize_buffer_and_add_token(char **buffer,
 	t_token ***tokens,
 	t_lexer *lexer, t_env *env, char *tokenValue, int inQuote)
 {
-	if (*bufIndex > 0)
+	if (lexer->buf_index > 0)
 	{
-		(*buffer)[*bufIndex] = '\0';
+		(*buffer)[lexer->buf_index] = '\0';
 		add_token(*tokens,
 			determine_token_type(*buffer, inQuote, env, lexer),
 			ft_strdup(*buffer));
-		*bufIndex = 0;
+		lexer->buf_index = 0;
 	}
 	if (tokenValue != NULL)
 	{
@@ -35,23 +35,22 @@ int	finalize_buffer_and_add_token(char **buffer, int *bufIndex,
 	return (0);
 }
 
-void	process_dollar_conditions(char *input, int *i, char **buffer,
-		int *bufIndex,
+void	process_dollar_conditions(char *input, char **buffer,
 		t_token ***tokens, t_lexer *lexer, t_env *env, int inQuote)
 {
-	if (input[*i + 1] == '?')
+	if (input[lexer->i + 1] == '?')
 	{
-		finalize_buffer_and_add_token(buffer, bufIndex,
+		finalize_buffer_and_add_token(buffer,
 			tokens, lexer, env, "$?", inQuote);
-		*i += 1;
+		lexer->i += 1;
 	}
-	else if (input[*i + 1] == '\0' || !ft_isalpha(input[*i + 1]))
+	else if (input[lexer->i + 1] == '\0' || !ft_isalpha(input[lexer->i + 1]))
 	{
-		finalize_buffer_and_add_token(buffer, bufIndex, tokens,
+		finalize_buffer_and_add_token(buffer, tokens,
 			lexer, env, "$", inQuote);
 	}
 	else
 	{
-		(*buffer)[(*bufIndex)++] = input[*i];
+		(*buffer)[(lexer->buf_index)++] = input[lexer->i];
 	}
 }
