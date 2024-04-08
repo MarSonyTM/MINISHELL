@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 10:39:17 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 11:33:15 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,13 +150,16 @@ int				process_comma(char *buffer,
 					t_token ***tokens, t_lexer *lexer);
 int				process_heredoc(char **buffer,
 					t_token ***tokens, t_lexer *lexer );
+int				process_single_redirect_out(char *buffer,
+					t_token ***tokens, t_lexer *lexer);
+int				process_redirect_out_append(char *buffer,
+					t_token ***tokens, t_lexer *lexer, int inQuote);
+int				process_single_redirect_in(char *buffer,
+					t_token ***tokens, t_lexer *lexer, int inQuote);
 int				finalize_buffer_and_add_token(char **buffer, t_token ***tokens, t_lexer *lexer,  char *tokenValue, int inQuote);
-void			process_dollar_conditions(char *input, char **buffer,  t_token ***tokens, t_lexer *lexer, int inQuote);
-int				process_single_redirect_out(char *buffer,  t_token ***tokens, t_lexer *lexer);
-int				process_redirect_out_append(char *buffer, t_token ***tokens, t_lexer *lexer, int inQuote);
-int				process_single_redirect_in(char *buffer,  t_token ***tokens, t_lexer *lexer,  int inQuote);
 int				finalize_lexer(char **buffer, t_token ***tokens, t_lexer *lexer, int inQuote, bool quote_error);
 int				process_input_loop(char *input, char **buffer,  t_token ***tokens, t_lexer *lexer, int *inQuote, bool *quote_error);
+void			process_dollar_conditions(char *input, char **buffer, t_token ***tokens, t_lexer *lexer, int inQuote);
 int				handle_builtin_or_command(t_cmd **cmd, t_token *current, t_cmd **current_cmd , int *arg_count);
 
 /*Functions prototypes for Parser*/
