@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:40:04 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:34:12 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:35:56 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,3 @@ void	process_quotes(char currentChar,
 	else
 		(*buffer)[lexer->buf_index++] = currentChar;
 }
-
