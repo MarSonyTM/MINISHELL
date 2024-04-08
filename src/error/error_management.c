@@ -1,5 +1,18 @@
 #include "../../inc/minishell.h"
 
+void	close_fds(int *open_fds, int processes)
+{
+	int	i;
+
+	i = 0;
+	while (i < processes * 2)
+	{
+		if (open_fds[i] != -1)
+			close(open_fds[i]);
+		i++;
+	}
+	free(open_fds);
+}
 void	close_and_free(t_exec *exec)
 {
 	free(exec->pid);
@@ -14,19 +27,6 @@ void	close_and_free(t_exec *exec)
 	close_fds(exec->open_fds, exec->processes);
 }
 
-void	close_fds(int *open_fds, int processes)
-{
-	int	i;
-
-	i = 0;
-	while (i < processes * 2)
-	{
-		if (open_fds[i] != -1)
-			close(open_fds[i]);
-		i++;
-	}
-	free(open_fds);
-}
 
 void	free_array(char **arr)
 {
