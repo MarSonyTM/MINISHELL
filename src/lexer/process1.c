@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:40:04 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:35:56 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:48:25 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ int	process_whitespace(char *buffer,
 {
 	if (lexer->buf_index > 0)
 	{
+		lexer->in_quote = 0;
 		buffer[lexer->buf_index] = '\0';
 		if (add_token(*tokens, determine_token_type(buffer,
-					0, lexer), strdup(buffer)) == 1)
+					lexer), strdup(buffer)) == 1)
 			return (1);
 		lexer->buf_index = 0;
 		lexer->token_count++;
@@ -34,11 +35,12 @@ bool	is_whitespace(char c)
 
 int	process_pipe(char *buffer, t_token ***tokens, t_lexer *lexer)
 {
+	lexer->in_quote = 0;
 	buffer[lexer->buf_index] = '\0';
 	if (lexer->buf_index > 0)
 	{
 		if (add_token(*tokens, determine_token_type(buffer,
-					0, lexer), ft_strdup(buffer)) == 1)
+					lexer), ft_strdup(buffer)) == 1)
 			return (1);
 		lexer->buf_index = 0;
 	}
@@ -49,18 +51,18 @@ int	process_pipe(char *buffer, t_token ***tokens, t_lexer *lexer)
 }
 
 void	process_quotes(char currentChar,
-		char **buffer, t_lexer *lexer, int *inQuote)
+		char **buffer, t_lexer *lexer)
 {
-	if (*inQuote == 0)
+	if (lexer->in_quote == 0)
 	{
 		if (currentChar == '\'')
-			*inQuote = 1;
+			lexer->in_quote = 1;
 		else
-			*inQuote = 2;
+			lexer->in_quote = 2;
 	}
-	else if ((*inQuote == 1 && currentChar == '\'')
-		|| (*inQuote == 2 && currentChar == '\"'))
-		*inQuote = 0;
+	else if ((lexer->in_quote == 1 && currentChar == '\'')
+		|| (lexer->in_quote == 2 && currentChar == '\"'))
+		lexer->in_quote = 0;
 	else
 		(*buffer)[lexer->buf_index++] = currentChar;
 }

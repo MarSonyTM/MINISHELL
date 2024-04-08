@@ -6,18 +6,18 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:06:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:29:58 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:46:28 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 t_token_type	determine_token_type(char *token,
-				int inQuote, t_lexer *lexer)
+				t_lexer *lexer)
 {
 	if (lexer->token_count == 0)
 		return (handle_first_token(token, lexer));
-	return (handle_subsequent_tokens(token, inQuote, lexer));
+	return (handle_subsequent_tokens(token, lexer));
 }
 
 t_token_type	handle_first_token(char *token, t_lexer *lexer)
@@ -41,7 +41,7 @@ t_token_type	handle_first_token(char *token, t_lexer *lexer)
 }
 
 t_token_type	handle_subsequent_tokens(char *token,
-				int inQuote, t_lexer *lexer)
+				t_lexer *lexer)
 {
 	t_token_type	special_token;
 
@@ -51,7 +51,7 @@ t_token_type	handle_subsequent_tokens(char *token,
 	if (lexer->token_count == 0 && is_command(token, lexer))
 		return (TOKEN_COMMAND);
 	if (token[0] == '$' && token[1] != '\0')
-		return (handle_dollar_tokens(token, inQuote));
+		return (handle_dollar_tokens(token, lexer));
 	return (TOKEN_ARG);
 }
 
@@ -74,11 +74,12 @@ t_token_type	check_special_tokens(char *token)
 	return (TOKEN_ARG);
 }
 
-t_token_type	handle_dollar_tokens(char *token, int inQuote)
+t_token_type	handle_dollar_tokens(char *token, t_lexer *lexer)
 {
-	if (inQuote == 2 || inQuote == 1)
+	if (lexer->in_quote == 2 || lexer->in_quote == 1)
 		return (TOKEN_ARG);
 	if (ft_strcmp(token, "$?") == 0)
 		return (TOKEN_EXIT_STATUS);
 	return (TOKEN_ENV_VAR);
 }
+

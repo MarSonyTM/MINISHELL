@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:34:18 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:44:48 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,18 +130,16 @@ typedef struct s_lexer
 int				lexer(char *input, t_token **tokens, t_lexer *lexer);
 void			free_tokens(t_token **tokens);
 int				add_token(t_token **tokens, t_token_type type, char *value);
-t_token_type	determine_token_type(char *token, int inQuote,
-					t_lexer *lexer);
+t_token_type	determine_token_type(char *token, t_lexer *lexer);
 t_token_type	handle_first_token(char *token, t_lexer *lexer);
-t_token_type	handle_subsequent_tokens(char *token, int inQuote,
-					t_lexer *lexer);
+t_token_type	handle_subsequent_tokens(char *token, t_lexer *lexer);
 t_token_type	check_special_tokens(char *token);
-t_token_type	handle_dollar_tokens(char *token, int inQuote);
+t_token_type	handle_dollar_tokens(char *token, t_lexer *lexer);
 bool			is_command(char *token, t_lexer *lexer);
 char			*construct_full_path(char *dir, char *token);
 bool			is_whitespace(char c);
 void			process_quotes(char currentChar,
-					char **buffer, t_lexer *lexer, int *inQuote);
+					char **buffer, t_lexer *lexer); /**/
 int				process_whitespace(char *buffer,
 					t_token ***tokens, t_lexer *lexer);
 int				process_pipe(char *buffer,
@@ -151,15 +149,15 @@ int				process_heredoc(char **buffer,
 int				process_single_redirect_out(char *buffer,
 					t_token ***tokens, t_lexer *lexer);
 int				process_redirect_out_append(char *buffer,
-					t_token ***tokens, t_lexer *lexer, int inQuote);
+					t_token ***tokens, t_lexer *lexer);
 int				process_single_redirect_in(char *buffer,
-					t_token ***tokens, t_lexer *lexer, int inQuote);
+					t_token ***tokens, t_lexer *lexer);
 int				handle_builtin_or_command(t_cmd **cmd,
 					t_token *current, t_cmd **current_cmd, int *arg_count);
-int				finalize_buffer_and_add_token(char **buffer, t_token ***tokens, t_lexer *lexer, char *tokenValue, int inQuote);
-int				finalize_lexer(char **buffer, t_token ***tokens, t_lexer *lexer, int inQuote, bool quote_error);
-int				process_input_loop(char *input, char **buffer,  t_token ***tokens, t_lexer *lexer, int *inQuote, bool *quote_error);
-void			process_dollar_conditions(char *input, char **buffer, t_token ***tokens, t_lexer *lexer, int inQuote);
+int				finalize_buffer_and_add_token(char **buffer, t_token ***tokens, t_lexer *lexer, char *tokenValue);
+int				finalize_lexer(char **buffer, t_token ***tokens, t_lexer *lexer, bool quote_error);
+int				process_input_loop(char *input, char **buffer,  t_token ***tokens, t_lexer *lexer, bool *quote_error); /**/
+void			process_dollar_conditions(char *input, char **buffer, t_token ***tokens, t_lexer *lexer);
 
 /*Functions prototypes for Parser*/
 
