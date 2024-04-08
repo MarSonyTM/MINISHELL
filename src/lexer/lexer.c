@@ -6,16 +6,14 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:45:34 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 10:27:04 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:44:26 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	lexer(char *input, t_token **tokens, t_env *env)
+int	lexer(char *input, t_token **tokens, t_lexer *lexer)
 {
-	t_lexer	*lexer;
-
 	lexer = malloc(sizeof(t_lexer));
 	if (lexer == NULL)
 		return (1);
@@ -28,9 +26,9 @@ int	lexer(char *input, t_token **tokens, t_env *env)
 	if (lexer->buffer == NULL)
 		return (1);
 	process_input_loop(input, &lexer->buffer,
-		&tokens, lexer, env,
-		 &lexer->in_quote, &lexer->quote_error);
+		&tokens, lexer,
+		&lexer->in_quote, &lexer->quote_error);
 	return (finalize_lexer(&lexer->buffer,
 			&tokens, lexer,
-			lexer->in_quote, lexer->quote_error, env));
+			lexer->in_quote, lexer->quote_error));
 }

@@ -6,13 +6,13 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:14:46 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/02 17:25:02 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:39:50 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-bool	is_command(char *token, t_env *env)
+bool	is_command(char *token, t_lexer *lexer)
 {
 	char	*path;
 	char	*path_copy;
@@ -20,7 +20,7 @@ bool	is_command(char *token, t_env *env)
 	char	*full_path;
 
 	path_copy = ft_strdup(path);
-	path = ft_getenv("PATH", env);
+	path = ft_getenv("PATH", lexer->env);
 	if (!path)
 		return (false);
 	if (!path_copy)

@@ -6,18 +6,18 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:06:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/05 12:12:30 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:39:23 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 t_token_type	determine_token_type(char *token,
-				int inQuote, t_env *env, t_lexer *lexer)
+				int inQuote, t_lexer *lexer)
 {
 	if (lexer->token_count == 0)
 		return (handle_first_token(token, lexer));
-	return (handle_subsequent_tokens(token, inQuote, env, lexer));
+	return (handle_subsequent_tokens(token, inQuote, lexer));
 }
 
 t_token_type	handle_first_token(char *token, t_lexer *lexer)
@@ -41,14 +41,14 @@ t_token_type	handle_first_token(char *token, t_lexer *lexer)
 }
 
 t_token_type	handle_subsequent_tokens(char *token,
-				int inQuote, t_env *env, t_lexer *lexer)
+				int inQuote, t_lexer *lexer)
 {
 	t_token_type	special_token;
 
 	special_token = check_special_tokens(token);
 	if (special_token != TOKEN_ARG)
 		return (special_token);
-	if (lexer->token_count == 0 && is_command(token, env))
+	if (lexer->token_count == 0 && is_command(token, lexer))
 		return (TOKEN_COMMAND);
 	if (token[0] == '$' && token[1] != '\0')
 		return (handle_dollar_tokens(token, inQuote));

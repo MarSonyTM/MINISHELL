@@ -96,7 +96,8 @@ int main(int argc, char **argv, char **envp)
         add_history(input);
  
         t_token *tokens = NULL; // initialize tokens 
-        int lexer_status = lexer(input, &tokens, env); // Tokenize the input
+        t_lexer lexer_instance; // Create an instance of t_lexer
+        int lexer_status = lexer(input, &tokens, &lexer_instance); // Lex the input
         if (lexer_status == 1) // malloc fail
         {
             free_tokens(&tokens);
