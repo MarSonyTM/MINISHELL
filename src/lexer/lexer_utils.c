@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/02 17:28:21 by mafurnic          #+#    #+#             */
+/*   Updated: 2024/04/02 17:28:49 by mafurnic         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 void	free_tokens(t_token **tokens)
@@ -6,7 +18,7 @@ void	free_tokens(t_token **tokens)
 	t_token	*temp;
 
 	current = *tokens;
-	while (current != NULL) 
+	while (current != NULL)
 	{
 		temp = current;
 		current = current->next;
@@ -32,13 +44,11 @@ int	add_token(t_token **tokens, t_token_type type, char *value)
 		return (1);
 	new_token->next = NULL;
 	if (*tokens == NULL)
-	{
 		*tokens = new_token;
-	}
 	else
 	{
 		temp = *tokens;
-		while (temp->next != NULL) 
+		while (temp->next != NULL)
 		{
 			temp = temp->next;
 		}

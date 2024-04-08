@@ -1,4 +1,4 @@
-#include "../../inc/minishell.h"
+ #include "../../inc/minishell.h"
 
 static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {

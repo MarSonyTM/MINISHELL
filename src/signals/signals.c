@@ -21,15 +21,15 @@ void check_blocked_signals()
         return;
     }
 
-    if (sigismember(&blocked, SIGINT)) {
-        printf("SIGINT is blocked\n");
-    } else {
-        printf("SIGINT is not blocked\n");
-    }
+    // if (sigismember(&blocked, SIGINT)) {
+         
+    // } else {
+    //     printf("SIGINT is not blocked\n");
+    // }
 
-    if (sigismember(&blocked, SIGQUIT)) {
-        printf("SIGQUIT is blocked\n");
-    } else {
-        printf("SIGQUIT is not blocked\n");
-    }
+    // if (sigismember(&blocked, SIGQUIT)) {
+    //     printf("SIGQUIT is blocked\n");
+    // } else {
+    //     printf("SIGQUIT is not blocked\n");
+    // }
 }

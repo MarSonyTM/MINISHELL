@@ -122,7 +122,7 @@ int	main(int argc, char **argv, char **envp)
 				case TOKEN_REDIRECT_IN:
 					type_str = "Input Redirection";
 					break;
-				case TOKEN_REDIRECT_OUT:
+				case T_R_OT:
 					type_str = "Output Redirection";
 					break;
 				case TOKEN_QUOTE:

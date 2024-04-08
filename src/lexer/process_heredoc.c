@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   process_heredoc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 16:45:34 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:53:39 by mafurnic         ###   ########.fr       */
+/*   Created: 2024/04/03 10:26:16 by mafurnic          #+#    #+#             */
+/*   Updated: 2024/04/08 12:51:33 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	lexer(char *input, t_token **tokens, t_lexer *lexer)
+int	process_heredoc(char **buffer,
+	t_token ***tokens, t_lexer *lexer)
 {
-	lexer = malloc(sizeof(t_lexer));
-	if (lexer == NULL)
-		return (1);
-	lexer->i = 0;
-	lexer->token_count = 0;
-	lexer->buf_index = 0;
 	lexer->in_quote = 0;
-	lexer->quote_error = false;
-	lexer->buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
-	if (lexer->buffer == NULL)
+	if (lexer->buf_index > 0)
+	{
+		(*buffer)[lexer->buf_index] = '\0';
+		if (add_token(*tokens,
+				determine_token_type(*buffer, lexer),
+				ft_strdup(*buffer)) == 1)
+			return (1);
+		lexer->buf_index = 0;
+		(lexer->token_count)++;
+	}
+	if (add_token(*tokens, TOKEN_HEREDOC, strdup("<<")) == 1)
 		return (1);
-	process_input_loop(input,
-		&lexer->buffer, &tokens, lexer, &lexer->quote_error);
-	return (finalize_lexer(&lexer->buffer,
-			&tokens, lexer,
-			lexer->quote_error));
+	(lexer->token_count)++;
+	(lexer->i)++;
+	return (0);
 }
