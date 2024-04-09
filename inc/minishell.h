@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 11:12:07 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 11:57:15 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ bool			is_command(char *token, t_lexer *lexer);
 char			*construct_full_path(char *dir, char *token);
 bool			is_whitespace(char c);
 void			process_quotes(char currentChar,
-					char **buffer, t_lexer *lexer); /**/
+					char **buffer, t_lexer *lexer);
 int				process_whitespace(char *buffer,
 					t_token ***tokens, t_lexer *lexer);
 int				process_pipe(char *buffer,
