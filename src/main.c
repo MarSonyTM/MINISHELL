@@ -98,8 +98,9 @@ int	main(int argc, char **argv, char **envp)
 	{
 		main_handle_input(&input);
 		tokens = NULL;
-		if (handle_lexer(lexer(input, &tokens, env), &tokens, &input))
-			continue ;
+		t_lexer lexer_instance;
+		if (handle_lexer(lexer(input, &tokens, &lexer_instance), &tokens, &input))
+    		continue ;
 		t_token *current;
 		current = tokens;
 		const char	*type_str;
