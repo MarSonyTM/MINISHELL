@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 11:24:35 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:52:06 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ int	process_token(t_command *command)
 		return (handle_argument(*current_cmd, *current));
 	else if ((*current)->type == TOKEN_INPUT && *current_cmd != NULL)
 		return (handle_input(*current_cmd, *current));
-	else if ((*current)->type == T_R_OT || (*current)->type == T_R_OUT_A || (*current)->type == TOKEN_REDIRECT_IN)
+	else if ((*current)->type == T_R_OT || (*current)->type == T_R_OUT_A
+		|| (*current)->type == TOKEN_REDIRECT_IN)
 		return (handle_parser_redirection(*current_cmd, current));
 	else if ((*current)->type == TOKEN_HEREDOC)
 		return (handle_parser_heredoc(current_cmd, current));
@@ -84,7 +85,7 @@ int	process_token(t_command *command)
 		return (handle_comma(*current_cmd, *current));
 	else if ((*current)->type == TOKEN_EXIT_STATUS)
 		return (handle_exit_status_token(*current_cmd,
-			(*current)->value, command->arg_count));
+				(*current)->value, command->arg_count));
 	else if ((*current)->type == TOKEN_ENV_VAR)
 		return (handle_environment_variable(*current_cmd, (*current)->value));
 	else if ((*current)->type == TOKEN_PIPE)
@@ -93,30 +94,3 @@ int	process_token(t_command *command)
 	return(0);
 }
 
-int process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
-{
-    t_command command;
-    t_cmd *current_cmd;
-    int arg_count;
-    t_token *current;
-    int result;
-
-    current_cmd = NULL;
-    arg_count = 0;
-    current = tokens;
-    command.current = &current;
-    command.current_cmd = &current_cmd;
-    command.cmd = &cmd;
-    command.env = &env;
-    command.arg_count = &arg_count;
-    while (current != NULL)
-    {
-        result = process_token(&command);
-        if (result != 0)
-            return result;
-        if (!current_cmd)
-            return 1;
-        current = current->next;
-    }
-    return 0;
-}

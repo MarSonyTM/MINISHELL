@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:04:35 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 12:13:12 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:49:10 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	add_argument_to_command(t_cmd *current_cmd, const char *arg_value)
 	int		arg_count;
 	char	**temp;
 
-	if (current_cmd == NULL || arg_value == NULL) 
+	if (current_cmd == NULL || arg_value == NULL)
 		return (1);
 	arg_count = 0;
 	while (current_cmd->cmd_arr[arg_count] != NULL)
@@ -60,38 +60,6 @@ int	add_argument_to_command(t_cmd *current_cmd, const char *arg_value)
 		return (1);
 	current_cmd->cmd_arr[arg_count + 1] = NULL;
 	return (0);
-}
-
-int	handle_redirection(t_cmd *current_cmd, t_token **current, int current_type)
-{
-	if (!current_cmd || !current || !(*current)) 
-		return (1);
-	*current = (*current)->next;
-	if (!(*current) || !(*current)->value)
-	{
-		error(ERR_PARS, "\n", NULL, 0);
-		return (2);
-	}
-	if (current_type == TOKEN_REDIRECT_IN)
-	{
-		current_cmd->input = ft_strdup((*current)->value);
-		if (!current_cmd->input)
-			return (1);
-	}
-	else
-	if (current_type == T_R_OUT_A)
-	{
-		current_cmd->redirection_append = ft_strdup((*current)->value);
-		if (!current_cmd->redirection_append)
-			return (1);
-	}
-	else if (current_type == T_R_OT)
-	{
-		current_cmd->output = ft_strdup((*current)->value);
-		if (!current_cmd->output)
-			return (1);
-	}
-		return (0);
 }
 
 int	handle_environment_variable(t_cmd *current_cmd, char *value)
