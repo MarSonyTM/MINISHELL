@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 09:24:13 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:18:02 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	handle_comma(t_cmd *current_cmd, t_token *current)
 	return (0);
 }
 
-void	process_token(t_command *command)
+int	process_token(t_command *command)
 {
 	t_token	**current;
 	t_cmd	**current_cmd;
@@ -76,7 +76,7 @@ void	process_token(t_command *command)
 		handle_argument(*current_cmd, *current);
 	else if ((*current)->type == TOKEN_INPUT && *current_cmd != NULL)
 		handle_input(*current_cmd, *current);
-	else if ((*current)->type == T_R_OT || (*current)->type == T_R_OUT_A)
+	else if ((*current)->type == T_R_OT || (*current)->type == T_R_OUT_A || (*current)->type == TOKEN_REDIRECT_IN)
 		handle_parser_redirection(*current_cmd, current);
 	else if ((*current)->type == TOKEN_HEREDOC)
 		handle_parser_heredoc(current_cmd, current);
@@ -90,6 +90,7 @@ void	process_token(t_command *command)
 	else if ((*current)->type == TOKEN_PIPE)
 		*current_cmd = handle_pipe_token(current,
 				*command->cmd, *command->env, command->arg_count);
+	return (0);
 }
 
 int	 process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)

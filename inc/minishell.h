@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 09:48:24 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:06:49 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,7 @@ char			*append_line_to_heredoc(char *heredoc_input,
 					const char *input_buffer);
 char			*handle_heredoc(t_token **current);
 char			*resolve_command_path(char *command, t_env *env);
-void			process_token(t_command *command);
+int			process_token(t_command *command);
 int				handle_builtin_or_command_parser(t_command *command);
 
 /*Functions prototypes for Execution*/
