@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 11:57:15 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:20:23 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "../libft/libft.h"
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <errno.h>
 
 # define PROMPT "minishell> "
 
@@ -35,6 +36,7 @@
 # define ERR_PARS "syntax error near unexpected token"
 # define ERR_NUM "numeric argument required"
 # define ERR_VAL "not a valid identifier"
+
 
 /* holds information of each separate token */
 
@@ -196,6 +198,11 @@ char			*handle_heredoc(t_token **current);
 char			*resolve_command_path(char *command, t_env *env);
 int				process_token(t_command *command);
 int				handle_builtin_or_command_parser(t_command *command);
+char			*ft_strjoin_free_char(char *s1, char c);
+char			*ft_strjoin_free(char *s1, const char *s2);
+char			*prompt_and_read_line(void);
+char			*get_var_name(const char **input);
+char			*expand_variable(const char **input, char *output);
 
 /*Functions prototypes for Execution*/
 
