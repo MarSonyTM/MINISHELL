@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:04:35 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 16:12:49 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 11:16:52 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	add_argument_to_command(t_cmd *current_cmd, const char *arg_value)
 	int		arg_count;
 	char	**temp;
 
-	if (current_cmd == NULL || arg_value == NULL)
+	if (current_cmd == NULL || arg_value == NULL) 
 		return (1);
 	arg_count = 0;
 	while (current_cmd->cmd_arr[arg_count] != NULL)

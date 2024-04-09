@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:05:23 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 10:13:43 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 11:17:36 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	handle_parser_redirection(t_cmd *current_cmd, t_token **current)
 	if (!(*current)->next)
 	{
 		error(ERR_PARS, "\n", NULL, 0);
-		printf ("error\n");
 		return (2);
 	}
 	result = handle_redirection(current_cmd, current, (*current)->type);

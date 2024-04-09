@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 10:06:49 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 11:12:07 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,6 @@ int				add_argument_to_command(t_cmd *current_cmd,
 					const char *arg_value);
 int				handle_redirection(t_cmd *current_cmd,
 					t_token **current, int current_type);
-char			*handle_heredoc(t_token **current);
 int				handle_environment_variable(t_cmd *current_cmd, char *value);
 int				handle_exit_status_token(t_cmd *current_cmd,
 					char *value, int *arg_count);
@@ -195,7 +194,7 @@ char			*append_line_to_heredoc(char *heredoc_input,
 					const char *input_buffer);
 char			*handle_heredoc(t_token **current);
 char			*resolve_command_path(char *command, t_env *env);
-int			process_token(t_command *command);
+int				process_token(t_command *command);
 int				handle_builtin_or_command_parser(t_command *command);
 
 /*Functions prototypes for Execution*/
@@ -250,6 +249,7 @@ void	check_args(int argc, char **argv);
 void			handle_sigint(int sig);
 void			handle_sigquit(int sig);
 void			check_blocked_signals(void);
+
 
 /* expansion */
 void			expand_env_vars(t_cmd *cmd, t_env *env);
