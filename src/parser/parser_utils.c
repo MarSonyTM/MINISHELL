@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:04:35 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 11:16:52 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:13:12 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	add_argument_to_command(t_cmd *current_cmd, const char *arg_value)
 
 int	handle_redirection(t_cmd *current_cmd, t_token **current, int current_type)
 {
-	if (!current_cmd || !current || !(*current))
+	if (!current_cmd || !current || !(*current)) 
 		return (1);
 	*current = (*current)->next;
 	if (!(*current) || !(*current)->value)
@@ -72,6 +72,13 @@ int	handle_redirection(t_cmd *current_cmd, t_token **current, int current_type)
 		error(ERR_PARS, "\n", NULL, 0);
 		return (2);
 	}
+	if (current_type == TOKEN_REDIRECT_IN)
+	{
+		current_cmd->input = ft_strdup((*current)->value);
+		if (!current_cmd->input)
+			return (1);
+	}
+	else
 	if (current_type == T_R_OUT_A)
 	{
 		current_cmd->redirection_append = ft_strdup((*current)->value);
@@ -84,7 +91,7 @@ int	handle_redirection(t_cmd *current_cmd, t_token **current, int current_type)
 		if (!current_cmd->output)
 			return (1);
 	}
-	return (0);
+		return (0);
 }
 
 int	handle_environment_variable(t_cmd *current_cmd, char *value)
