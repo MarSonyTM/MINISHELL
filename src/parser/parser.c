@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:08 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 12:52:14 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:56:20 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 // Main parse function
 int	parse(t_token *tokens, t_cmd **cmd, t_env *env)
 {
-	
+	if (!tokens)
+		return (2);
 	return (process_tokens(tokens, cmd, env));
 	return (0);
 }
