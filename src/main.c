@@ -1,6 +1,5 @@
 #include "../inc/minishell.h"
 
-
 int	handle_lexer(int lexer_status, t_token **tokens, char **input)
 {
 	if (lexer_status == 1)

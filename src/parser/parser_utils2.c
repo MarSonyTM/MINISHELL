@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 12:52:06 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 13:47:39 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,5 @@ int	process_token(t_command *command)
 	else if ((*current)->type == TOKEN_PIPE)
 		*current_cmd = handle_pipe_token(current,
 				*command->cmd, *command->env, command->arg_count);
-	return(0);
+	return (0);
 }
-
