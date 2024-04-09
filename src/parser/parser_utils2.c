@@ -28,29 +28,31 @@ int	handle_exit_status_token(t_cmd *current_cmd, char *value, int *arg_count)
 	return (0);
 }
 
-t_cmd	*handle_pipe_token(t_token **current,
-	t_cmd **cmd, t_env *env, int *arg_count)
+t_cmd	*handle_pipe_token(t_command *command)
 {
 	t_cmd	*current_cmd;
 	char	*cmd_path;
 
-	*current = (*current)->next;
-	if (*current == NULL
-		|| ((*current)->type != TOKEN_COMMAND
-			&& (*current)->type != TOKEN_BUILTIN))
+	*(command->current) = (*(command->current))->next;
+	if (*(command->current) == NULL
+		|| ((*(command->current))->type != TOKEN_COMMAND
+			&& (*(command->current))->type != TOKEN_BUILTIN))
+	{
+		command->err_code = 2;
 		return (error(ERR_PARS, "\n", NULL, 0), NULL);
-	current_cmd = new_command(cmd);
+	}
+	current_cmd = new_command(*(command->cmd));
 	if (!current_cmd)
 		return (NULL);
-	current_cmd->cmd_arr[0] = ft_strdup((*current)->value);
+	current_cmd->cmd_arr[0] = ft_strdup((*(command->current))->value);
 	if (!current_cmd->cmd_arr[0])
 		return (NULL);
 	current_cmd->cmd_arr[1] = NULL;
-	cmd_path = resolve_command_path((*current)->value, env);
+	cmd_path = resolve_command_path((*(command->current))->value, *(command->env), &command->err_code);
 	if (!cmd_path)
 		return (NULL);
 	current_cmd->cmd_path = cmd_path;
-	*arg_count = 1;
+	*(command->arg_count) = 1;
 	return (current_cmd);
 }
 
@@ -63,7 +65,7 @@ int	handle_comma(t_cmd *current_cmd, t_token *current)
 	return (0);
 }
 
-int	process_token(t_command *command)
+void	process_token(t_command *command)
 {
 	t_token	**current;
 	t_cmd	**current_cmd;
@@ -71,25 +73,23 @@ int	process_token(t_command *command)
 	current = command->current;
 	current_cmd = command->current_cmd;
 	if ((*current)->type == TOKEN_BUILTIN || (*current)->type == TOKEN_COMMAND)
-		return (handle_builtin_or_command_parser(command));
+		handle_builtin_or_command_parser(command);
 	else if ((*current)->type == TOKEN_ARG)
-		return (handle_argument(*current_cmd, *current));
+		handle_argument(*current_cmd, *current, &command->err_code);
 	else if ((*current)->type == TOKEN_INPUT && *current_cmd != NULL)
-		return (handle_input(*current_cmd, *current));
+		command->err_code = handle_input(*current_cmd, *current);
 	else if ((*current)->type == T_R_OT || (*current)->type == T_R_OUT_A
 		|| (*current)->type == TOKEN_REDIRECT_IN)
-		return (handle_parser_redirection(*current_cmd, current));
+		command->err_code = handle_parser_redirection(*current_cmd, current);
 	else if ((*current)->type == TOKEN_HEREDOC)
-		return (handle_parser_heredoc(current_cmd, current));
+		command->err_code = handle_parser_heredoc(current_cmd, current);
 	else if ((*current)->type == TOKEN_COMMA)
-		return (handle_comma(*current_cmd, *current));
+		command->err_code = handle_comma(*current_cmd, *current);
 	else if ((*current)->type == TOKEN_EXIT_STATUS)
-		return (handle_exit_status_token(*current_cmd,
-				(*current)->value, command->arg_count));
+		command->err_code = handle_exit_status_token(*current_cmd,
+				(*current)->value, command->arg_count);
 	else if ((*current)->type == TOKEN_ENV_VAR)
-		return (handle_environment_variable(*current_cmd, (*current)->value));
+		command->err_code = handle_environment_variable(*current_cmd, (*current)->value);
 	else if ((*current)->type == TOKEN_PIPE)
-		*current_cmd = handle_pipe_token(current,
-				*command->cmd, *command->env, command->arg_count);
-	return (0);
+		*current_cmd = handle_pipe_token(command);
 }

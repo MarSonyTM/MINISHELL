@@ -12,13 +12,13 @@
 
 #include "../../inc/minishell.h"
 
+// return err_code
 int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 {
 	t_command	command;
 	t_cmd		*current_cmd;
 	int			arg_count;
 	t_token		*current;
-	int			result;
 
 	current_cmd = NULL;
 	arg_count = 0;
@@ -28,11 +28,12 @@ int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 	command.cmd = &cmd;
 	command.env = &env;
 	command.arg_count = &arg_count;
+	command.err_code = 0;
 	while (current != NULL)
 	{
-		result = process_token(&command);
-		if (result != 0)
-			return (result);
+		process_token(&command);
+		if (command.err_code != 0)
+			return (command.err_code);
 		if (!current_cmd)
 			return (1);
 		current = current->next;
@@ -43,7 +44,7 @@ int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 // Main parse function
 int	parse(t_token *tokens, t_cmd **cmd, t_env *env)
 {
-	if (!tokens)
+	if (!tokens) // if there is no input (like only enter)
 		return (2);
 	return (process_tokens(tokens, cmd, env));
 	return (0);

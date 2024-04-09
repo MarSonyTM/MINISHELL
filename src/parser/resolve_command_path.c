@@ -34,7 +34,7 @@ static bool	is_command_found(char *fullPath)
 }
 
 static char	*find_command_in_path(char *command,
-				char *pathCopy, size_t commandLen)
+				char *pathCopy, size_t commandLen, int *err_code)
 {
 	char	*dir;
 	size_t	dir_len;
@@ -56,10 +56,11 @@ static char	*find_command_in_path(char *command,
 		free(full_path);
 		dir = ft_strtok(NULL, ":");
 	}
+	*err_code = 2;
 	return (NULL);
 }
 
-char	*resolve_command_path(char *command, t_env *env)
+char	*resolve_command_path(char *command, t_env *env, int *err_code)
 {
 	char	*path;
 	char	*path_copy;
@@ -73,7 +74,7 @@ char	*resolve_command_path(char *command, t_env *env)
 		return (NULL);
 	}
 	command_len = ft_strlen(command);
-	full_path = find_command_in_path(command, path_copy, command_len);
+	full_path = find_command_in_path(command, path_copy, command_len, err_code);
 	free(path_copy);
 	if (full_path != NULL)
 	{
