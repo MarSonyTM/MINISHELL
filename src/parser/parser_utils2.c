@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 16:13:11 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 09:24:13 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	process_token(t_command *command)
 				*command->cmd, *command->env, command->arg_count);
 }
 
-int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
+int	 process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 {
 	t_command	command;
 	t_cmd		*current_cmd;

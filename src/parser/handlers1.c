@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:05:23 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 16:20:43 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 09:29:09 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,11 @@ int	handle_argument(t_cmd *current_cmd, t_token *current)
 
 int	handle_input(t_cmd *current_cmd, t_token *current)
 {
-	if (current_cmd == NULL)
-		return (0);
+	if (!current->next)
+	{
+		error(ERR_PARS, "\n", NULL, 0);
+		return (2);
+	}
 	current_cmd->input = ft_strdup(current->value);
 	if (!current_cmd->input)
 		return (1);
@@ -45,8 +48,11 @@ int	handle_parser_redirection(t_cmd *current_cmd, t_token **current)
 {
 	int		result;
 
-	if (current_cmd == NULL)
-		return (0);
+	if (!(*current)->next)
+	{
+		error(ERR_PARS, "\n", NULL, 0);
+		return (2);
+	}
 	result = handle_redirection(current_cmd, current, (*current)->type);
 	if (result != 0)
 		return (result);

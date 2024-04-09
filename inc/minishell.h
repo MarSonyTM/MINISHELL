@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 16:26:07 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/09 09:48:24 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_cmd
     char            *redirection_append; //for output redirection append, else NULL
     int             exit_status;
     int             prev_exit_status;
+	int			    parse_status;
     struct s_cmd    *next;
 }   t_cmd;
 
@@ -101,8 +102,6 @@ typedef struct s_exec
 	int	*open_fds;
 	int	non_customs;
 }	t_exec;
-
-
 
 
 typedef struct s_command
@@ -130,7 +129,7 @@ typedef struct s_lexer
 
 /*Functions prototypes for Lexer*/
 
-int				lexer(char *input, t_token **tokens, t_lexer *slexer);
+int				lexer(char *input, t_token **tokens, t_lexer *lexer);
 void			free_tokens(t_token **tokens);
 int				add_token(t_token **tokens, t_token_type type, char *value);
 t_token_type	determine_token_type(char *token, t_lexer *lexer);

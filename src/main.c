@@ -1,31 +1,8 @@
 #include "../inc/minishell.h"
 
-void	print_commands(t_cmd *cmd)
-{
-	t_cmd	*current_cmd = cmd;
-    int i = 1;
-    while (current_cmd != NULL) 
-    {
-        printf("PARSER: Command: %s\n", current_cmd->cmd_arr[0]); // Print command
-        while ( current_cmd->cmd_arr[i] != NULL) 
-        {
-            printf("PARSER: Arg: %s\n", current_cmd->cmd_arr[i]); // Print arguments
-            i++;
-        }
-        if (current_cmd->input != NULL)
-            printf("PARSER: Input Redirection: %s\n", current_cmd->input);
-        if (current_cmd->output != NULL)
-            printf("PARSER: Output Redirection: %s\n", current_cmd->output);
-        if (current_cmd->redirection_append != NULL)
-            printf("PARSER: Output Redirection Append: %s\n", current_cmd->redirection_append);
-        current_cmd = current_cmd->next; // Move to the next commandr
-        i = 1; // Reset argument index for the next command
-    }
-}
 
 int	handle_lexer(int lexer_status, t_token **tokens, char **input)
 {
-
 	if (lexer_status == 1)
 	{
 		free_tokens(tokens);
@@ -83,6 +60,29 @@ void	main_handle_input(char **input)
 	add_history(*input);
 }
 
+void	print_commands(t_cmd *cmd)
+{
+	t_cmd	*current_cmd = cmd;
+    int i = 1;
+    while (current_cmd != NULL) 
+    {
+        printf("PARSER: Command: %s\n", current_cmd->cmd_arr[0]); // Print command
+        while ( current_cmd->cmd_arr[i] != NULL) 
+        {
+            printf("PARSER: Arg: %s\n", current_cmd->cmd_arr[i]); // Print arguments
+            i++;
+        }
+        if (current_cmd->input != NULL)
+            printf("PARSER: Input Redirection: %s\n", current_cmd->input);
+        if (current_cmd->output != NULL)
+            printf("PARSER: Output Redirection: %s\n", current_cmd->output);
+        if (current_cmd->redirection_append != NULL)
+            printf("PARSER: Output Redirection Append: %s\n", current_cmd->redirection_append);
+        current_cmd = current_cmd->next; // Move to the next commandr
+        i = 1; // Reset argument index for the next command
+    }
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
@@ -98,8 +98,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		main_handle_input(&input);
 		tokens = NULL;
-        t_lexer lexer_instance;
-		if (handle_lexer(lexer(input, &tokens, &lexer_instance), &tokens, &input))
+		if (handle_lexer(lexer(input, &tokens, env), &tokens, &input))
 			continue ;
 		t_token *current;
 		current = tokens;
