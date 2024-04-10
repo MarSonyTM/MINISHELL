@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 13:00:06 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 13:15:16 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,18 @@ int	process_input_loop(char *input, char **buffer,
 		bool *quote_error)
 {
 	char	current_char;
+	int		result;
 
 	current_char = input[lexer->i];
 	while (current_char != '\0' && !(*quote_error))
 	{
-		process_character(current_char, input, buffer,
+		result = process_character(current_char, input, buffer,
 			tokens, lexer);
+		if (result == 2)
+		{
+			return (2);
+			break ;
+		}
 		(lexer->i)++;
 		current_char = input[lexer->i];
 	}
