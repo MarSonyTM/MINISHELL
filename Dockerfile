@@ -24,7 +24,8 @@ RUN apt-get install -y --fix-missing \
     apt-transport-https \
     wget \
     gnupg \
-    git
+    git \
+    make
 
 # Add the LLVM package repository
 RUN echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main" | tee /etc/apt/sources.list.d/llvm.list
