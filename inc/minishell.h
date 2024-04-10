@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 17:20:23 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 13:47:35 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ typedef struct s_lexer
 	int		buf_index;
 	int		in_quote;
 	bool	quote_error;
+	bool 	lexer_error;
 }	t_lexer;
 
 
