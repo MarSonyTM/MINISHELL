@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 10:52:42 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 13:00:06 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,38 @@ int	process_character(char current_char, char *input,
 		process_pipe(*buffer, tokens, lexer);
 	else if (current_char == '\'' || current_char == '\"')
 		process_quotes(current_char, buffer, lexer);
-	else if (current_char == '<' && input[lexer->i + 1] != '<' && lexer->in_quote == 0)
-		process_single_redirect_in(*buffer,
-			tokens, lexer);
+	else if (current_char == '<' && lexer->in_quote == 0)
+{
+    if (input[lexer->i + 1] == '<' && !ft_isalnum((input[lexer->i + 2])))
+    {
+        if (input[lexer->i + 2] == '<')
+            return (2); // Syntax error
+        process_heredoc(buffer, tokens, lexer);
+    }
+    else if (input[lexer->i + 1] != '<' && !ft_isalnum(input[lexer->i + 1]))
+    {
+        if (input[lexer->i + 1] == '<')
+        {
+            return (2); // Syntax error
+        }
+        process_single_redirect_in(*buffer, tokens, lexer);
+    }
+}
 	else if (current_char == '>' && input[lexer->i + 1] != '>' && lexer->in_quote == 0)
 		process_single_redirect_out(*buffer,
 			tokens, lexer);
 	else if (current_char == '$')
 		process_dollar_conditions(input, buffer,
 			tokens, lexer);
-	else if (current_char == '<' && input[lexer->i + 1] == '<' && lexer->in_quote == 0)
-		process_heredoc(buffer, tokens, lexer);
 	else if (current_char == '>' && input[lexer->i + 1] == '>' && lexer->in_quote == 0)
+		{
+		if (input[lexer->i + 1] == '>' && !ft_isspace((input[lexer->i + 2])))
+		{
+			return (2);
+		}
 		process_redirect_out_append(*buffer,
 			tokens, lexer);
+		}
 	else
 		(*buffer)[(lexer->buf_index)++] = current_char;
 	return (0);
