@@ -27,7 +27,7 @@ int	lexer(char *input, t_token **tokens, t_lexer *lexer)
 	lexer->lexer_error = false;
 	lexer->buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
 	if (lexer->buffer == NULL)
-		return (1);
+		return (free(lexer), 1);
 	result = process_input_loop(input,
 			&lexer->buffer, &tokens, lexer, &lexer->quote_error);
 	return (finalize_lexer(&lexer->buffer,
