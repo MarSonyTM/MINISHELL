@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:04:35 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 12:49:19 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:29:53 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,16 @@ int	handle_redirection(t_cmd *current_cmd, t_token **current, int current_type)
 {
 	int	result;
 
-	if (!current_cmd || !current || !(*current))
+	if (!current_cmd)
+	{
+		if ((*current)->type == TOKEN_REDIRECT_IN)
+			return (error (ERR_FIL, (*current)->next->value, NULL, 1), 2);
+		else if ((*current)->type == T_R_OUT_A)
+			return (2);
+		else if ((*current)->type == T_R_OT)
+			return (2);
+	}
+	if (!current || !(*current))
 		return (1);
 	*current = (*current)->next;
 	result = handle_error(current);

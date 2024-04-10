@@ -2,6 +2,7 @@
 
 int	handle_lexer(int lexer_status, t_token **tokens, char **input)
 {
+	printf("lexer_status: %d\n", lexer_status);
 	if (lexer_status == 1)
 	{
 		free_tokens(tokens);
@@ -14,11 +15,13 @@ int	handle_lexer(int lexer_status, t_token **tokens, char **input)
 		free(*input);
 		return (1);
 	}
+
 	return (0);
 }
 
 int	handle_parser(int parse_status, t_cmd **cmd, t_token **tokens, char **input)
 {
+	printf("parse_status: %d\n", parse_status);
 	if (parse_status == 1)
 	{
 		free_cmds(cmd);
