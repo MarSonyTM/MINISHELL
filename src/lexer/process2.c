@@ -128,12 +128,13 @@ int	finalize_lexer(char **buffer, t_token ***tokens,
 			if (add_token(*tokens,
 					determine_token_type(*buffer, lexer),
 					ft_strdup(*buffer)) == 1)
-				return (free(*buffer), 1);
+				return (free(*buffer), free(lexer), 1);
 			(lexer->token_count)++;
 		}
 	}
 	if (quote_error)
-		return (free(*buffer), 2);
+		return (free(*buffer), free(lexer), 2);
 	free(*buffer);
+	free(lexer);
 	return (0);
 }

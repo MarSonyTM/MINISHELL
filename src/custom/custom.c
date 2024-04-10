@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-void	custom_exec(t_cmd *cmd, t_env **env)
+void	custom_exec(t_cmd *cmd, t_env **env, t_exec **exec)
 {
 	if (ft_strncmp(cmd->cmd_arr[0], "echo", 5) == 0)
 		echo_cmd(cmd);
@@ -28,7 +28,7 @@ void	custom_exec(t_cmd *cmd, t_env **env)
 	}
 	else if (ft_strncmp(cmd->cmd_arr[0], "exit", 5) == 0)
 	{
-		if (exit_cmd(cmd, *env) == 1)
+		if (exit_cmd(cmd, *env, exec) == 1)
 			cmd->exit_status = 1;
 	}
 }

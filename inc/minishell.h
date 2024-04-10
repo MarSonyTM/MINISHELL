@@ -212,7 +212,7 @@ int				process_other_tokens(t_command *command,
 
 /*Functions prototypes for Execution*/
 
-void			custom_exec(t_cmd *cmd, t_env **env);
+void			custom_exec(t_cmd *cmd, t_env **env, t_exec **exec);
 int				executor(t_cmd *cmd, t_env **env, int exit_status);
 t_env			*arr_to_linked_list(char **envp);
 
@@ -222,7 +222,7 @@ int				cd_cmd(t_cmd *cmd, t_env *env);
 int				pwd_cmd(void);
 int				env_cmd(t_cmd *cmd, t_env *env);
 void			unset_cmd(t_cmd *cmd, t_env **env);
-int				exit_cmd(t_cmd *cmd, t_env *env);
+int				exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec);
 int				export_cmd(t_cmd *cmd, t_env **env);
 
 /* error management */
@@ -240,7 +240,7 @@ int		count_processes(t_cmd *cmd);
 char	*get_key(char *cmd, int *j);
 char	*get_value(char *cmd, int *j);
 char	*get_value_concat(char *cmd, int *j);
-int 	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i);
+int		handle_custom(t_cmd *cmd, t_env **env, t_exec **exec, int i);
 int	    handle_pipe(t_exec *exec, int i, char *cmd_path);
 int 	duplicate_fd(int old_fd, int new_fd, int custom);
 char    *ft_getenv(const char *name, t_env *env);
@@ -253,7 +253,7 @@ int     get_last_exit_status(t_cmd *cmd, t_exec *exec);
 int	    allocate_memory(t_exec *exec, t_cmd *cmd, t_env **env);
 void	handle_fds(t_exec *exec, int i);
 void	free_cmds(t_cmd **cmd);
-void	reset_free_cmd(t_cmd **cmd, t_token **tokens, char *input);
+void	reset_free_cmd(t_cmd **cmd, char *input);
 void	check_args(int argc, char **argv);
 
 /* signal management */

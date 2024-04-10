@@ -19,7 +19,7 @@ static int	check_for_digit(char *str)
 	return (1);
 }
 
-int	exit_cmd(t_cmd *cmd, t_env *env)
+int	exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec)
 {
 	int	exit_code;
 
@@ -43,6 +43,7 @@ int	exit_cmd(t_cmd *cmd, t_env *env)
 			exit_code = 2;
 	}
 	clean_up(cmd, env);
+	close_and_free(*exec);
 	ft_putstr_fd("exit\n", 1);
 	exit(exit_code);
 	return (0);

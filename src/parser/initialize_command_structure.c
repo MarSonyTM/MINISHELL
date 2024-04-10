@@ -33,6 +33,7 @@ static t_cmd	*initialize_command_structure(void)
 	cmd->output = NULL;
 	cmd->exit_status = 0;
 	cmd->next = NULL;
+	cmd->redirection_append = NULL;
 	return (cmd);
 }
 

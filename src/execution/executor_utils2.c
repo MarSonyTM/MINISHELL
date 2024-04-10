@@ -12,11 +12,11 @@ int	duplicate_fd(int old_fd, int new_fd, int custom)
 	return (0);
 }
 
-int	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i)
+int	handle_custom(t_cmd *cmd, t_env **env, t_exec **exec, int i)
 {
 	int	stdout_fd;
 
-	exec->pid[i] = -1;
+	(*exec)->pid[i] = -1;
 	stdout_fd = dup(1);
 	if (stdout_fd == -1)
 		return (1);
@@ -37,20 +37,20 @@ int	handle_custom(t_cmd *cmd, t_env **env, t_exec *exec, int i)
 	}
 	if (cmd->next != NULL)
 	{
-		if (duplicate_fd(exec->fd[1], 1, 1) == 1)
+		if (duplicate_fd((*exec)->fd[1], 1, 1) == 1)
 			return (1);
 	}
-	custom_exec(cmd, env);
+	custom_exec(cmd, env, exec);
 	if (duplicate_fd(stdout_fd, 1, 1) == 1)
 		return (1);
 	close (stdout_fd);
 	if (cmd->next != NULL)
 	{
-		close(exec->fd[1]);
-		exec->open_fds[i * 2 + 1] = -1;
+		close((*exec)->fd[1]);
+		(*exec)->open_fds[i * 2 + 1] = -1;
 	}
-	exec->old_fd[0] = exec->fd[0];
-	exec->old_fd[1] = exec->fd[1];
+	(*exec)->old_fd[0] = (*exec)->fd[0];
+	(*exec)->old_fd[1] = (*exec)->fd[1];
 	return (0);
 }
 

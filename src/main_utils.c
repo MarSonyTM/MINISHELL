@@ -4,9 +4,7 @@ void	free_cmds(t_cmd **cmd)
 {
 	t_cmd	*current;
 	t_cmd	*temp;
-	int		i;
 
-	i = 0;
 	current = *cmd;
 	while (current != NULL)
 	{
@@ -14,16 +12,16 @@ void	free_cmds(t_cmd **cmd)
 		current = current->next;
 		free(temp->cmd_path);
 		free_array(temp->cmd_arr);
-		i = 0;
 		free_array(temp->env_vars);
 		free(temp->input);
 		free(temp->output);
+		free(temp->redirection_append);
 		free(temp);
 	}
 	*cmd = NULL;
 }
 
-void	reset_free_cmd(t_cmd **cmd, t_token **tokens, char *input)
+void	reset_free_cmd(t_cmd **cmd, char *input)
 {
 	t_cmd	*current;
 
@@ -36,7 +34,6 @@ void	reset_free_cmd(t_cmd **cmd, t_token **tokens, char *input)
 		current->cmd_path = NULL;
 		current = current->next;
 	}
-	free_tokens(tokens);
 	free(input);
 	free_cmds(cmd);
 }
