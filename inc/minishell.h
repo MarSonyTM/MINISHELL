@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 15:25:48 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 15:51:41 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,6 @@ void	close_and_free(t_exec *exec);
 void	error(char *msg, char *command, char *argument, int custom);
 void	free_array(char **arr);
 
-
 /* utils */
 int	    redirection(t_cmd *cmd, int mode, int custom);
 char	**env_to_array(t_cmd *cmd, t_env **env);
@@ -257,12 +256,10 @@ void	free_cmds(t_cmd **cmd);
 void	reset_free_cmd(t_cmd **cmd, t_token **tokens, char *input);
 void	check_args(int argc, char **argv);
 
-
 /* signal management */
 void			handle_sigint(int sig);
 void			handle_sigquit(int sig);
 void			check_blocked_signals(void);
-
 
 /* expansion */
 void			expand_env_vars(t_cmd *cmd, t_env *env);
