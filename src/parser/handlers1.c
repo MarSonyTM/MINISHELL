@@ -16,7 +16,7 @@ void	handle_builtin_or_command_parser(t_command *command)
 {
 	*command->current_cmd = initialize_new_command(*command->cmd,
 			*command->current, *command->env, &command->err_code);
-	if (!(*command->current_cmd))
+	if (!(*command->current_cmd) && !command->err_code)
 		command->err_code = 1;
 	*command->arg_count = 1;
 }

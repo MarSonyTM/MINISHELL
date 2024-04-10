@@ -12,7 +12,7 @@
 
 #include "../../inc/minishell.h"
 
-t_cmd	*initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env)
+t_cmd	*initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env, int *err_code)
 {
 	t_cmd	*new_cmd;
 
@@ -28,7 +28,7 @@ t_cmd	*initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env)
 	new_cmd->cmd_arr[1] = NULL;
 	if (current_token->type == TOKEN_COMMAND)
 	{
-		new_cmd->cmd_path = resolve_command_path(current_token->value, env);
+		new_cmd->cmd_path = resolve_command_path(current_token->value, env, err_code);
 		if (!new_cmd->cmd_path)
 			return (NULL);
 	}
