@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 17:28:03 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/03/12 16:21:10 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 12:02:34 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void			ft_lstadd_back(t_list	**stack, t_list *newnode);
 t_list			*ft_lstlast(t_list *head);
 char			*ft_itoa_base(int n, int base);
 int				ft_atoi_base(const char *str, int base);
+int				ft_isspace(int c);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
 int				ft_isalnum(int c);

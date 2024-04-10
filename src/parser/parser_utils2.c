@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 13:47:39 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:50:39 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,7 @@ int	handle_comma(t_cmd *current_cmd, t_token *current)
 		return (1);
 	return (0);
 }
-
-void	process_token(t_command *command)
+ void	process_token(t_command *command)
 {
 	t_token	**current;
 	t_cmd	**current_cmd;

@@ -17,7 +17,7 @@ SOURCE_FILES := main.c /main_utils.c lexer/lexer.c lexer/lexer_utils.c lexer/det
 				lexer/process_dollar_sign.c lexer/process_heredoc.c custom/export.c error/error_management.c execution/executor.c execution/executor_utils1.c \
 				parser/parser.c parser/resolve_command_path.c  parser/parser_utils.c parser/parser_utils2.c  custom/custom_functions1.c custom/custom_functions2.c custom/custom.c \
 				parser/handlers1.c parser/handlers2.c parser/parser_heredoc.c execution/executor_utils2.c /signals/signals.c expansion/expansion.c  \
-				parser/initialize_command_structure.c env/arr_to_linked_list.c env/env_utils.c env/linked_list_to_arr.c
+				parser/initialize_command_structure.c parser/parser_heredoc_utils.c env/arr_to_linked_list.c env/env_utils.c env/linked_list_to_arr.c
 
 
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)

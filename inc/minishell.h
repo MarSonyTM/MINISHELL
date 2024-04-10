@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 11:57:15 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:49:22 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "../libft/libft.h"
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <errno.h>
 
 # define PROMPT "minishell> "
 
@@ -35,6 +36,7 @@
 # define ERR_PARS "syntax error near unexpected token"
 # define ERR_NUM "numeric argument required"
 # define ERR_VAL "not a valid identifier"
+
 
 /* holds information of each separate token */
 
@@ -125,6 +127,7 @@ typedef struct s_lexer
 	int		buf_index;
 	int		in_quote;
 	bool	quote_error;
+	bool	lexer_error;
 }	t_lexer;
 
 
@@ -161,8 +164,9 @@ int				finalize_buffer_and_add_token(char **buffer,
 					t_token ***tokens, t_lexer *lexer, char *tokenValue);
 int				finalize_lexer(char **buffer,
 					t_token ***tokens, t_lexer *lexer, bool quote_error);
-int				process_input_loop(char *input, char **buffer,  t_token ***tokens, t_lexer *lexer, bool *quote_error); /**/
-void			process_dollar_conditions(char *input, char **buffer, t_token ***tokens, t_lexer *lexer);
+void			process_dollar_conditions(char *input, char **buffer,
+					t_token ***tokens, t_lexer *lexer);
+int				process_input_loop(char *input, char **buffer,  t_token ***tokens, t_lexer *lexer, bool *quote_error);
 
 /*Functions prototypes for Parser*/
 
@@ -193,8 +197,18 @@ t_cmd			*new_command(t_cmd **cmd);
 char			*append_line_to_heredoc(char *heredoc_input,
 					const char *input_buffer);
 char			*handle_heredoc(t_token **current);
-void			process_token(t_command *command);
 void			handle_builtin_or_command_parser(t_command *command);
+void				process_token(t_command *command);
+char			*ft_strjoin_free_char(char *s1, char c);
+char			*ft_strjoin_free(char *s1, const char *s2);
+char			*prompt_and_read_line(void);
+char			*get_var_name(const char **input);
+char			*expand_variable(const char **input, char *output);
+int				process_command_related_tokens(t_command *command,
+					t_token **current, t_cmd **current_cmd);
+int				process_other_tokens(t_command *command,
+					t_token **current, t_cmd **current_cmd);
+
 
 /*Functions prototypes for Execution*/
 
@@ -217,7 +231,6 @@ void	close_fds(int *open_fds, int processes);
 void	close_and_free(t_exec *exec);
 void	error(char *msg, char *command, char *argument, int custom);
 void	free_array(char **arr);
-
 
 /* utils */
 int	    redirection(t_cmd *cmd, int mode, int custom);
@@ -243,12 +256,10 @@ void	free_cmds(t_cmd **cmd);
 void	reset_free_cmd(t_cmd **cmd, t_token **tokens, char *input);
 void	check_args(int argc, char **argv);
 
-
 /* signal management */
 void			handle_sigint(int sig);
 void			handle_sigquit(int sig);
 void			check_blocked_signals(void);
-
 
 /* expansion */
 void			expand_env_vars(t_cmd *cmd, t_env *env);
