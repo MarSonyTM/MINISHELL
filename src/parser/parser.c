@@ -6,11 +6,20 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:08 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 12:56:20 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 15:10:19 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+// Main parse function
+int	parse(t_token *tokens, t_cmd **cmd, t_env *env)
+{
+	if (!tokens)
+		return (2);
+	return (process_tokens(tokens, cmd, env));
+	return (0);
+}
 
 int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 {
@@ -40,11 +49,19 @@ int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 	return (0);
 }
 
-// Main parse function
-int	parse(t_token *tokens, t_cmd **cmd, t_env *env)
+int	process_token(t_command *command)
 {
-	if (!tokens)
-		return (2);
-	return (process_tokens(tokens, cmd, env));
+	t_token	**current;
+	t_cmd	**current_cmd;
+	int		result;
+
+	current = command->current;
+	current_cmd = command->current_cmd;
+	result = process_command_related_tokens(command, current, current_cmd);
+	if (result != -1)
+		return (result);
+	result = process_other_tokens(command, current, current_cmd);
+	if (result != -1)
+		return (result);
 	return (0);
 }

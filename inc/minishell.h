@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 13:47:35 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 15:09:27 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,10 @@ char			*ft_strjoin_free(char *s1, const char *s2);
 char			*prompt_and_read_line(void);
 char			*get_var_name(const char **input);
 char			*expand_variable(const char **input, char *output);
+int				process_command_related_tokens(t_command *command,
+					t_token **current, t_cmd **current_cmd);
+int				process_other_tokens(t_command *command,
+					t_token **current, t_cmd **current_cmd);
 
 /*Functions prototypes for Execution*/
 

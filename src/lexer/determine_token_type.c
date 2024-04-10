@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:06:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 14:28:20 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:41:36 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ t_token_type	determine_token_type(char *token,
 t_token_type	handle_first_token(char *token, t_lexer *lexer)
 {
 	int			i;
-	char		*builtins[7];
-
-	i = 0;
+	char		*builtins[8];
+	
 	builtins[0] = "echo";
 	builtins[1] = "cd";
 	builtins[2] = "pwd";
@@ -33,6 +32,9 @@ t_token_type	handle_first_token(char *token, t_lexer *lexer)
 	builtins[4] = "unset";
 	builtins[5] = "env";
 	builtins[6] = "exit";
+	builtins[7] = NULL;
+
+	i = 0;
 	while (builtins[i])
 	{
 		if (ft_strcmp(token, builtins[i]) == 0)
