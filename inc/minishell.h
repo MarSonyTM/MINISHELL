@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 15:09:27 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/10 15:25:48 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ typedef struct s_lexer
 	int		buf_index;
 	int		in_quote;
 	bool	quote_error;
-	bool 	lexer_error;
+	bool	lexer_error;
 }	t_lexer;
 
 
@@ -163,8 +163,9 @@ int				finalize_buffer_and_add_token(char **buffer,
 					t_token ***tokens, t_lexer *lexer, char *tokenValue);
 int				finalize_lexer(char **buffer,
 					t_token ***tokens, t_lexer *lexer, bool quote_error);
-int				process_input_loop(char *input, char **buffer,  t_token ***tokens, t_lexer *lexer, bool *quote_error); /**/
-void			process_dollar_conditions(char *input, char **buffer, t_token ***tokens, t_lexer *lexer);
+void			process_dollar_conditions(char *input, char **buffer,
+					t_token ***tokens, t_lexer *lexer);
+int				process_input_loop(char *input, char **buffer,  t_token ***tokens, t_lexer *lexer, bool *quote_error);
 
 /*Functions prototypes for Parser*/
 
