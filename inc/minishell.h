@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 16:49:22 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:13:06 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ int				add_argument_to_command(t_cmd *current_cmd,
 					const char *arg_value);
 int				handle_redirection(t_cmd *current_cmd,
 					t_token **current, int current_type);
-int				handle_environment_variable(t_cmd *current_cmd, char *value);
+int				hdl_env_var(t_cmd *current_cmd, char *value);
 int				handle_exit_status_token(t_cmd *current_cmd,
 					char *value, int *arg_count);
 t_cmd			*handle_pipe_token(t_command *command);
@@ -189,21 +189,21 @@ void			handle_argument(t_cmd *current_cmd, t_token *current, int *err_code);
 int				handle_input(t_cmd *current_cmd, t_token *current);
 int				handle_parser_redirection(t_cmd *current_cmd,
 					t_token **current);
-int				handle_parser_heredoc(t_cmd **current_cmd, t_token **current);
+int				hdl_parser_heredoc(t_cmd **current_cmd, t_token **current, t_command *command);
 int				handle_comma(t_cmd *current_cmd, t_token *current);
 int				handle_exit_status(t_cmd *current_cmd, t_token *current);
 void			link_command_to_list(t_cmd **cmd_list, t_cmd *new_cmd);
 t_cmd			*new_command(t_cmd **cmd);
 char			*append_line_to_heredoc(char *heredoc_input,
 					const char *input_buffer);
-char			*handle_heredoc(t_token **current);
+char			*handle_heredoc(t_token **current, t_command *command);
 void			handle_builtin_or_command_parser(t_command *command);
 void				process_token(t_command *command);
 char			*ft_strjoin_free_char(char *s1, char c);
 char			*ft_strjoin_free(char *s1, const char *s2);
 char			*prompt_and_read_line(void);
 char			*get_var_name(const char **input);
-char			*expand_variable(const char **input, char *output);
+char			*expand_variable(const char **input, char *output, t_command *command);
 int				process_command_related_tokens(t_command *command,
 					t_token **current, t_cmd **current_cmd);
 int				process_other_tokens(t_command *command,
