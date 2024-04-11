@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 13:31:16 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:31:01 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void    handle_sigint(int sig)
 
 void    handle_sigquit(int sig) 
 {
-    printf("\nCaught signal %d\n", sig);
+    (void)sig;
 }
 
 void check_blocked_signals()
