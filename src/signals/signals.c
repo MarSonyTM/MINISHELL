@@ -6,16 +6,16 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 15:31:01 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:51:25 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void    handle_sigint(int sig)
+void handle_sigint(int sig)
 {
-    printf("\nCaught signal %d\n", sig);
-    printf("minishell> ");
+    (void)sig;  // Indicate that sig is intentionally unused
+    printf("\nminishell> ");
 }
 
 void    handle_sigquit(int sig) 
@@ -28,7 +28,8 @@ void check_blocked_signals()
     sigset_t blocked;
     sigemptyset(&blocked);
 
-    if (sigprocmask(SIG_BLOCK, NULL, &blocked) < 0) {
+    if (sigprocmask(SIG_BLOCK, NULL, &blocked) < 0)
+    {
         perror("sigprocmask");
         return;
     }
