@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_management.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 13:30:41 by mafurnic          #+#    #+#             */
+/*   Updated: 2024/04/11 13:30:42 by mafurnic         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 void	close_fds(int *open_fds, int processes)
@@ -13,6 +25,7 @@ void	close_fds(int *open_fds, int processes)
 	}
 	free(open_fds);
 }
+
 void	close_and_free(t_exec *exec)
 {
 	free(exec->pid);
@@ -26,7 +39,6 @@ void	close_and_free(t_exec *exec)
 	}
 	close_fds(exec->open_fds, exec->processes);
 }
-
 
 void	free_array(char **arr)
 {

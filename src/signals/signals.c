@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
+/*   Updated: 2024/04/11 13:31:16 by mafurnic         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-void handle_sigint(int sig) 
+void    handle_sigint(int sig)
 {
     printf("\nCaught signal %d\n", sig);
     printf("minishell> ");
 }
 
-void handle_sigquit(int sig) 
+void    handle_sigquit(int sig) 
 {
     printf("\nCaught signal %d\n", sig);
 }
