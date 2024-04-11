@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 13:13:06 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:57:00 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,7 @@ void	check_args(int argc, char **argv);
 void			handle_sigint(int sig);
 void			handle_sigquit(int sig);
 void			check_blocked_signals(void);
+extern sig_atomic_t signal_caught;
 
 /* expansion */
 void			expand_env_vars(t_cmd *cmd, t_env *env);
