@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:36:50 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 17:36:51 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:02:14 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,13 @@ char	*get_var_name(const char **input)
 	return (var_name);
 }
 
-char	*expand_variable(const char **input, char *output)
+char	*expand_variable(const char **input, char *output, t_command *command)
 {
 	char	*var_name;
 	char	*var_value;
 
 	var_name = get_var_name(input);
-	var_value = getenv(var_name);
+	var_value = ft_getenv(var_name, *command->env);
 	free(var_name);
 	if (var_value)
 		output = ft_strjoin_free(output, var_value);

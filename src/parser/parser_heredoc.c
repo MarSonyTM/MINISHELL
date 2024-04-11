@@ -6,13 +6,13 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 17:36:32 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:12:41 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	*expand_variables(const char *input)
+char	*expand_variables(const char *input, t_command *command)
 {
 	char	*output;
 
@@ -20,7 +20,7 @@ char	*expand_variables(const char *input)
 	while (*input)
 	{
 		if (*input == '$')
-			output = expand_variable(&input, output);
+			output = expand_variable(&input, output, command);
 		else
 		{
 			output = ft_strjoin_free_char(output, *input);
@@ -67,7 +67,8 @@ int	create_temp_file(char *temp_file_name, int temp_file_num)
 	return (fd);
 }
 
-char	*read_and_write_heredoc(int fd, char *delimiter, char *heredoc_input)
+char	*read_and_write_heredoc(int fd,
+		char *delimiter, char *heredoc_input, t_command *command)
 {
 	char	*input_buffer;
 	char	*new_heredoc_input;
@@ -83,7 +84,7 @@ char	*read_and_write_heredoc(int fd, char *delimiter, char *heredoc_input)
 			free(input_buffer);
 			break ;
 		}
-		expanded_input = expand_variables(input_buffer);
+		expanded_input = expand_variables(input_buffer, command);
 		new_heredoc_input = append_line_to_heredoc(heredoc_input,
 				expanded_input);
 		free(heredoc_input);
@@ -96,7 +97,7 @@ char	*read_and_write_heredoc(int fd, char *delimiter, char *heredoc_input)
 	return (heredoc_input);
 }
 
-char	*handle_heredoc(t_token **current)
+char	*handle_heredoc(t_token **current, t_command *command)
 {
 	char	*delimiter;
 	char	*heredoc_input;
@@ -113,7 +114,8 @@ char	*handle_heredoc(t_token **current)
 	fd = create_temp_file(temp_file_name, temp_file_num);
 	if (fd == -1)
 		return (NULL);
-	heredoc_input = read_and_write_heredoc(fd, delimiter, heredoc_input);
+	heredoc_input = read_and_write_heredoc(fd,
+			delimiter, heredoc_input, command);
 	if (!heredoc_input)
 	{
 		close(fd);

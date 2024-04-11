@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:05:23 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 16:28:47 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:14:11 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ int	handle_parser_redirection(t_cmd *current_cmd, t_token **current)
 	return (0);
 }
 
-int	handle_parser_heredoc(t_cmd **current_cmd, t_token **current)
+int	hdl_parser_heredoc(t_cmd **current_cmd,
+		t_token **current, t_command *command)
 {
 	char	*heredoc_input;
 
@@ -71,17 +72,19 @@ int	handle_parser_heredoc(t_cmd **current_cmd, t_token **current)
 		return (2);
 	}
 	*current = (*current)->next;
-	heredoc_input = handle_heredoc(current);
+	heredoc_input = handle_heredoc(current, command);
 	ft_printf("heredoc_input: %s\n", heredoc_input);
 	if (!heredoc_input)
 		return (1);
 	if (*current_cmd)
 	{
 		(*current_cmd)->input = heredoc_input;
+		return (0);
 	}
 	else
 	{
 		free(heredoc_input);
+		return (2);
 	}
 	return (0);
 }

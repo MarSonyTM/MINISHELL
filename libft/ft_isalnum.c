@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/05 11:24:36 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 17:55:31 by mafurnic         ###   ########.fr       */
+/*   Created: 2024/04/11 13:19:19 by mafurnic          #+#    #+#             */
+/*   Updated: 2024/04/11 13:19:32 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*#include <ctype.h>
-#include <stdio.h>*/
+#include "libft.h"
 
 int	ft_isalnum(int c)
 {

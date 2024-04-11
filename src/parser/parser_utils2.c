@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 16:50:39 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:13:21 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ t_cmd	*handle_pipe_token(t_command *command)
 	if (!current_cmd->cmd_arr[0])
 		return (NULL);
 	current_cmd->cmd_arr[1] = NULL;
-	cmd_path = resolve_command_path((*(command->current))->value, *(command->env), &command->err_code);
+	cmd_path = resolve_command_path((*(command->current))->value,
+			*(command->env), &command->err_code);
 	if (!cmd_path)
 		return (NULL);
 	current_cmd->cmd_path = cmd_path;
@@ -64,7 +65,8 @@ int	handle_comma(t_cmd *current_cmd, t_token *current)
 		return (1);
 	return (0);
 }
- void	process_token(t_command *command)
+
+void	process_token(t_command *command)
 {
 	t_token	**current;
 	t_cmd	**current_cmd;
@@ -81,14 +83,14 @@ int	handle_comma(t_cmd *current_cmd, t_token *current)
 		|| (*current)->type == TOKEN_REDIRECT_IN)
 		command->err_code = handle_parser_redirection(*current_cmd, current);
 	else if ((*current)->type == TOKEN_HEREDOC)
-		command->err_code = handle_parser_heredoc(current_cmd, current);
+		command->err_code = hdl_parser_heredoc(current_cmd, current, command);
 	else if ((*current)->type == TOKEN_COMMA)
 		command->err_code = handle_comma(*current_cmd, *current);
 	else if ((*current)->type == TOKEN_EXIT_STATUS)
 		command->err_code = handle_exit_status_token(*current_cmd,
 				(*current)->value, command->arg_count);
 	else if ((*current)->type == TOKEN_ENV_VAR)
-		command->err_code = handle_environment_variable(*current_cmd, (*current)->value);
+		command->err_code = hdl_env_var(*current_cmd, (*current)->value);
 	else if ((*current)->type == TOKEN_PIPE)
 		*current_cmd = handle_pipe_token(command);
 }

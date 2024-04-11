@@ -6,13 +6,14 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:04:35 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 12:49:10 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:11:13 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-t_cmd	*initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env, int *err_code)
+t_cmd	*initialize_new_command(t_cmd **cmd,
+				t_token *current_token, t_env *env, int *err_code)
 {
 	t_cmd	*new_cmd;
 
@@ -28,7 +29,8 @@ t_cmd	*initialize_new_command(t_cmd **cmd, t_token *current_token, t_env *env, i
 	new_cmd->cmd_arr[1] = NULL;
 	if (current_token->type == TOKEN_COMMAND)
 	{
-		new_cmd->cmd_path = resolve_command_path(current_token->value, env, err_code);
+		new_cmd->cmd_path = resolve_command_path
+			(current_token->value, env, err_code);
 		if (!new_cmd->cmd_path)
 			return (NULL);
 	}
@@ -62,7 +64,7 @@ int	add_argument_to_command(t_cmd *current_cmd, const char *arg_value)
 	return (0);
 }
 
-int	handle_environment_variable(t_cmd *current_cmd, char *value)
+int	hdl_env_var(t_cmd *current_cmd, char *value)
 {
 	int		env_var_count;
 	char	**temp;

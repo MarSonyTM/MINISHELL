@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:08 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 16:50:41 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:14:43 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	parse(t_token *tokens, t_cmd **cmd, t_env *env)
 	return (process_tokens(tokens, cmd, env));
 	return (0);
 }
-
 
 int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 {
@@ -49,4 +48,3 @@ int	process_tokens(t_token *tokens, t_cmd **cmd, t_env *env)
 	}
 	return (0);
 }
-
