@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 13:12:41 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:58:24 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,13 @@ char	*read_and_write_heredoc(int fd,
 	char	*new_heredoc_input;
 	char	*expanded_input;
 
+	signal_caught = 0;
 	while (1)
 	{
+		if (signal_caught == 1)
+		{
+			break ;
+		}
 		input_buffer = prompt_and_read_line();
 		if (!input_buffer)
 			return (close(fd), free(heredoc_input), NULL);

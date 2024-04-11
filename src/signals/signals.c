@@ -6,15 +6,18 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 15:51:25 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:55:51 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+sig_atomic_t signal_caught = 0;
+
 void handle_sigint(int sig)
 {
     (void)sig;  // Indicate that sig is intentionally unused
+    signal_caught = 1;
     printf("\nminishell> ");
 }
 
