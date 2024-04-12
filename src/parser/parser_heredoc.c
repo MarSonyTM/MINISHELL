@@ -6,13 +6,13 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/09 17:36:32 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/11 15:58:24 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	*expand_variables(const char *input)
+char	*expand_variables(const char *input, t_command *command)
 {
 	char	*output;
 
@@ -20,7 +20,7 @@ char	*expand_variables(const char *input)
 	while (*input)
 	{
 		if (*input == '$')
-			output = expand_variable(&input, output);
+			output = expand_variable(&input, output, command);
 		else
 		{
 			output = ft_strjoin_free_char(output, *input);
@@ -67,14 +67,20 @@ int	create_temp_file(char *temp_file_name, int temp_file_num)
 	return (fd);
 }
 
-char	*read_and_write_heredoc(int fd, char *delimiter, char *heredoc_input)
+char	*read_and_write_heredoc(int fd,
+		char *delimiter, char *heredoc_input, t_command *command)
 {
 	char	*input_buffer;
 	char	*new_heredoc_input;
 	char	*expanded_input;
 
+	signal_caught = 0;
 	while (1)
 	{
+		if (signal_caught == 1)
+		{
+			break ;
+		}
 		input_buffer = prompt_and_read_line();
 		if (!input_buffer)
 			return (close(fd), free(heredoc_input), NULL);
@@ -83,7 +89,7 @@ char	*read_and_write_heredoc(int fd, char *delimiter, char *heredoc_input)
 			free(input_buffer);
 			break ;
 		}
-		expanded_input = expand_variables(input_buffer);
+		expanded_input = expand_variables(input_buffer, command);
 		new_heredoc_input = append_line_to_heredoc(heredoc_input,
 				expanded_input);
 		free(heredoc_input);
@@ -96,7 +102,7 @@ char	*read_and_write_heredoc(int fd, char *delimiter, char *heredoc_input)
 	return (heredoc_input);
 }
 
-char	*handle_heredoc(t_token **current)
+char	*handle_heredoc(t_token **current, t_command *command)
 {
 	char	*delimiter;
 	char	*heredoc_input;
@@ -113,7 +119,8 @@ char	*handle_heredoc(t_token **current)
 	fd = create_temp_file(temp_file_name, temp_file_num);
 	if (fd == -1)
 		return (NULL);
-	heredoc_input = read_and_write_heredoc(fd, delimiter, heredoc_input);
+	heredoc_input = read_and_write_heredoc(fd,
+			delimiter, heredoc_input, command);
 	if (!heredoc_input)
 	{
 		close(fd);
