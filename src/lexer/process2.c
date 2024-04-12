@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/10 14:54:37 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/12 11:42:37 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,11 @@ int	process_input_loop(char *input, char **buffer,
 		(lexer->i)++;
 		current_char = input[lexer->i];
 	}
+	if (lexer->in_quote != 0)
+    {
+        error("Unclosed quote", ERROR, NULL, 0);
+        *quote_error = true;
+    }
 	return (result);
 }
 
