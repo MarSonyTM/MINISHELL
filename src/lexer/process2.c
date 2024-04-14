@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/12 13:34:51 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/14 20:22:53 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	process_character(char current_char, char *input,      // function to proces
 {
 	lexer->lexer_error = false; // set lexer error flag to false
 	if (is_whitespace(current_char) && lexer->in_quote == 0) // check if the current character is a whitespace character and not in a quote
-		process_whitespace(*buffer, tokens, lexer);
+		process_whitespace(*buffer, tokens, lexer); 
 	else if (current_char == '|')
 		process_pipe(*buffer, tokens, lexer);
 	else if (current_char == '\'' || current_char == '\"')
@@ -89,7 +89,7 @@ int	process_character(char current_char, char *input,      // function to proces
 	else if (current_char == '$')
 		process_dollar_conditions(input, buffer, tokens, lexer);
 	else
-		(*buffer)[(lexer->buf_index)++] = current_char;
+		(*buffer)[(lexer->buf_index)++] = current_char; 
 	return (0);
 }
 
@@ -117,14 +117,14 @@ int	process_input_loop(char *input, char **buffer,  // process the input string
 	return (result); // return the result
 }
 
-int	finalize_lexer(char **buffer, t_token ***tokens,
+int	finalize_lexer(char **buffer, t_token ***tokens, 
 	t_lexer *lexer, bool quote_error)
 {
-	if (lexer->buf_index > 0 && !quote_error)
+	if (lexer->buf_index > 0 && !quote_error) 
 	{
 		if (lexer->in_quote != 0)
 		{
-			error("Unclosed quote", ERROR, NULL, 0);
+			error("Unclosed quote", ERROR, NULL, 0); 
 			quote_error = true;
 		}
 		else
