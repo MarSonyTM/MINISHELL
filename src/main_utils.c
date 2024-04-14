@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:59 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 13:32:00 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/12 16:26:41 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	reset_free_cmd(t_cmd **cmd, t_token **tokens, char *input)
 
 void	check_args(int argc, char **argv)
 {
-	if (argc > 1 || argv[1] != NULL)
+	if (argc > 1) // check if the program was called with arguments
 	{
 		error("this program does not take any arguments", "minishell", NULL, 0);
 		exit(1);

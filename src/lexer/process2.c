@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/12 11:42:37 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/12 13:34:51 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ int	process_double_redirects(char current_char,
 	return (0);
 }
 
-int	process_character(char current_char, char *input,
+int	process_character(char current_char, char *input,      // function to process the current character
 		char **buffer, t_token ***tokens, t_lexer *lexer)
 {
-	lexer->lexer_error = false;
-	if (is_whitespace(current_char) && lexer->in_quote == 0)
+	lexer->lexer_error = false; // set lexer error flag to false
+	if (is_whitespace(current_char) && lexer->in_quote == 0) // check if the current character is a whitespace character and not in a quote
 		process_whitespace(*buffer, tokens, lexer);
 	else if (current_char == '|')
 		process_pipe(*buffer, tokens, lexer);
@@ -93,28 +93,28 @@ int	process_character(char current_char, char *input,
 	return (0);
 }
 
-int	process_input_loop(char *input, char **buffer,
+int	process_input_loop(char *input, char **buffer,  // process the input string
 	t_token ***tokens, t_lexer *lexer,
 		bool *quote_error)
 {
-	char	current_char;
-	int		result;
-
-	lexer->lexer_error = false;
-	current_char = input[lexer->i];
-	while (current_char != '\0' && !(*quote_error) && !lexer->lexer_error)
+	char	current_char; // current character
+	int		result; // return value
+ 
+	lexer->lexer_error = false; // set lexer error flag to false
+	current_char = input[lexer->i]; // get the first character of the input string
+	while (current_char != '\0' && !(*quote_error) && !lexer->lexer_error) // loop through the input string until the end of the string or an error is encountered
 	{
-		result = process_character(current_char, input, buffer,
+		result = process_character(current_char, input, buffer, // process the current character and store it in the buffer
 				tokens, lexer);
-		(lexer->i)++;
-		current_char = input[lexer->i];
+		(lexer->i)++; // increment the index of the input string
+		current_char = input[lexer->i]; // get the next character of the input string
 	}
-	if (lexer->in_quote != 0)
+	if (lexer->in_quote != 0) // check if there is an unclosed quote
     {
         error("Unclosed quote", ERROR, NULL, 0);
-        *quote_error = true;
+        *quote_error = true; // set the quote error flag to true
     }
-	return (result);
+	return (result); // return the result
 }
 
 int	finalize_lexer(char **buffer, t_token ***tokens,

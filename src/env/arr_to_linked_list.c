@@ -27,7 +27,7 @@ t_env	*create_env_node(char *envp, int *j)
 	return (new);
 }
 
-t_env	*arr_to_linked_list(char **envp)
+t_env	*arr_to_linked_list(char **envp) 
 {
 	t_env	*env;
 	t_env	*tmp;

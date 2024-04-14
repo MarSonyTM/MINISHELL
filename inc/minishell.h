@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 15:57:00 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/12 16:20:39 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 
 /* holds information of each separate token */
 
-typedef enum e_token_type
+typedef enum e_token_type   // this is an enum type for the token types
 {
 	TOKEN_COMMAND,
 	TOKEN_BUILTIN,
@@ -62,6 +62,7 @@ typedef enum e_token_type
 	TOKEN_ERROR
 }	t_token_type;
 
+/* holds information of each separate token */
 typedef struct s_token
 {
 	t_token_type	type;
@@ -72,9 +73,9 @@ typedef struct s_token
 /* holds information of each separate environment variable */
 typedef struct s_env
 {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
+	char			*key; // For the key of the environment variable
+	char			*value; // For the value of the environment variable
+	struct s_env	*next; // For linked list structure
 }	t_env;
 
 /* holds information of each separate command / child process */
@@ -106,7 +107,8 @@ typedef struct s_exec
 }	t_exec;
 
 
-typedef struct s_command
+/* holds information of each separate command / child process */
+typedef struct s_command 
 {
 	t_token	**current;
 	t_cmd	**current_cmd;
@@ -117,6 +119,7 @@ typedef struct s_command
 }	t_command;
 
 
+/* holds information of each separate token */
 typedef struct s_lexer
 {
 	t_env	*env;

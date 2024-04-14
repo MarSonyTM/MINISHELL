@@ -40,26 +40,26 @@ int	handle_parser(int parse_status, t_cmd **cmd, t_token **tokens, char **input)
 	return (0);
 }
 
-void	init_env_signals(t_env **env, char **envp)
+void	init_env_signals(t_env **env, char **envp) // env is a pointer to a pointer to a struct of environment variables
 {
-	*env = arr_to_linked_list(envp);
+	*env = arr_to_linked_list(envp); // function that converts an array of strings to a linked list of environment variables
 	if (!*env)
 		exit(1);
-	check_blocked_signals();
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
+	check_blocked_signals(); // function that checks if signals are blocked
+	signal(SIGINT, handle_sigint); // function that sets the signal handler for SIGINT
+	signal(SIGQUIT, handle_sigquit); // function that sets the signal handler for SIGQUIT
 }
 
 void	main_handle_input(char **input)
 {
 	*input = readline(PROMPT);
 	sleep(0);
-	if (!*input)
-	{
-		free(*input);
-		ft_putendl_fd("exit", 1);
-		exit(0);
-	}
+	// if (!*input)
+	// {
+	// 	free(*input);
+	// 	ft_putendl_fd("exit", 1);      unecessary!!!!
+	// 	exit(0);
+	// }
 	add_history(*input);
 }
 
@@ -86,22 +86,22 @@ void	print_commands(t_cmd *cmd)
     }
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp) // the char **envp argument in the main function represents the environment variables passed to the program. It allows you to access and use the environment variables within your C program.
 {
-	char		*input;
-	t_env		*env;
-	t_token		*tokens;
-	int			exit_status;
-	t_cmd		*cmd;
+	char		*input; // poitner to the first character of the aray of characters input sztring
+	t_env		*env; // poitner to the struct of environment variables
+	t_token		*tokens; // pointer to the struct of tokens
+	int			exit_status; // exit status
+	t_cmd		*cmd; // pointer to the struct of commands
 
-	exit_status = 0;
-	check_args(argc, argv);
-	init_env_signals(&env, envp);
-	while (1)
+	exit_status = 0; // set the exit status to 0
+	check_args(argc, argv);  // function that checks the number of arguments passed to the program
+	init_env_signals(&env, envp); // function that initializes the environment variables and sets the signal handlers
+	while (1) 
 	{
-		main_handle_input(&input);
-		tokens = NULL;
-		t_lexer lexer_instance;
+		main_handle_input(&input); // function that handles the input string
+		tokens = NULL; // set the tokens struct to NULL
+		t_lexer lexer_instance; // create an instance of the lexer struct
 		if (handle_lexer(lexer(input, &tokens, &lexer_instance), &tokens, &input))
     		continue ;
 		t_token *current;
@@ -157,16 +157,16 @@ int	main(int argc, char **argv, char **envp)
 			printf("LEXER: Token: Type: %s, Value: %s\n", type_str, current->value);
 			current = current->next;
 		}
-		cmd = NULL;
+		cmd = NULL; // set the command struct to NULL to avoid memory leaks
 		if (handle_parser(parse(tokens, &cmd, env), &cmd, &tokens, &input))
 		{
 			exit_status = 127;
 			continue ;
 		}
-		print_commands(cmd);
-		expand_env_vars(cmd, env);
-		exit_status = executor(cmd, &env, exit_status);
-		reset_free_cmd(&cmd, &tokens, input);
+		print_commands(cmd); // function that prints the commands
+		expand_env_vars(cmd, env); // function that expands environment variables
+		exit_status = executor(cmd, &env, exit_status); // function that executes the commands
+		reset_free_cmd(&cmd, &tokens, input); // function that resets and frees the command struct, tokens struct, and input string
 	}
 	return (0);
 }
