@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 15:57:00 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/15 20:36:06 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,12 @@ void			check_blocked_signals(void);
 extern sig_atomic_t signal_caught;
 
 /* expansion */
+void			expand_env_vars(t_cmd *cmd, t_env *env);
+void			process_env_var(char *var_start, t_cmd *cmd, t_env *env);
+char			*get_env_value(char *var_name, t_env *env);
+int				get_cmd_arr_size(char ***cmd_arr);
+char			**create_new_cmd_arr(char ***cmd_arr, int size, char *value);
+void			append_to_cmd_arr(char ***cmd_arr, char *value);
 void			expand_env_vars(t_cmd *cmd, t_env *env);
 
 #endif
