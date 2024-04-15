@@ -54,6 +54,7 @@ void append_to_cmd_arr(char ***cmd_arr, char *value)
     *cmd_arr = new_cmd_arr;
 }
 
+
 void expand_env_vars(t_cmd *cmd, t_env *env)
 {
     while (cmd != NULL)
@@ -67,7 +68,7 @@ void expand_env_vars(t_cmd *cmd, t_env *env)
             while (var_end != NULL)
             {
                 // Get the variable name
-                char *var_name = strndup(var_start, var_end - var_start);
+                char *var_name = ft_strndup(var_start, var_end - var_start);
 
                 // Expand the variable
                 char *var_value = get_env_value(var_name, env);
