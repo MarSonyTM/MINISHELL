@@ -1,5 +1,4 @@
-heredoc should be able to expand multiple env var on a single line for now it does if they are on multiple lines
-
+maybe handle $USER$PWD    variables without spaces
 
 norminette!
 
