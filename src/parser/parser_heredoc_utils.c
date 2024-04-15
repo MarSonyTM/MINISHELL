@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:36:50 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 16:12:16 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:09:29 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,14 @@ char	*prompt_and_read_line(void)
 
 char	*get_var_name(const char **input)
 {
-	char	*var_start;
-	char	*var_end;
-	char	*var_name;
+    const char	*start;
 
-	var_start = (char *)(*input) + 1;
-	var_end = var_start;
-	while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
-		var_end++;
-	var_name = ft_substr(var_start, 0, var_end - var_start);
-	*input = var_end;
-	return (var_name);
+    // Skip the $ sign
+    (*input)++;
+    start = *input;
+    while (**input && **input != ' ')
+        (*input)++;
+    return (ft_substr(start, 0, *input - start));
 }
 
 char	*expand_variable(const char **input, char *output, t_command *command)
@@ -91,12 +88,22 @@ char	*expand_variable(const char **input, char *output, t_command *command)
 	char	*var_name;
 	char	*var_value;
 
+	printf ("input before expand_variable: %s\n", *input);
+
 	var_name = get_var_name(input);
 	var_value = ft_getenv(var_name, *command->env);
+	
+	 printf("Variable name: %s\n", var_name);  // Debug statement
+    	printf("Variable value: %s\n", var_value ? var_value : "NULL");  // Debug statement
+
+
 	free(var_name);
 	if (var_value)
 		output = ft_strjoin_free(output, var_value);
 	else
 		output = ft_strjoin_free(output, "");
+
+	printf("Output after expanding variable: %s\n", output);  // Debug statement
+
 	return (output);
 }
