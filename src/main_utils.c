@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:59 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 13:32:00 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/15 19:04:42 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void	free_cmds(t_cmd **cmd)
 {
 	t_cmd	*current;
 	t_cmd	*temp;
-	int		i;
 
-	i = 0;
 	current = *cmd;
 	while (current != NULL)
 	{
@@ -26,7 +24,6 @@ void	free_cmds(t_cmd **cmd)
 		current = current->next;
 		free(temp->cmd_path);
 		free_array(temp->cmd_arr);
-		i = 0;
 		free_array(temp->env_vars);
 		free(temp->input);
 		free(temp->output);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   determine_token_type1.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:14:46 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 10:39:50 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/15 19:05:38 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ bool	is_command(char *token, t_lexer *lexer)
 	char	*dir;
 	char	*full_path;
 
+	path = NULL;
 	path_copy = ft_strdup(path);
 	path = ft_getenv("PATH", lexer->env);
 	if (!path)
