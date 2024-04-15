@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:36:50 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 13:02:14 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:14:17 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,13 @@ char	*prompt_and_read_line(void)
 
 char	*get_var_name(const char **input)
 {
-	char	*var_start;
-	char	*var_end;
-	char	*var_name;
+	const char	*start;
 
-	var_start = (char *)(*input) + 1;
-	var_end = var_start;
-	while (*var_end && (isalnum(*var_end) || *var_end == '_'))
-		var_end++;
-	var_name = ft_substr(var_start, 0, var_end - var_start);
-	*input = var_end;
-	return (var_name);
+	(*input)++;
+	start = *input;
+	while (**input && **input != ' ')
+		(*input)++;
+	return (ft_substr(start, 0, *input - start));
 }
 
 char	*expand_variable(const char **input, char *output, t_command *command)
