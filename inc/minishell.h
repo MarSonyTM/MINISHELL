@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/12 16:20:39 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/15 07:48:30 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ typedef enum e_token_type   // this is an enum type for the token types
 }	t_token_type;
 
 /* holds information of each separate token */
-typedef struct s_token
+typedef struct s_token 
 {
-	t_token_type	type;
-	char			*value;
-	struct s_token	*next; // For linked list structure
-}	t_token;
+	t_token_type	type; // For the type of the token ex: TOKEN_COMMAND
+	char			*value; // For the value of the token ex: "ls"
+	struct s_token	*next; // pointer to the next node in the linked list
+}	t_token; 
 
 /* holds information of each separate environment variable */
 typedef struct s_env

@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:08 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/14 20:33:48 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/15 07:58:23 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // Main parse function
 int	parse(t_token *tokens, t_cmd **cmd, t_env *env) // tokens is a pointer to a struct of tokens, cmd is a pointer to a pointer to a struct of commands, env is a pointer to a struct of environment variables
 {
-	if (!tokens) // if tokens is NULL
+	if (!tokens) // if tokens is NULL , if the input is empty
 		return (2); // return 2 
 	return (process_tokens(tokens, cmd, env)); // return the result of the process_tokens function
 	return (0); // return 0
