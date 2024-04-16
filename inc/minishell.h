@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 11:39:31 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 11:47:09 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # define ERR_NUM "numeric argument required"
 # define ERR_VAL "not a valid identifier"
 
-extern sig_atomic_t	signal_caught;
+extern sig_atomic_t	g_signal_caught;
 
 /* holds information of each separate token */
 
@@ -87,7 +87,7 @@ typedef struct s_cmd
 	char			*exit_status_token; //for exit status expansion, else NULL
 	char			*input; //for input redirection, else NULL
 	char			*output; //for output redirection, else NULL
-	char			*redirection_append; //for output redirection append, else NULL
+	char			*redirection_append; //for output rdrction append,else NULL
 	int				exit_status;
 	int				prev_exit_status;
 	int				parse_status;
@@ -106,7 +106,6 @@ typedef struct s_exec
 	int	non_customs;
 }	t_exec;
 
-
 typedef struct s_command
 {
 	t_token	**current;
@@ -116,7 +115,6 @@ typedef struct s_command
 	int		*arg_count;
 	int		err_code;
 }	t_command;
-
 
 typedef struct s_lexer
 {
@@ -130,7 +128,6 @@ typedef struct s_lexer
 	bool	quote_error;
 	bool	lexer_error;
 }	t_lexer;
-
 
 /*Functions prototypes for Lexer*/
 
@@ -215,7 +212,6 @@ int				process_other_tokens(t_command *command,
 					t_token **current, t_cmd **current_cmd);
 char			*expand_variables(const char *input, t_command *command);
 int				create_temp_file(char *temp_file_name, int temp_file_num);
-
 
 /*Functions prototypes for Execution*/
 

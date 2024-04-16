@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_env_var.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 20:32:46 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/04/15 20:36:43 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/16 12:04:31 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	process_env_var(char *var_start, t_cmd *cmd, t_env *env)
 		var_value = get_env_value(var_name, env);
 		if (var_value != NULL)
 		{
-			printf("Variable value: %s\n", var_value);
 			append_to_cmd_arr(&cmd->cmd_arr, var_value);
 			free(var_value);
 		}
@@ -36,7 +35,6 @@ void	process_env_var(char *var_start, t_cmd *cmd, t_env *env)
 	var_value = get_env_value(var_start, env);
 	if (var_value != NULL)
 	{
-		printf("Variable value: %s\n", var_value);
 		append_to_cmd_arr(&cmd->cmd_arr, var_value);
 		free(var_value);
 	}

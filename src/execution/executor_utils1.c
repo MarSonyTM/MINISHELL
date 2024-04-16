@@ -28,21 +28,21 @@ static int	handle_redirect(int fd, int mode, t_cmd *cmd, int custom)
 
 int	redirection(t_cmd *cmd, int mode, int custom)
 {
-    int	fd;
+	int	fd;
 
-    if (mode == 0)
-        fd = open(cmd->input, O_RDONLY);
-    else if (mode == 1)
-        fd = open(cmd->output, O_WRONLY | O_CREAT | O_TRUNC, 0644); // Overwrite the file
-    else
-        fd = open(cmd->redirection_append, O_WRONLY | O_CREAT | O_APPEND, 0644); // Append to the file
-    if (handle_redirect(fd, mode, cmd, custom) == 1)
-    {
-        if (!custom)
-            exit(1);
-        return (1);
-    }
-    return (0);
+	if (mode == 0)
+		fd = open(cmd->input, O_RDONLY);
+	else if (mode == 1)
+		fd = open(cmd->output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else
+		fd = open(cmd->redirection_append, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (handle_redirect(fd, mode, cmd, custom) == 1)
+	{
+		if (!custom)
+			exit(1);
+		return (1);
+	}
+	return (0);
 }
 
 int	get_last_exit_status(t_cmd *cmd, t_exec *exec)
