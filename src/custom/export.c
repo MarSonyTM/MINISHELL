@@ -100,7 +100,7 @@ int	export_cmd(t_cmd *cmd, t_env **env)
 	int	i;
 
 	i = 1;
-	if (!cmd->cmd_arr[1]) //export command with no argument
+	if (!cmd->cmd_arr[1])
 	{
 		env_cmd(cmd, *env);
 		return (1);
