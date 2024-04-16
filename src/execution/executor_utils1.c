@@ -1,4 +1,16 @@
- #include "../../inc/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_utils1.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/16 15:39:18 by csturm            #+#    #+#             */
+/*   Updated: 2024/04/16 15:42:54 by csturm           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../inc/minishell.h"
 
 static int	handle_redirect(int fd, int mode, t_cmd *cmd, int custom)
 {

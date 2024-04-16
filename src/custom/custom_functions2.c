@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   custom_functions2.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/16 15:50:20 by csturm            #+#    #+#             */
+/*   Updated: 2024/04/16 16:00:54 by csturm           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static int	check_for_digit(char *str)
@@ -25,10 +37,7 @@ int	exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec)
 
 	exit_code = EXIT_SUCCESS;
 	if (cmd->cmd_arr[1] && cmd->cmd_arr[2])
-	{
-		error(ERR_ARGS, "exit", NULL, 1);
-		return (1);
-	}
+		return (error(ERR_ARGS, "exit", NULL, 1), 1);
 	else if (cmd->cmd_arr[1])
 	{
 		if (check_for_digit(cmd->cmd_arr[1]))
@@ -44,7 +53,7 @@ int	exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec)
 	}
 	clean_up(cmd, env);
 	close_and_free(*exec);
-	ft_putstr_fd("exit\n", 1);
+	ft_putendl_fd("exit", 1);
 	exit(exit_code);
 	return (0);
 }

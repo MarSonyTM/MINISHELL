@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/16 15:50:43 by csturm            #+#    #+#             */
+/*   Updated: 2024/04/16 16:03:01 by csturm           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 t_env	*add_env_node(t_env **env, char *key, char *value)
@@ -101,10 +113,7 @@ int	export_cmd(t_cmd *cmd, t_env **env)
 
 	i = 1;
 	if (!cmd->cmd_arr[1])
-	{
-		env_cmd(cmd, *env);
-		return (1);
-	}
+		return (env_cmd(cmd, *env), 0);
 	if (cmd->cmd_arr[1][0] == '=' || ft_isdigit(cmd->cmd_arr[1][0]))
 	{
 		error(ERR_ARG, "export", cmd->cmd_arr[1], 1);

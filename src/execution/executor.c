@@ -1,4 +1,16 @@
- #include "../../inc/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/16 15:40:14 by csturm            #+#    #+#             */
+/*   Updated: 2024/04/16 15:42:05 by csturm           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../inc/minishell.h"
 
 static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 {
@@ -34,8 +46,8 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 	}
 	if (cmd->cmd_path == NULL)
 	{
-		custom_exit = handle_custom(cmd, env, &exec, i); // handle_custom fails if malloc dup or open fails
-		if (custom_exit == 1 && cmd->exit_status == 0) // if there is an error in handle_custom and no error in custom_exec
+		custom_exit = handle_custom(cmd, env, &exec, i);
+		if (custom_exit == 1 && cmd->exit_status == 0)
 			cmd->exit_status = 1;
 		return ;
 	}

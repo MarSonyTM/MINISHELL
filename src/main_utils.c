@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:59 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 15:03:10 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:16:24 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,14 @@ void	check_args(int argc, char **argv)
 		error("this program does not take any arguments", "minishell", NULL, 0);
 		exit(1);
 	}
+}
+
+void	init_env_signals(t_env **env, char **envp)
+{
+	*env = arr_to_linked_list(envp);
+	if (!*env)
+		exit(1);
+	check_blocked_signals();
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
 }

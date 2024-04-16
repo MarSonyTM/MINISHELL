@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 14:38:36 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:16:50 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,6 +259,7 @@ void			handle_fds(t_exec *exec, int i);
 void			free_cmds(t_cmd **cmd);
 void			reset_free_cmd(t_cmd **cmd, char *input);
 void			check_args(int argc, char **argv);
+void			init_env_signals(t_env **env, char **envp);
 
 /* signal management */
 void			handle_sigint(int sig);
