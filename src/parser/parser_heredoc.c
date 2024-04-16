@@ -6,78 +6,37 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/15 12:15:33 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 13:41:09 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	*expand_variables(const char *input, t_command *command)
+char	*handle_input_buffer(char *input_buffer,
+		char *heredoc_input, t_command *command, int fd)
 {
-	char	*output;
-
-	output = ft_strdup("");
-	while (*input)
-	{
-		if (*input == '$')
-			output = expand_variable(&input, output, command);
-		else
-		{
-			output = ft_strjoin_free_char(output, *input);
-			input++;
-		}
-	}
-	return (output);
-}
-
-char	*append_line_to_heredoc(char *heredoc_input, const char *input_buffer)
-{
-	char	*temp;
+	char	*expanded_input;
 	char	*new_heredoc_input;
 
-	if (heredoc_input)
-		temp = ft_strjoin(heredoc_input, "\n");
-	else
-		temp = ft_strdup("");
-	new_heredoc_input = ft_strjoin(temp, input_buffer);
-	free(temp);
+	expanded_input = expand_variables(input_buffer, command);
+	new_heredoc_input = append_line_to_heredoc(heredoc_input, expanded_input);
+	write(fd, expanded_input, ft_strlen(expanded_input));
+	write(fd, "\n", 1);
+	free(heredoc_input);
+	free(input_buffer);
+	free(expanded_input);
 	return (new_heredoc_input);
 }
 
-int	create_temp_file(char *temp_file_name, int temp_file_num)
-{
-	int	fd;
-
-	while (1)
-	{
-		fd = open(temp_file_name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
-		if (fd == -1 && errno == EEXIST)
-		{
-			temp_file_num++;
-			temp_file_name[20] = '0' + temp_file_num;
-			continue ;
-		}
-		else if (fd == -1)
-		{
-			perror("open");
-			return (-1);
-		}
-		break ;
-	}
-	return (fd);
-}
-
-char	*read_and_write_heredoc(int fd,
-		char *delimiter, char *heredoc_input, t_command *command)
+char	*read_and_write_heredoc(int fd, char *delimiter,
+		char *heredoc_input, t_command *command)
 {
 	char	*input_buffer;
-	char	*new_heredoc_input;
-	char	*expanded_input;
 
-	signal_caught = 0;
+	g_signal_caught = 0;
 	while (1)
 	{
-		if (signal_caught == 1)
+		if (g_signal_caught == 1)
 			break ;
 		input_buffer = prompt_and_read_line();
 		if (!input_buffer)
@@ -87,15 +46,8 @@ char	*read_and_write_heredoc(int fd,
 			free(input_buffer);
 			break ;
 		}
-		expanded_input = expand_variables(input_buffer, command);
-		new_heredoc_input = append_line_to_heredoc(heredoc_input,
-				expanded_input);
-		free(heredoc_input);
-		heredoc_input = new_heredoc_input;
-		write(fd, expanded_input, ft_strlen(expanded_input));
-		write(fd, "\n", 1);
-		free(input_buffer);
-		free(expanded_input);
+		heredoc_input = handle_input_buffer(input_buffer,
+				heredoc_input, command, fd);
 	}
 	return (heredoc_input);
 }

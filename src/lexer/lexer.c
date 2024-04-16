@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:45:34 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/15 19:07:39 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/16 13:40:50 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ int	lexer(char *input, t_token **tokens, t_lexer *lexer)
 	lexer->lexer_error = false;
 	lexer->buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
 	if (lexer->buffer == NULL)
-		return (free(lexer), 1);
-	process_input_loop(input,
-			&lexer->buffer, &tokens, lexer, &lexer->quote_error);
+		return (1);
+	process_input_loop(input, &tokens, lexer, &lexer->quote_error);
 	return (finalize_lexer(&lexer->buffer,
 			&tokens, lexer,
 			lexer->quote_error));

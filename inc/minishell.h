@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 15:57:00 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 13:39:39 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define ERR_NUM "numeric argument required"
 # define ERR_VAL "not a valid identifier"
 
+extern sig_atomic_t	g_signal_caught;
 
 /* holds information of each separate token */
 
@@ -80,18 +81,18 @@ typedef struct s_env
 /* holds information of each separate command / child process */
 typedef struct s_cmd
 {
-    char            *cmd_path; //for execve, else NULL
-    char            **cmd_arr; //holds flags and arguments
-    char            **env_vars; //for env var expansion, else NULL
-    char            *exit_status_token; //for exit status expansion, else NULL
-    char            *input; //for input redirection, else NULL
-    char            *output; //for output redirection, else NULL
-    char            *redirection_append; //for output redirection append, else NULL
-    int             exit_status;
-    int             prev_exit_status;
-	int			    parse_status;
-    struct s_cmd    *next;
-}   t_cmd;
+	char			*cmd_path; //for execve, else NULL
+	char			**cmd_arr; //holds flags and arguments
+	char			**env_vars; //for env var expansion, else NULL
+	char			*exit_status_token; //for exit status expansion, else NULL
+	char			*input; //for input redirection, else NULL
+	char			*output; //for output redirection, else NULL
+	char			*redirection_append; //for output rdrction append,else NULL
+	int				exit_status;
+	int				prev_exit_status;
+	int				parse_status;
+	struct s_cmd	*next;
+}	t_cmd;
 
 /* just reduces variables in execution */
 typedef struct s_exec
@@ -105,7 +106,6 @@ typedef struct s_exec
 	int	non_customs;
 }	t_exec;
 
-
 typedef struct s_command
 {
 	t_token	**current;
@@ -115,7 +115,6 @@ typedef struct s_command
 	int		*arg_count;
 	int		err_code;
 }	t_command;
-
 
 typedef struct s_lexer
 {
@@ -129,7 +128,6 @@ typedef struct s_lexer
 	bool	quote_error;
 	bool	lexer_error;
 }	t_lexer;
-
 
 /*Functions prototypes for Lexer*/
 
@@ -166,7 +164,8 @@ int				finalize_lexer(char **buffer,
 					t_token ***tokens, t_lexer *lexer, bool quote_error);
 void			process_dollar_conditions(char *input, char **buffer,
 					t_token ***tokens, t_lexer *lexer);
-int				process_input_loop(char *input, char **buffer,  t_token ***tokens, t_lexer *lexer, bool *quote_error);
+int				process_input_loop(char *input,
+					t_token ***tokens, t_lexer *lexer, bool *quote_error);
 
 /*Functions prototypes for Parser*/
 
@@ -185,11 +184,13 @@ int				handle_exit_status_token(t_cmd *current_cmd,
 					char *value, int *arg_count);
 t_cmd			*handle_pipe_token(t_command *command);
 int				process_tokens(t_token *tokens, t_cmd **cmd, t_env *env);
-void			handle_argument(t_cmd *current_cmd, t_token *current, int *err_code);
+void			handle_argument(t_cmd *current_cmd,
+					t_token *current, int *err_code);
 int				handle_input(t_cmd *current_cmd, t_token *current);
 int				handle_parser_redirection(t_cmd *current_cmd,
 					t_token **current);
-int				hdl_parser_heredoc(t_cmd **current_cmd, t_token **current, t_command *command);
+int				hdl_parser_heredoc(t_cmd **current_cmd,
+					t_token **current, t_command *command);
 int				handle_comma(t_cmd *current_cmd, t_token *current);
 int				handle_exit_status(t_cmd *current_cmd, t_token *current);
 void			link_command_to_list(t_cmd **cmd_list, t_cmd *new_cmd);
@@ -198,17 +199,19 @@ char			*append_line_to_heredoc(char *heredoc_input,
 					const char *input_buffer);
 char			*handle_heredoc(t_token **current, t_command *command);
 void			handle_builtin_or_command_parser(t_command *command);
-void				process_token(t_command *command);
+void			process_token(t_command *command);
 char			*ft_strjoin_free_char(char *s1, char c);
 char			*ft_strjoin_free(char *s1, const char *s2);
 char			*prompt_and_read_line(void);
 char			*get_var_name(const char **input);
-char			*expand_variable(const char **input, char *output, t_command *command);
+char			*expand_variable(const char **input,
+					char *output, t_command *command);
 int				process_command_related_tokens(t_command *command,
 					t_token **current, t_cmd **current_cmd);
 int				process_other_tokens(t_command *command,
 					t_token **current, t_cmd **current_cmd);
-
+char			*expand_variables(const char *input, t_command *command);
+int				create_temp_file(char *temp_file_name, int temp_file_num);
 
 /*Functions prototypes for Execution*/
 
@@ -226,13 +229,14 @@ int				exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec);
 int				export_cmd(t_cmd *cmd, t_env **env);
 
 /* error management */
-void	clean_up(t_cmd *cmd, t_env *env);
-void	close_fds(int *open_fds, int processes);
-void	close_and_free(t_exec *exec);
-void	error(char *msg, char *command, char *argument, int custom);
-void	free_array(char **arr);
+void			clean_up(t_cmd *cmd, t_env *env);
+void			close_fds(int *open_fds, int processes);
+void			close_and_free(t_exec *exec);
+void			error(char *msg, char *command, char *argument, int custom);
+void			free_array(char **arr);
 
 /* utils */
+
 int	    redirection(t_cmd *cmd, int mode, int custom);
 char	**env_to_array(t_cmd *cmd, t_env **env);
 int		get_len(t_env *env);
@@ -256,13 +260,19 @@ void	free_cmds(t_cmd **cmd);
 void	reset_free_cmd(t_cmd **cmd, char *input);
 void	check_args(int argc, char **argv);
 
+
 /* signal management */
 void			handle_sigint(int sig);
 void			handle_sigquit(int sig);
 void			check_blocked_signals(void);
-extern sig_atomic_t signal_caught;
 
 /* expansion */
+void			expand_env_vars(t_cmd *cmd, t_env *env);
+void			process_env_var(char *var_start, t_cmd *cmd, t_env *env);
+char			*get_env_value(char *var_name, t_env *env);
+int				get_cmd_arr_size(char ***cmd_arr);
+char			**create_new_cmd_arr(char ***cmd_arr, int size, char *value);
+void			append_to_cmd_arr(char ***cmd_arr, char *value);
 void			expand_env_vars(t_cmd *cmd, t_env *env);
 
 #endif

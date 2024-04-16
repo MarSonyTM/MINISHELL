@@ -1,65 +1,96 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/15 19:50:27 by marianfurni       #+#    #+#             */
+/*   Updated: 2024/04/15 20:38:20 by marianfurni      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
- 
- void expand_env_vars(t_cmd *cmd, t_env *env)
+
+char	*get_env_value(char *var_name, t_env *env)
 {
-    while (cmd != NULL)
-    {
-        int i = 0; // Index for env_vars
-        while (cmd->env_vars[i] != NULL)
-        {
-            // Remove the $ symbol from the environment variable name
-            char *env_var_name = cmd->env_vars[i] + 1;
-            printf("Expanding variable: %s\n", env_var_name); // Debug print
+	t_env	*current_env;
 
-            // Find the value of the environment variable
-            char *var_value = NULL;
-            for (t_env *tmp = env; tmp != NULL; tmp = tmp->next)
-            {
-                if (ft_strcmp(tmp->key, env_var_name) == 0)
-                {
-                    var_value = ft_strdup(tmp->value);
-                    break;
-                }
-            }
+	current_env = env;
+	while (current_env != NULL)
+	{
+		if (ft_strcmp(current_env->key, var_name) == 0)
+		{
+			return (ft_strdup(current_env->value));
+		}
+		current_env = current_env->next;
+	}
+	return (NULL);
+}
 
-            if (var_value != NULL)
-            {
-                printf("Variable value: %s\n", var_value); // Debug print
+int	get_cmd_arr_size(char ***cmd_arr)
+{
+	int	size;
 
-                // Replace the env_var field with the environment variable's value
-                free(cmd->env_vars[i]);
-                cmd->env_vars[i] = ft_strdup(var_value);
+	size = 0;
+	while ((*cmd_arr)[size] != NULL)
+	{
+		size++;
+	}
+	return (size);
+}
 
-                // Find the length of cmd_arr
-                int cmd_arr_len = 0;
-                while (cmd->cmd_arr[cmd_arr_len] != NULL) 
-                {
-                    cmd_arr_len++;
-                }
+char	**create_new_cmd_arr(char ***cmd_arr, int size, char *value)
+{
+	int		i;
+	char	**new_cmd_arr;
 
-                // Resize cmd_arr to accommodate the new value
-                cmd->cmd_arr = realloc(cmd->cmd_arr, sizeof(char *) * (cmd_arr_len + 2));
-                if (cmd->cmd_arr == NULL)
-                {
-                    // Handle realloc failure
-                    printf("Error: Memory allocation failed\n");
-                    return;
-                }
+	i = 0;
+	new_cmd_arr = malloc((size + 2) * sizeof(char *));
+	if (new_cmd_arr == NULL)
+		return (NULL);
+	while (i < size)
+	{
+		new_cmd_arr[i] = (*cmd_arr)[i];
+		i++;
+	}
+	new_cmd_arr[size] = ft_strdup(value);
+	if (new_cmd_arr[size] == NULL)
+	{
+		free(new_cmd_arr);
+		return (NULL);
+	}
+	new_cmd_arr[size + 1] = NULL;
+	return (new_cmd_arr);
+}
 
-                // Append the new value to cmd_arr
-                cmd->cmd_arr[cmd_arr_len] = ft_strdup(var_value);
-                // NULL-terminate cmd_arr
-                cmd->cmd_arr[cmd_arr_len + 1] = NULL;
+void	append_to_cmd_arr(char ***cmd_arr, char *value)
+{
+	int		size;
+	char	**new_cmd_arr;
 
-                free(var_value); // Remember to free the duplicated value after use
-            }
-            else
-            {
-                // Handle error: Environment variable not found
-                printf("Error: Environment variable '%s' not found\n", env_var_name); // Debug print
-            }
-            i++;
-        }
-        cmd = cmd->next;
-    }
+	size = get_cmd_arr_size(cmd_arr);
+	new_cmd_arr = create_new_cmd_arr(cmd_arr, size, value);
+	if (new_cmd_arr == NULL)
+		return ;
+	free(*cmd_arr);
+	*cmd_arr = new_cmd_arr;
+}
+
+void	expand_env_vars(t_cmd *cmd, t_env *env)
+{
+	int		i;
+	char	*var_start;
+
+	while (cmd != NULL)
+	{
+		i = 0;
+		while (cmd->env_vars[i] != NULL)
+		{
+			var_start = cmd->env_vars[i] + 1;
+			process_env_var(var_start, cmd, env);
+			i++;
+		}
+		cmd = cmd->next;
+	}
 }
