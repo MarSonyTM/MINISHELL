@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/15 20:36:06 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/16 11:08:08 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,8 @@ int				process_command_related_tokens(t_command *command,
 					t_token **current, t_cmd **current_cmd);
 int				process_other_tokens(t_command *command,
 					t_token **current, t_cmd **current_cmd);
+char			*expand_variables(const char *input, t_command *command);
+int				create_temp_file(char *temp_file_name, int temp_file_num);
 
 
 /*Functions prototypes for Execution*/
