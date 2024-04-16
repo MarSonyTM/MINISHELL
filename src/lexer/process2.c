@@ -6,14 +6,14 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 11:12:55 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 11:44:04 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 int	process_redirects(char current_char,
-	char *input, char **buffer, t_token ***tokens, t_lexer *lexer)
+	char *input, t_token ***tokens, t_lexer *lexer)
 {
 	if (current_char == '<'
 		&& input[lexer->i + 1] != '<' && lexer->in_quote == 0)
@@ -24,7 +24,7 @@ int	process_redirects(char current_char,
 			error("Syntax error near unexpected token `>'", ERROR, NULL, 0);
 			return (2);
 		}
-		process_single_redirect_in(*buffer, tokens, lexer);
+		process_single_redirect_in(lexer->buffer, tokens, lexer);
 	}
 	else if (current_char == '>'
 		&& input[lexer->i + 1] != '>' && lexer->in_quote == 0)
@@ -35,13 +35,13 @@ int	process_redirects(char current_char,
 			error("Syntax error near unexpected token `<'", ERROR, NULL, 0);
 			return (2);
 		}
-		process_single_redirect_out(*buffer, tokens, lexer);
+		process_single_redirect_out(lexer->buffer, tokens, lexer);
 	}
 	return (0);
 }
 
 int	process_double_redirects(char current_char,
-		char *input, char **buffer, t_token ***tokens, t_lexer *lexer)
+			char *input, t_token ***tokens, t_lexer *lexer)
 {
 	if (current_char == '<'
 		&& input[lexer->i + 1] == '<' && lexer->in_quote == 0)
@@ -52,7 +52,7 @@ int	process_double_redirects(char current_char,
 			error("Syntax error near unexpected token", ERROR, NULL, 0);
 			return (2);
 		}
-		process_heredoc(buffer, tokens, lexer);
+		process_heredoc(&(lexer->buffer), tokens, lexer);
 	}
 	else if (current_char == '>'
 		&& input[lexer->i + 1] == '>' && lexer->in_quote == 0)
@@ -63,38 +63,38 @@ int	process_double_redirects(char current_char,
 			error("Syntax error near unexpected token", ERROR, NULL, 0);
 			return (2);
 		}
-		process_redirect_out_append(*buffer, tokens, lexer);
+		process_redirect_out_append(lexer->buffer, tokens, lexer);
 	}
 	return (0);
 }
 
 int	process_character(char current_char, char *input,
-		char **buffer, t_token ***tokens, t_lexer *lexer)
+		t_token ***tokens, t_lexer *lexer)
 {
 	lexer->lexer_error = false;
 	if (is_whitespace(current_char) && lexer->in_quote == 0)
-		process_whitespace(*buffer, tokens, lexer);
+		process_whitespace(lexer->buffer, tokens, lexer);
 	else if (current_char == '|')
-		process_pipe(*buffer, tokens, lexer);
+		process_pipe(lexer->buffer, tokens, lexer);
 	else if (current_char == '\'' || current_char == '\"')
-		process_quotes(current_char, buffer, lexer);
+		process_quotes(current_char, &(lexer->buffer), lexer);
 	else if (current_char == '<' || current_char == '>')
 	{
-		if (process_redirects(current_char, input, buffer, tokens, lexer) == 2)
+		if (process_redirects(current_char,
+				input, tokens, lexer) == 2)
 			return (2);
 		if (process_double_redirects(current_char,
-				input, buffer, tokens, lexer) == 2)
+				input, tokens, lexer) == 2)
 			return (2);
 	}
 	else if (current_char == '$')
-		process_dollar_conditions(input, buffer, tokens, lexer);
+		process_dollar_conditions(input, &(lexer->buffer), tokens, lexer);
 	else
-		(*buffer)[(lexer->buf_index)++] = current_char;
+		lexer->buffer[(lexer->buf_index)++] = current_char;
 	return (0);
 }
 
-int	process_input_loop(char *input, char **buffer,
-	t_token ***tokens, t_lexer *lexer,
+int	process_input_loop(char *input, t_token ***tokens, t_lexer *lexer,
 		bool *quote_error)
 {
 	char	current_char;
@@ -104,7 +104,7 @@ int	process_input_loop(char *input, char **buffer,
 	current_char = input[lexer->i];
 	while (current_char != '\0' && !(*quote_error) && !lexer->lexer_error)
 	{
-		result = process_character(current_char, input, buffer,
+		result = process_character(current_char, input,
 				tokens, lexer);
 		(lexer->i)++;
 		current_char = input[lexer->i];
