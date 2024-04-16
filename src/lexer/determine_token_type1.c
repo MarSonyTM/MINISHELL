@@ -3,35 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   determine_token_type1.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:14:46 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/15 19:07:06 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/16 14:45:52 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+bool	check_command_in_dir(char *dir, char *token)
+{
+	char	*full_path;
+	bool	found;
+
+	full_path = construct_full_path(dir, token);
+	found = (access(full_path, F_OK | X_OK) == 0);
+	free(full_path);
+	return (found);
+}
 
 bool	is_command(char *token, t_lexer *lexer)
 {
 	char	*path;
 	char	*path_copy;
 	char	*dir;
-	char	*full_path;
 
-	path = NULL;
-	path_copy = ft_strdup(path);
 	path = ft_getenv("PATH", lexer->env);
 	if (!path)
 		return (false);
+	path_copy = ft_strdup(path);
 	if (!path_copy)
-		return (1);
+		return (false);
 	dir = ft_strtok(path_copy, ":");
 	while (dir)
 	{
-		full_path = construct_full_path(dir, token);
-		free(full_path);
-		if (access(full_path, F_OK | X_OK) == 0)
+		if (check_command_in_dir(dir, token))
 		{
 			free(path_copy);
 			return (true);
