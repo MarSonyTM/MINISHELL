@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 11:05:53 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 11:10:42 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 13:37:20 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	create_temp_file(char *temp_file_name, int temp_file_num)
 
 	while (1)
 	{
-		fd = open(temp_file_name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+		fd = open(temp_file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd == -1 && errno == EEXIST)
 		{
 			temp_file_num++;
