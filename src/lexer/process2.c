@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 11:44:04 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 15:57:57 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,31 +115,4 @@ int	process_input_loop(char *input, t_token ***tokens, t_lexer *lexer,
 		*quote_error = true;
 	}
 	return (result);
-}
-
-int	finalize_lexer(char **buffer, t_token ***tokens,
-	t_lexer *lexer, bool quote_error)
-{
-	if (lexer->buf_index > 0 && !quote_error)
-	{
-		if (lexer->in_quote != 0)
-		{
-			error("Unclosed quote", ERROR, NULL, 0);
-			quote_error = true;
-		}
-		else
-		{
-			(*buffer)[lexer->buf_index] = '\0';
-			if (add_token(*tokens,
-					determine_token_type(*buffer, lexer),
-					ft_strdup(*buffer)) == 1)
-				return (free(*buffer), free(lexer), 1);
-			(lexer->token_count)++;
-		}
-	}
-	if (quote_error)
-		return (free(*buffer), free(lexer), 2);
-	free(*buffer);
-	free(lexer);
-	return (0);
 }
