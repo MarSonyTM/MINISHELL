@@ -34,7 +34,7 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 	}
 	if (cmd->cmd_path == NULL)
 	{
-		custom_exit = handle_custom(cmd, env, exec, i); // handle_custom fails if malloc dup or open fails
+		custom_exit = handle_custom(cmd, env, &exec, i); // handle_custom fails if malloc dup or open fails
 		if (custom_exit == 1 && cmd->exit_status == 0) // if there is an error in handle_custom and no error in custom_exec
 			cmd->exit_status = 1;
 		return ;

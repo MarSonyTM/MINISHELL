@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   intialize_command_structure.c                      :+:      :+:    :+:   */
+/*   initialize_command_structure.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 13:48:45 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/04 13:48:59 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/15 20:37:08 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static t_cmd	*initialize_command_structure(void)
 	cmd->output = NULL;
 	cmd->exit_status = 0;
 	cmd->next = NULL;
+	cmd->redirection_append = NULL;
 	return (cmd);
 }
 
@@ -60,10 +61,12 @@ t_cmd	*new_command(t_cmd **cmd)
 	{
 		if (new_cmd)
 		{
-			free(new_cmd->cmd_arr);
-			free(new_cmd->env_vars);
+			if (new_cmd->cmd_arr)
+				free(new_cmd->cmd_arr);
+			if (new_cmd->env_vars)
+				free(new_cmd->env_vars);
+			free(new_cmd);
 		}
-		free(new_cmd);
 		return (NULL);
 	}
 	link_command_to_list(cmd, new_cmd);

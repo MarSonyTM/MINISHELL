@@ -86,9 +86,10 @@ int	main(int argc, char **argv, char **envp)
 			exit_status = 127;
 			continue ;
 		}
+		free_tokens(&tokens);
 		expand_env_vars(cmd, env);
 		exit_status = executor(cmd, &env, exit_status);
-		reset_free_cmd(&cmd, &tokens, input);
+		reset_free_cmd(&cmd, input);
 	}
 	return (0);
 }
