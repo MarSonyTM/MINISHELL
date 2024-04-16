@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:40:04 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:48:25 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 17:52:39 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,18 @@
 int	process_whitespace(char *buffer,
 	t_token ***tokens, t_lexer *lexer)
 {
+	char	*tmp;
 	if (lexer->buf_index > 0)
 	{
 		lexer->in_quote = 0;
 		buffer[lexer->buf_index] = '\0';
+		tmp = ft_strdup(buffer);
 		if (add_token(*tokens, determine_token_type(buffer,
-					lexer), strdup(buffer)) == 1)
-			return (1);
+					lexer), tmp) == 1)
+			return (free(tmp), 1);
 		lexer->buf_index = 0;
 		lexer->token_count++;
+		free(tmp);
 	}
 	return (0);
 }
@@ -35,17 +38,24 @@ bool	is_whitespace(char c)
 
 int	process_pipe(char *buffer, t_token ***tokens, t_lexer *lexer)
 {
+	char	*tmp_buffer;
+	char	*tmp;
+
 	lexer->in_quote = 0;
 	buffer[lexer->buf_index] = '\0';
+	tmp_buffer = ft_strdup(buffer);
 	if (lexer->buf_index > 0)
 	{
 		if (add_token(*tokens, determine_token_type(buffer,
-					lexer), ft_strdup(buffer)) == 1)
-			return (1);
+					lexer), tmp_buffer) == 1)
+			return (free(tmp_buffer), 1);
 		lexer->buf_index = 0;
 	}
-	if (add_token(*tokens, TOKEN_PIPE, ft_strdup("|")) == 1)
-		return (1);
+	free(tmp_buffer);
+	tmp = ft_strdup("|");
+	if (add_token(*tokens, TOKEN_PIPE, tmp) == 1)
+		return (free(tmp), 1);
+	free(tmp);
 	lexer->token_count = 0;
 	return (0);
 }

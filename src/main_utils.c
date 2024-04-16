@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:59 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 16:16:24 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/16 17:46:06 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,17 @@ void	reset_free_cmd(t_cmd **cmd, char *input)
 	current = *cmd;
 	while (current != NULL)
 	{
+		if (current->input)
+			free(current->input);
 		current->input = NULL;
+		if (current->output)
+			free(current->output);
 		current->output = NULL;
+		if (current->redirection_append)
+			free(current->redirection_append);
 		current->redirection_append = NULL;
+		if (current->cmd_path)
+			free(current->cmd_path);
 		current->cmd_path = NULL;
 		current = current->next;
 	}
