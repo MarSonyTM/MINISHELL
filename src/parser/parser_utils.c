@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:04:35 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 13:11:13 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:45:50 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@ t_cmd	*initialize_new_command(t_cmd **cmd,
 
 	new_cmd = new_command(cmd);
 	if (!new_cmd)
-		return (NULL);
-	new_cmd->cmd_arr = malloc(sizeof(char *) * 2);
-	if (!new_cmd->cmd_arr)
 		return (NULL);
 	new_cmd->cmd_arr[0] = ft_strdup(current_token->value);
 	if (!new_cmd->cmd_arr[0])
