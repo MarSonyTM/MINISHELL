@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 13:39:39 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:38:36 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,29 +237,28 @@ void			free_array(char **arr);
 
 /* utils */
 
-int	    redirection(t_cmd *cmd, int mode, int custom);
-char	**env_to_array(t_cmd *cmd, t_env **env);
-int		get_len(t_env *env);
-int		count_processes(t_cmd *cmd);
-char	*get_key(char *cmd, int *j);
-char	*get_value(char *cmd, int *j);
-char	*get_value_concat(char *cmd, int *j);
-int		handle_custom(t_cmd *cmd, t_env **env, t_exec **exec, int i);
-int	    handle_pipe(t_exec *exec, int i, char *cmd_path);
-int 	duplicate_fd(int old_fd, int new_fd, int custom);
-char    *ft_getenv(const char *name, t_env *env);
-t_env	*add_env_node(t_env **env, char *key, char *value);
-void	add_empty_env_var(char *cmd, t_env **env);
-void	add_new_env_var(char *cmd, t_env **env, int j);
-void	concatenate_env_var(char *cmd, t_env **env, int j);
-void	handle_export_args(t_cmd *cmd, t_env **env, int i);
-int     get_last_exit_status(t_cmd *cmd, t_exec *exec);
-int	    allocate_memory(t_exec *exec, t_cmd *cmd, t_env **env);
-void	handle_fds(t_exec *exec, int i);
-void	free_cmds(t_cmd **cmd);
-void	reset_free_cmd(t_cmd **cmd, char *input);
-void	check_args(int argc, char **argv);
-
+int				redirection(t_cmd *cmd, int mode, int custom);
+char			**env_to_array(t_cmd *cmd, t_env **env);
+int				get_len(t_env *env);
+int				count_processes(t_cmd *cmd);
+char			*get_key(char *cmd, int *j);
+char			*get_value(char *cmd, int *j);
+char			*get_value_concat(char *cmd, int *j);
+int				handle_custom(t_cmd *cmd, t_env **env, t_exec **exec, int i);
+int				handle_pipe(t_exec *exec, int i, char *cmd_path);
+int				duplicate_fd(int old_fd, int new_fd, int custom);
+char			*ft_getenv(const char *name, t_env *env);
+t_env			*add_env_node(t_env **env, char *key, char *value);
+void			add_empty_env_var(char *cmd, t_env **env);
+void			add_new_env_var(char *cmd, t_env **env, int j);
+void			concatenate_env_var(char *cmd, t_env **env, int j);
+void			handle_export_args(t_cmd *cmd, t_env **env, int i);
+int				get_last_exit_status(t_cmd *cmd, t_exec *exec);
+int				allocate_memory(t_exec *exec, t_cmd *cmd, t_env **env);
+void			handle_fds(t_exec *exec, int i);
+void			free_cmds(t_cmd **cmd);
+void			reset_free_cmd(t_cmd **cmd, char *input);
+void			check_args(int argc, char **argv);
 
 /* signal management */
 void			handle_sigint(int sig);

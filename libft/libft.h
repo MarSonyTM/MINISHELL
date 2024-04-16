@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 17:28:03 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/15 19:42:54 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/16 14:24:16 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 # include <stdlib.h>
 # include <stdbool.h>
 # include <limits.h>
-#include <fcntl.h>
-#include <termios.h>
-#include <sys/ioctl.h>
+# include <fcntl.h>
+# include <termios.h>
+# include <sys/ioctl.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1042
@@ -108,6 +108,5 @@ char			*ft_strndup(const char *s, size_t n);
 int				ft_strcmp(const char *s1, const char *s2);
 size_t			ft_strcspn(const char *s, const char *reject);
 size_t			ft_strnlen(const char *s, size_t maxlen);
-
 
 #endif
