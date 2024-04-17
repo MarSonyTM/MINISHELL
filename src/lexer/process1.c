@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:40:04 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/17 16:19:32 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:34:04 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	process_pipe(char *buffer, t_token ***tokens, t_lexer *lexer)
 	return (0);
 }
 
-char	process_quotes(char currentChar,
+void	process_quotes(char currentChar,
 		char **buffer, t_lexer *lexer)
 {
 	if (lexer->in_quote == 0)
@@ -76,5 +76,4 @@ char	process_quotes(char currentChar,
 		lexer->in_quote = 0;
 	else
 		(*buffer)[lexer->buf_index++] = currentChar;
-	return (currentChar);
 }
