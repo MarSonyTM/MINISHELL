@@ -56,4 +56,3 @@ cat << EOF > test
 
 CTRL+C does nto work
 
-
