@@ -1,5 +1,0 @@
-maybe handle $USER$PWD    variables without spaces
-
-norminette!
-
-valgrind!

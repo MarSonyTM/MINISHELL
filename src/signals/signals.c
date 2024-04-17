@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 11:53:02 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/17 13:20:57 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	handle_sigint(int sig)
 {
 	(void)sig;
 	g_signal_caught = 1;
-	printf("\nminishell> ");
 }
 
 void	handle_sigquit(int sig)
