@@ -56,3 +56,7 @@ cat << EOF > test
 
 CTRL+C does nto work
 
+1. cat | cat | ls
+2. should output ls, then need to press enter as many times as there are cats
+
+

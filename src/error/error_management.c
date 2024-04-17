@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_management.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:30:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 13:30:42 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:42:39 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,9 @@ void	free_array(char **arr)
 
 void	clean_up(t_cmd *cmd, t_env *env)
 {
-	t_cmd	*tmp;
 	t_env	*env_tmp;
 
-	while (cmd != NULL)
-	{
-		tmp = cmd;
-		cmd = cmd->next;
-		free(tmp->cmd_path);
-		free(tmp->input);
-		free(tmp->output);
-		free_array(tmp->cmd_arr);
-		free(tmp);
-	}
+	free_cmds(&cmd);
 	while (env != NULL)
 	{
 		env_tmp = env;

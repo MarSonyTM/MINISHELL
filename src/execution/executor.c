@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:40:14 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/16 15:42:05 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/17 17:17:44 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,11 @@ static int	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
 	exec->old_fd[0] = -1;
 	exec->old_fd[1] = -1;
 	if (allocate_memory(exec, cmd, env) == 1)
-		return (1);
+	{
+		clean_up(cmd, *env);
+		close_and_free(exec);
+		exit (1);
+	}
 	i = 0;
 	while (i < exec->processes * 2)
 		exec->open_fds[i++] = -1;
@@ -87,8 +91,7 @@ int	executor(t_cmd *cmd, t_env **env, int exit_status)
 	int		j;
 	int		last_exit_status;
 
-	if (init_exec(&exec, cmd, env) == 1)
-		return (1);
+	init_exec(&exec, cmd, env);
 	last_exit_status = 0;
 	cmd->prev_exit_status = exit_status;
 	i = 0;

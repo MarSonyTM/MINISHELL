@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:20 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/17 15:36:44 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/17 17:01:09 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ int	exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec, int stdout_fd)
 	clean_up(cmd, env);
 	close_and_free(*exec);
 	ft_putendl_fd("exit", 1);
-	close(stdout_fd);
+	if (stdout_fd != -1)
+		close(stdout_fd);
 	exit(exit_code);
 	return (0);
 }

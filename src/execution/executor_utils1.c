@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:39:18 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/16 15:42:54 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/17 17:56:50 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,18 @@ int	get_last_exit_status(t_cmd *cmd, t_exec *exec)
 
 int	allocate_memory(t_exec *exec, t_cmd *cmd, t_env **env)
 {
+	t_cmd	*tmp;
+	t_env	*env_tmp;
+
+	tmp = cmd;
+	env_tmp = *env;
 	exec->pid = (int *)malloc(sizeof(int) * exec->processes);
 	if (!exec->pid)
-	{
-		clean_up(cmd, *env);
 		return (1);
-	}
 	exec->status = (int *)malloc(sizeof(int) * exec->processes);
 	if (!exec->status)
 	{
 		free(exec->pid);
-		clean_up(cmd, *env);
 		return (1);
 	}
 	exec->open_fds = (int *)malloc(sizeof(int) * exec->processes * 2);
@@ -104,7 +105,6 @@ int	allocate_memory(t_exec *exec, t_cmd *cmd, t_env **env)
 	{
 		free(exec->pid);
 		free(exec->status);
-		clean_up(cmd, *env);
 		return (1);
 	}
 	return (0);
