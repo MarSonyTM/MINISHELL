@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 15:57:57 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:19:04 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	process_character(char current_char, char *input,
 	else if (current_char == '|')
 		process_pipe(lexer->buffer, tokens, lexer);
 	else if (current_char == '\'' || current_char == '\"')
-		process_quotes(current_char, &(lexer->buffer), lexer);
+		lexer->buffer[(lexer->buf_index)++] = current_char = process_quotes(current_char, &(lexer->buffer), lexer);
 	else if (current_char == '<' || current_char == '>')
 	{
 		if (process_redirects(current_char,

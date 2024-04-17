@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/17 15:36:42 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/17 16:19:23 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ t_token_type	handle_dollar_tokens(char *token, t_lexer *lexer);
 bool			is_command(char *token, t_lexer *lexer);
 char			*construct_full_path(char *dir, char *token);
 bool			is_whitespace(char c);
-void			process_quotes(char currentChar,
+char			process_quotes(char currentChar,
 					char **buffer, t_lexer *lexer);
 int				process_whitespace(char *buffer,
 					t_token ***tokens, t_lexer *lexer);
