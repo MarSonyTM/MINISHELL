@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:40:03 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/16 15:47:29 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/17 15:49:57 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	handle_custom(t_cmd *cmd, t_env **env, t_exec **exec, int i)
 		return (1);
 	if (helper_redirections(cmd, exec) == 1)
 		return (1);
-	custom_exec(cmd, env, exec);
+	custom_exec(cmd, env, exec, stdout_fd);
 	if (duplicate_fd(stdout_fd, 1, 1) == 1)
 		return (1);
 	close (stdout_fd);
