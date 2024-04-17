@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:40:04 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 17:52:39 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/17 11:47:03 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	process_whitespace(char *buffer,
 	t_token ***tokens, t_lexer *lexer)
 {
 	char	*tmp;
+
 	if (lexer->buf_index > 0)
 	{
 		lexer->in_quote = 0;
