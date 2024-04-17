@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:20 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/16 16:00:54 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/17 15:36:44 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	check_for_digit(char *str)
 	return (1);
 }
 
-int	exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec)
+int	exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec, int stdout_fd)
 {
 	int	exit_code;
 
@@ -54,6 +54,7 @@ int	exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec)
 	clean_up(cmd, env);
 	close_and_free(*exec);
 	ft_putendl_fd("exit", 1);
+	close(stdout_fd);
 	exit(exit_code);
 	return (0);
 }

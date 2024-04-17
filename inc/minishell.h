@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 16:16:50 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/17 15:36:42 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ int				create_temp_file(char *temp_file_name, int temp_file_num);
 
 /*Functions prototypes for Execution*/
 
-void			custom_exec(t_cmd *cmd, t_env **env, t_exec **exec);
+void			custom_exec(t_cmd *cmd, t_env **env, t_exec **exec, int stdout_fd);
 int				executor(t_cmd *cmd, t_env **env, int exit_status);
 t_env			*arr_to_linked_list(char **envp);
 
@@ -225,7 +225,7 @@ int				cd_cmd(t_cmd *cmd, t_env *env);
 int				pwd_cmd(void);
 int				env_cmd(t_cmd *cmd, t_env *env);
 void			unset_cmd(t_cmd *cmd, t_env **env);
-int				exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec);
+int				exit_cmd(t_cmd *cmd, t_env *env, t_exec **exec, int stdout_fd);
 int				export_cmd(t_cmd *cmd, t_env **env);
 
 /* error management */
