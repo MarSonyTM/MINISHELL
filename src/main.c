@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/18 13:49:35 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:21:18 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	print_commands(t_cmd *cmd)
         i = 1; // Reset argument index for the next command
     }
 }
-
 
 char *append_to_string(char *str, const char *append)
 {
@@ -66,33 +65,32 @@ char *append_to_string(char *str, const char *append)
 
     return new_str;
 } 
-void expand_env_varss(char **input, t_env *env, int in_quote) {
+void expand_env_varss(char **input, t_env *env, int in_quote)
+{
     char *result = malloc(1);  // Start with an empty string.
     result[0] = '\0';
 
     char *cursor = *input;
-    while (*cursor) {
-        if (*cursor == '\'') {
-            // Toggle in_quote status on encountering a single quote
-            in_quote = !in_quote;
-            cursor++;
-            continue;
-        }
-
-        if (*cursor == '$' && !in_quote) {
+    while (*cursor) 
+    {
+        if (*cursor == '$' && in_quote != '\'')
+        {
             cursor++; // Skip over the '$'
-            if (*cursor == '\0' || isspace(*cursor)) {
-                // Handle the case where $ is the last character or followed by space
-                size_t len = strlen(result);
+            if (*cursor == '\0' || !ft_isalnum(*cursor))
+            {
+                // Handle the case where $ is the last character or followed by non-alphanumeric
+                size_t len = ft_strlen(result);
                 result = realloc(result, len + 2);
                 result[len] = '$';
                 result[len + 1] = '\0';
+                if (*cursor != '\0') cursor++;
                 continue;
             }
 
             // Find the end of the variable name
             char *end = cursor;
-            while (*end && (isalnum(*end) || *end == '_')) {
+            while (*end && (ft_isalnum(*end) || *end == '_'))
+            {
                 end++;
             }
 
@@ -108,9 +106,19 @@ void expand_env_varss(char **input, t_env *env, int in_quote) {
             free(var_value);
 
             cursor = end;
-        } else {
+        } 
+        else if (*cursor == '\'' || *cursor == '\"')
+        {
+            if (in_quote == *cursor)
+                in_quote = 0;
+            else
+                in_quote = *cursor;
+            cursor++;
+        }
+        else 
+        {
             // Handle normal characters
-            size_t len = strlen(result);
+            size_t len = ft_strlen(result);
             result = realloc(result, len + 2);
             result[len] = *cursor;
             result[len + 1] = '\0';
@@ -185,30 +193,27 @@ void	main_loop(t_env **env, int *exit_status)
         i = 0;
 		int in_quote = 0;
       while (input[i] != '\0')
-        {
-            if (input[i] == '\'' && in_quote != 2)
-            {
-                if (in_quote == 1)
-                    in_quote = 0;
-                else
-                    in_quote = 1;
-                i++;
-                continue;
-            }
-            else if (input[i] == '\"' && in_quote != 1)
-            {
-                if (in_quote == 2)
-                    in_quote = 0;
-                else
-                    in_quote = 2;
-                i++;
-                continue;
-            }
-            else if (input[i] == '$' && (in_quote == 0 || in_quote == 2))
-            {
-                expand_env_varss(&input, *env, in_quote);
-            }
-            i++;
+{
+    if (input[i] == '\'' && in_quote != 2)
+    {
+        in_quote = 1;
+        i++;
+        continue;
+    }
+    else if (input[i] == '\"' && in_quote != 1)
+    {
+        if (in_quote == 2)
+            in_quote = 0;
+        else
+            in_quote = 2;
+        i++;
+        continue;
+    }
+    else if (input[i] == '$' && (in_quote == 0 || in_quote == 2))
+    {
+        expand_env_varss(&input, *env, in_quote);
+    }
+    i++;
         }
 		tokens = NULL;
 		if (handle_lexer(lexer(input, &tokens,
