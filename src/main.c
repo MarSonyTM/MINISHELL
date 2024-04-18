@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/18 12:53:58 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 13:49:35 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,69 +66,60 @@ char *append_to_string(char *str, const char *append)
 
     return new_str;
 } 
-void expand_env_varss(char **input, t_env *env, int in_quote)
-{
-    char *new_input = NULL;
-    char *var_start = NULL;
-    char *var_end = NULL;
-    char *var_name = NULL;
-    char *var_value = NULL;
-    char *before_var = NULL;
-    char *after_var = NULL;
+void expand_env_varss(char **input, t_env *env, int in_quote) {
+    char *result = malloc(1);  // Start with an empty string.
+    result[0] = '\0';
 
-    // Scan through the input.
-    for (char *p = *input; *p != '\0'; p++)
-    {
-        // When we encounter a $ character, expand the variable if we're not in quotes.
-        if (*p == '$' && in_quote != 1)
-        {
-            var_start = p;
+    char *cursor = *input;
+    while (*cursor) {
+        if (*cursor == '\'') {
+            // Toggle in_quote status on encountering a single quote
+            in_quote = !in_quote;
+            cursor++;
+            continue;
+        }
 
-            // Find the end of the variable name.
-            for (var_end = p + 1; *var_end != '\0' && *var_end != ' ' && *var_end != '"' && *var_end != '\''; var_end++)
-                ;
-
-            // Duplicate the variable name.
-            var_name = ft_strndup(var_start + 1, var_end - var_start - 1);
-            if (var_name == NULL)
-            {
-                // Handle the error.
-                free(new_input);
-                return;
+        if (*cursor == '$' && !in_quote) {
+            cursor++; // Skip over the '$'
+            if (*cursor == '\0' || isspace(*cursor)) {
+                // Handle the case where $ is the last character or followed by space
+                size_t len = strlen(result);
+                result = realloc(result, len + 2);
+                result[len] = '$';
+                result[len + 1] = '\0';
+                continue;
             }
 
-            // Get the variable value.
-            var_value = get_env_value(var_name, env);
-            if (var_value == NULL)
-            {
-                // Handle the error.
-                free(var_name);
-                free(new_input);
-                return;
+            // Find the end of the variable name
+            char *end = cursor;
+            while (*end && (isalnum(*end) || *end == '_')) {
+                end++;
             }
 
-            // Get the parts of the input before and after the variable.
-            before_var = ft_strndup(*input, var_start - *input);
-            after_var = ft_strdup(var_end);
-
-            // Create the new input by concatenating before_var, var_value, and after_var.
-            new_input = ft_strjoin(before_var, var_value);
-            new_input = ft_strjoin(new_input, after_var);
-
-            // Free the variable value and the variable name.
-            free(var_value);
+            // Extract variable name
+            char *var_name = ft_strndup(cursor, end - cursor);
+            char *var_value = get_env_value(var_name, env);
             free(var_name);
-            free(before_var);
-            free(after_var);
 
-            // Move to the next character.
-            p = var_end;
+            // Append variable value to result
+            char *old_result = result;
+            result = ft_strjoin(result, var_value ? var_value : "");
+            free(old_result);
+            free(var_value);
+
+            cursor = end;
+        } else {
+            // Handle normal characters
+            size_t len = strlen(result);
+            result = realloc(result, len + 2);
+            result[len] = *cursor;
+            result[len + 1] = '\0';
+            cursor++;
         }
     }
 
-    // Replace the input with the new input.
     free(*input);
-    *input = new_input;
+    *input = result;
 }
 
 int	handle_lexer(int lexer_status, t_token **tokens, char **input)
@@ -215,8 +206,6 @@ void	main_loop(t_env **env, int *exit_status)
             }
             else if (input[i] == '$' && (in_quote == 0 || in_quote == 2))
             {
-				printf("%d\n", in_quote);
-                // Perform expansion logic here
                 expand_env_varss(&input, *env, in_quote);
             }
             i++;
