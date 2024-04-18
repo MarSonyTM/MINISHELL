@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:07:12 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/11 13:13:21 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:38:29 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,6 @@ void	process_token(t_command *command)
 	else if ((*current)->type == TOKEN_EXIT_STATUS)
 		command->err_code = handle_exit_status_token(*current_cmd,
 				(*current)->value, command->arg_count);
-	else if ((*current)->type == TOKEN_ENV_VAR)
-		command->err_code = hdl_env_var(*current_cmd, (*current)->value);
 	else if ((*current)->type == TOKEN_PIPE)
 		*current_cmd = handle_pipe_token(command);
 }

@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/18 16:47:52 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:38:56 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef enum e_token_type
 	TOKEN_WHITESPACE,
 	TOKEN_QUOTE,
 	TOKEN_DQUOTE,
-	TOKEN_ENV_VAR,
 	TOKEN_EXIT_STATUS,
 	TOKEN_HEREDOC,
 	T_R_OUT_A, //token redirect out append
@@ -179,7 +178,6 @@ int				add_argument_to_command(t_cmd *current_cmd,
 					const char *arg_value);
 int				handle_redirection(t_cmd *current_cmd,
 					t_token **current, int current_type);
-int				hdl_env_var(t_cmd *current_cmd, char *value);
 int				handle_exit_status_token(t_cmd *current_cmd,
 					char *value, int *arg_count);
 t_cmd			*handle_pipe_token(t_command *command);

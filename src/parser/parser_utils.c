@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:04:35 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/18 11:57:38 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:38:18 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,42 +59,6 @@ int	add_argument_to_command(t_cmd *current_cmd, const char *arg_value)
 		return (1);
 	current_cmd->cmd_arr[arg_count + 1] = NULL;
 	return (0);
-}
-
-int	hdl_env_var(t_cmd *current_cmd, char *value)
-{
-    int		env_var_count;
-    char	**temp;
-    char    **split_value;
-    int     i;
-
-    if (current_cmd == NULL)
-        return (1);
-    env_var_count = 0;
-    split_value = ft_split(value, ' ');
-    if (!split_value)
-        return (1);
-    i = 0;
-    while (split_value[i] != NULL)
-    {
-        while (current_cmd->env_vars
-            && current_cmd->env_vars[env_var_count] != NULL)
-        {
-            env_var_count++;
-        }
-        temp = realloc(current_cmd->env_vars, sizeof(char *) * (env_var_count + 2));
-        if (!temp)
-            return (1);
-        current_cmd->env_vars = temp;
-        current_cmd->env_vars[env_var_count] = ft_strdup(split_value[i]);
-        if (!current_cmd->env_vars[env_var_count])
-            return (1);
-        current_cmd->env_vars[env_var_count + 1] = NULL;
-        printf("Parser env_var: %s\n", current_cmd->env_vars[env_var_count]);
-        i++;
-    }
-    free(split_value);
-    return (0);
 }
 
 int	handle_exit_status(t_cmd *current_cmd, t_token *current)

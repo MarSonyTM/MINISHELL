@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/18 18:34:48 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:38:01 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,9 +225,6 @@ void	main_loop(t_env **env, int *exit_status)
 				case TOKEN_COMMAND:
 					type_str = "Command";
 					break;
-				case TOKEN_ENV_VAR:
-					type_str = "Environment Variable";
-					break;
 				case TOKEN_EXIT_STATUS:
 					type_str = "Exit Status";
 					break;
@@ -258,7 +255,6 @@ void	main_loop(t_env **env, int *exit_status)
 		}
 		print_commands(cmd);
 		free_tokens(&tokens);
-		// expand_env_vars(cmd, *env);
 		*exit_status = executor(cmd, env, *exit_status);
 		reset_free_cmd(&cmd, input);
 	}
