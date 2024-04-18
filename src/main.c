@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/18 17:53:56 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:34:48 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,41 +66,44 @@ char *append_to_string(char *str, const char *append)
 
     return new_str;
 } 
-void expand_env_varss(char **input, t_env *env) {
-    char *result = malloc(1);  // Start with an empty string.
-    result[0] = '\0';
-
+void expand_env_varss(char **input, t_env *env)
+{
+    char *result = NULL;
     char *cursor = *input;
     int in_single_quote = 0;
     int in_double_quote = 0;
     while (*cursor) {
-        if (*cursor == '\"') {
+        if (*cursor == '\"')
+		{
             // Toggle in_double_quote status on encountering a double quote
             in_double_quote = !in_double_quote;
+            // Add the double quote to the result
+            result = append_to_string(result, "\"");
             cursor++;
             continue;
-        } else if (*cursor == '\'') {
+        } else if (*cursor == '\'')
+		{
             // Toggle in_single_quote status on encountering a single quote
             in_single_quote = !in_single_quote;
+            // Add the single quote to the result
+            result = append_to_string(result, "'");
             cursor++;
             continue;
         }
 
         if (*cursor == '$' && !in_single_quote) {
-            cursor++; // Skip over the '$'
-            if (*cursor == '\0' || isspace(*cursor) || *cursor == '$' || (in_double_quote && (!isalnum(*cursor) && *cursor != '_'))) {
-                // Handle the case where $ is the last character or followed by space or another $ or inside double quotes and not followed by a variable name
-                size_t len = ft_strlen(result);
-                result = realloc(result, len + 2);
-                result[len] = '$';
-                result[len + 1] = '\0';
-                if (*cursor != '\0') cursor++;
-                continue;
-            }
+    cursor++; // Skip over the '$'
+    if (*cursor == '\0' || isspace(*cursor) || *cursor == '$' || (in_double_quote && (!isalnum(*cursor) && *cursor != '_'))) {
+        // Handle the case where $ is the last character or followed by space or another $ or inside double quotes and not followed by a variable name
+        result = append_to_string(result, "$");
+        if (*cursor != '\0' && *cursor != '\"' && *cursor != '\'') cursor++;
+        continue;
+    }
 
             // Find the end of the variable name
             char *end = cursor;
-            while (*end && (isalnum(*end) || *end == '_')) {
+            while (*end && (isalnum(*end) || *end == '_'))
+			{
                 end++;
             }
 
@@ -110,24 +113,21 @@ void expand_env_varss(char **input, t_env *env) {
             free(var_name);
 
             // Append variable value to result
-            if (var_value) {
-                char *old_result = result;
-                result = ft_strjoin(result, var_value);
-                free(old_result);
+            if (var_value)
+			{
+                result = append_to_string(result, var_value);
                 free(var_value);
             }
 
             cursor = end;
-        } else {
+        } else
+		{
             // Handle normal characters
-            size_t len = ft_strlen(result);
-            result = realloc(result, len + 2);
-            result[len] = *cursor;
-            result[len + 1] = '\0';
+            char append[2] = {*cursor, '\0'};
+            result = append_to_string(result, append);
             cursor++;
         }
     }
-
     free(*input);
     *input = result;
 }
@@ -192,6 +192,7 @@ void	main_loop(t_env **env, int *exit_status)
     {
         main_handle_input(&input);
 		expand_env_varss(&input, *env);
+		printf("EXPAND: %s\n", input);
 		tokens = NULL;
 		if (handle_lexer(lexer(input, &tokens,
 					&lexer_instance), &tokens, &input))
