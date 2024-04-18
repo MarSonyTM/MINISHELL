@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/17 16:33:49 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:47:52 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,5 @@ char			*get_env_value(char *var_name, t_env *env);
 int				get_cmd_arr_size(char ***cmd_arr);
 char			**create_new_cmd_arr(char ***cmd_arr, int size, char *value);
 void			append_to_cmd_arr(char ***cmd_arr, char *value);
-void			expand_env_vars(t_cmd *cmd, t_env *env);
 
 #endif
