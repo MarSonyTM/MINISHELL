@@ -6,12 +6,11 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/18 19:41:46 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:36:48 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
 
 int	handle_lexer(int lexer_status, t_token **tokens, char **input)
 {
@@ -65,14 +64,21 @@ void	main_handle_input(char **input)
 void	main_loop(t_env **env, int *exit_status)
 {
 	char		*input;
+	char		*cursor;
+	char		*result;
 	t_token		*tokens;
 	t_cmd		*cmd;
 	t_lexer		lexer_instance;
+	t_expansion	exp;
 
 	while (1)
 	{
 		main_handle_input(&input);
-		expand_env_varss(&input, *env);
+		cursor = input;
+		result = NULL;
+		exp.cursor = &cursor;
+		exp.result = &result;
+		expand_env_varss(*env, &exp, &input);
 		tokens = NULL;
 		if (handle_lexer(lexer(input, &tokens,
 					&lexer_instance), &tokens, &input))
@@ -88,7 +94,6 @@ void	main_loop(t_env **env, int *exit_status)
 		reset_free_cmd(&cmd, input);
 	}
 }
-
 
 int	main(int argc, char **argv, char **envp)
 {

@@ -6,47 +6,45 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 19:34:47 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/18 19:41:51 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:29:52 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static void	handle_quotes(char **cursor,
-				int *in_single_quote, int *in_double_quote, char **result)
+static void	handle_quotes(t_expansion *exp,
+				int *in_single_quote, int *in_double_quote)
 {
-	if (**cursor == '\"')
+	if (**exp->cursor == '\"')
 	{
 		*in_double_quote = !(*in_double_quote);
-		*result = append_to_string(*result, "\"");
-		(*cursor)++;
+		*exp->result = append_to_string(*exp->result, "\"");
+		(*exp->cursor)++;
 	}
-	else if (**cursor == '\'')
+	else if (**exp->cursor == '\'')
 	{
 		*in_single_quote = !(*in_single_quote);
-		*result = append_to_string(*result, "'");
-		(*cursor)++;
+		*exp->result = append_to_string(*exp->result, "'");
+		(*exp->cursor)++;
 	}
 }
 
-void	expand_env_varss(char **input, t_env *env)
+void	expand_env_varss(t_env *env, t_expansion *exp, char **input)
 {
-	char	*result;
-	char	*cursor;
 	int		in_single_quote;
 	int		in_double_quote;
 
-	result = NULL;
-	cursor = *input;
+	*exp->result = NULL;
+	*exp->cursor = *input;
 	in_single_quote = 0;
 	in_double_quote = 0;
-	while (*cursor)
+	while (**exp->cursor)
 	{
-		handle_quotes(&cursor, &in_single_quote, &in_double_quote, &result);
-		handle_dollar(&cursor, in_single_quote, in_double_quote, &result, env);
-		handle_space(&cursor, in_single_quote, in_double_quote, &result);
-		handle_normal_char(&cursor, &result);
+		handle_quotes(exp, &in_single_quote, &in_double_quote);
+		handle_dollar(exp, in_single_quote, in_double_quote, env);
+		handle_space(exp, in_single_quote, in_double_quote);
+		handle_normal_char(exp);
 	}
 	free(*input);
-	*input = result;
+	*input = *exp->result;
 }

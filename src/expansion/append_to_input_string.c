@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 20:32:46 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/04/18 19:15:03 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:31:09 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,3 @@ char	*get_env_value(char *var_name, t_env *env)
 	}
 	return (NULL);
 }
-

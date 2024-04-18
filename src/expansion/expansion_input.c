@@ -6,78 +6,75 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:50:27 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/04/18 19:44:01 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:30:57 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-
-static void	handle_dollar_special_cases(char **cursor,
-		int in_double_quote, char **result)
+static void	handle_dollar_special_cases(t_expansion *exp,
+		int in_double_quote)
 {
-	if (**cursor == '\0' || isspace(**cursor)
-		|| **cursor == '$' || (in_double_quote
-			&& (!isalnum(**cursor) && **cursor != '_')))
+	if (**exp->cursor == '\0' || isspace(**exp->cursor)
+		|| **exp->cursor == '$' || (in_double_quote
+			&& (!isalnum(**exp->cursor) && **exp->cursor != '_')))
 	{
-		*result = append_to_string(*result, "$");
-		if (**cursor != '\0' && **cursor != '\"' && **cursor != '\'')
-			(*cursor)++;
+		*exp->result = append_to_string(*exp->result, "$");
+		if (**exp->cursor != '\0'
+			&& **exp->cursor != '\"' && **exp->cursor != '\'')
+			(*exp->cursor)++;
 	}
 }
 
-static void	handle_dollar_normal_case(char **cursor, char **result, t_env *env)
+static void	handle_dollar_normal_case(t_expansion *exp, t_env *env)
 {
 	char	*end;
 	char	*var_name;
 	char	*var_value;
 
-	end = *cursor;
+	end = *exp->cursor;
 	while (*end && (isalnum(*end) || *end == '_'))
 	{
 		end++;
 	}
-	var_name = ft_strndup(*cursor, end - *cursor);
+	var_name = ft_strndup(*exp->cursor, end - *exp->cursor);
 	var_value = get_env_value(var_name, env);
 	free(var_name);
 	if (var_value)
 	{
-		*result = append_to_string(*result, var_value);
+		*exp->result = append_to_string(*exp->result, var_value);
 		free(var_value);
 	}
-	*cursor = end;
+	*exp->cursor = end;
 }
 
-void	handle_dollar(char **cursor,
-            int in_single_quote, int in_double_quote, char **result, t_env *env)
+void	handle_dollar(t_expansion *exp,
+		int in_single_quote, int in_double_quote, t_env *env)
 {
-	if (**cursor == '$' && !in_single_quote)
+	if (**exp->cursor == '$' && !in_single_quote)
 	{
-		(*cursor)++;
-		handle_dollar_special_cases(cursor, in_double_quote, result);
-		handle_dollar_normal_case(cursor, result, env);
+		(*exp->cursor)++;
+		handle_dollar_special_cases(exp, in_double_quote);
+		handle_dollar_normal_case(exp, env);
 	}
 }
 
-void	handle_space(char **cursor,
-			int in_single_quote, int in_double_quote, char **result)
+void	handle_space(t_expansion *exp,
+			int in_single_quote, int in_double_quote)
 {
-	if (**cursor == ' ' && (in_double_quote || in_single_quote))
+	if (**exp->cursor == ' ' && (in_double_quote || in_single_quote))
 	{
-		*result = append_to_string(*result, " ");
-		(*cursor)++;
+		*exp->result = append_to_string(*exp->result, " ");
+		(*exp->cursor)++;
 	}
 }
 
-void	handle_normal_char(char **cursor, char **result)
+void	handle_normal_char(t_expansion *exp)
 {
 	char	append[2];
 
-	append[0] = **cursor;
+	append[0] = **exp->cursor;
 	append[1] = '\0';
-
-	*result = append_to_string(*result, append);
-	(*cursor)++;
+	*exp->result = append_to_string(*exp->result, append);
+	(*exp->cursor)++;
 }
-
-

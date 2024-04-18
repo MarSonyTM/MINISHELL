@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/18 19:39:37 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:25:52 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,14 @@
 # define ERR_VAL "not a valid identifier"
 
 extern sig_atomic_t	g_signal_caught;
+
+/*for expansion before lexer*/
+
+typedef struct s_expansion
+{
+	char	**cursor;
+	char	**result;
+}	t_expansion;
 
 /* holds information of each separate token */
 
@@ -267,12 +275,12 @@ void			check_blocked_signals(void);
 /* expansion */
 void			process_env_var(char *var_start, t_cmd *cmd, t_env *env);
 char			*get_env_value(char *var_name, t_env *env);
-void			expand_env_varss(char **input, t_env *env);
+void			expand_env_varss(t_env *env, t_expansion *exp, char **input);
 char			*append_to_string(char *str, const char *append);
-void			handle_dollar(char **cursor,
-          			  int in_single_quote, int in_double_quote, char **result, t_env *env);
-void			handle_space(char **cursor,
-					int in_single_quote, int in_double_quote, char **result);
-void			handle_normal_char(char **cursor, char **result);
+void			handle_dollar(t_expansion *exp,
+					int in_single_quote, int in_double_quote, t_env *env);
+void			handle_space(t_expansion *exp,
+					int in_single_quote, int in_double_quote);
+void			handle_normal_char(t_expansion *exp);
 
 #endif
