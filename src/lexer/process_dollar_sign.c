@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:29:15 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/08 12:51:18 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 12:58:27 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ void	process_dollar_conditions(char *input, char **buffer,
 	}
 	else if (input[lexer->i + 1] == '\0' || !ft_isalpha(input[lexer->i + 1]))
 	{
-		finalize_buffer_and_add_token(buffer, tokens,
-			lexer, "$");
+		(*buffer)[(lexer->buf_index)++] = input[lexer->i];
 	}
 	else
 	{
