@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/18 18:38:56 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:39:37 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,11 +265,14 @@ void			handle_sigquit(int sig);
 void			check_blocked_signals(void);
 
 /* expansion */
-void			expand_env_vars(t_cmd *cmd, t_env *env);
 void			process_env_var(char *var_start, t_cmd *cmd, t_env *env);
 char			*get_env_value(char *var_name, t_env *env);
-int				get_cmd_arr_size(char ***cmd_arr);
-char			**create_new_cmd_arr(char ***cmd_arr, int size, char *value);
-void			append_to_cmd_arr(char ***cmd_arr, char *value);
+void			expand_env_varss(char **input, t_env *env);
+char			*append_to_string(char *str, const char *append);
+void			handle_dollar(char **cursor,
+          			  int in_single_quote, int in_double_quote, char **result, t_env *env);
+void			handle_space(char **cursor,
+					int in_single_quote, int in_double_quote, char **result);
+void			handle_normal_char(char **cursor, char **result);
 
 #endif
