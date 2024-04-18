@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/17 16:54:14 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/18 16:52:18 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ void	main_loop(t_env **env, int *exit_status)
 		tokens = NULL;
 		if (handle_lexer(lexer(input, &tokens,
 					&lexer_instance), &tokens, &input))
+		{
+			*exit_status = 1;
 			continue ;
+		}
 		cmd = NULL;
 		if (handle_parser(parse(tokens, &cmd, *env), &cmd, &tokens, &input))
 		{

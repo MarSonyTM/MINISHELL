@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:08 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/16 15:52:48 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/18 16:48:45 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 void	echo_cmd(t_cmd *cmd)
 {
-	int	i;
-	int	newline;
+	int		i;
+	int		newline;
+	char	*tmp;
 
 	newline = 1;
 	i = 1;
@@ -27,7 +28,11 @@ void	echo_cmd(t_cmd *cmd)
 	while (cmd->cmd_arr[i] != NULL)
 	{
 		if (ft_strncmp(cmd->cmd_arr[i], "$?", 3) == 0)
-			ft_putstr_fd(ft_itoa(cmd->prev_exit_status), 1);
+		{
+			tmp = ft_itoa(cmd->prev_exit_status);
+			ft_putstr_fd(tmp, 1);
+			free(tmp);
+		}
 		else
 			ft_putstr_fd(cmd->cmd_arr[i], 1);
 		if (cmd->cmd_arr[i + 1] != NULL)

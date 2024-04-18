@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/17 16:33:49 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:52:24 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,9 +249,9 @@ int				handle_pipe(t_exec *exec, int i, char *cmd_path);
 int				duplicate_fd(int old_fd, int new_fd, int custom);
 char			*ft_getenv(const char *name, t_env *env);
 t_env			*add_env_node(t_env **env, char *key, char *value);
-void			add_empty_env_var(char *cmd, t_env **env);
-void			add_new_env_var(char *cmd, t_env **env, int j);
-void			concatenate_env_var(char *cmd, t_env **env, int j);
+int				add_empty_env_var(char *cmd, t_env **env);
+int				add_new_env_var(char *cmd, t_env **env, int j);
+int				concatenate_env_var(char *cmd, t_env **env, int j);
 void			handle_export_args(t_cmd *cmd, t_env **env, int i);
 int				get_last_exit_status(t_cmd *cmd, t_exec *exec);
 int				allocate_memory(t_exec *exec, t_cmd *cmd, t_env **env);

@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:50 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/16 15:50:54 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/18 15:37:33 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,18 @@ t_env	*create_env_node(char *envp, int *j)
 	if (!new)
 		return (NULL);
 	new->key = get_key(envp, j);
+	if (!new->key)
+	{
+		free(new);
+		return (NULL);
+	}
 	new->value = get_value(envp, j);
+	if (!new->value)
+	{
+		free(new->key);
+		free(new);
+		return (NULL);
+	}
 	new->next = NULL;
 	return (new);
 }
