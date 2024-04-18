@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/18 18:38:01 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:48:30 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,63 +73,63 @@ void expand_env_varss(char **input, t_env *env)
     int in_single_quote = 0;
     int in_double_quote = 0;
     while (*cursor) {
-        if (*cursor == '\"')
-		{
-            // Toggle in_double_quote status on encountering a double quote
-            in_double_quote = !in_double_quote;
-            // Add the double quote to the result
-            result = append_to_string(result, "\"");
-            cursor++;
-            continue;
-        } else if (*cursor == '\'')
-		{
-            // Toggle in_single_quote status on encountering a single quote
-            in_single_quote = !in_single_quote;
-            // Add the single quote to the result
-            result = append_to_string(result, "'");
-            cursor++;
-            continue;
-        }
-
-        if (*cursor == '$' && !in_single_quote) {
-    cursor++; // Skip over the '$'
-    if (*cursor == '\0' || isspace(*cursor) || *cursor == '$' || (in_double_quote && (!isalnum(*cursor) && *cursor != '_'))) {
-        // Handle the case where $ is the last character or followed by space or another $ or inside double quotes and not followed by a variable name
-        result = append_to_string(result, "$");
-        if (*cursor != '\0' && *cursor != '\"' && *cursor != '\'') cursor++;
+    if (*cursor == '\"') {
+        // Toggle in_double_quote status on encountering a double quote
+        in_double_quote = !in_double_quote;
+        // Add the double quote to the result
+        result = append_to_string(result, "\"");
+        cursor++;
+        continue;
+    } else if (*cursor == '\'') {
+        // Toggle in_single_quote status on encountering a single quote
+        in_single_quote = !in_single_quote;
+        // Add the single quote to the result
+        result = append_to_string(result, "'");
+        cursor++;
         continue;
     }
 
-            // Find the end of the variable name
-            char *end = cursor;
-            while (*end && (isalnum(*end) || *end == '_'))
-			{
-                end++;
-            }
-
-            // Extract variable name
-            char *var_name = ft_strndup(cursor, end - cursor);
-            char *var_value = get_env_value(var_name, env);
-            free(var_name);
-
-            // Append variable value to result
-            if (var_value)
-			{
-                result = append_to_string(result, var_value);
-                free(var_value);
-            }
-
-            cursor = end;
-        } else
-		{
-            // Handle normal characters
-            char append[2] = {*cursor, '\0'};
-            result = append_to_string(result, append);
-            cursor++;
+    if (*cursor == '$' && !in_single_quote) {
+        cursor++; // Skip over the '$'
+        if (*cursor == '\0' || isspace(*cursor) || *cursor == '$' || (in_double_quote && (!isalnum(*cursor) && *cursor != '_'))) {
+            // Handle the case where $ is the last character or followed by space or another $ or inside double quotes and not followed by a variable name
+            result = append_to_string(result, "$");
+            if (*cursor != '\0' && *cursor != '\"' && *cursor != '\'') cursor++;
+            continue;
         }
+
+        // Find the end of the variable name
+        char *end = cursor;
+        while (*end && (isalnum(*end) || *end == '_')) {
+            end++;
+        }
+
+        // Extract variable name
+        char *var_name = ft_strndup(cursor, end - cursor);
+        char *var_value = get_env_value(var_name, env);
+        free(var_name);
+
+        // Append variable value to result
+        if (var_value) {
+            result = append_to_string(result, var_value);
+            free(var_value);
+        }
+
+        cursor = end;
+    } else if (*cursor == ' ' && (in_double_quote || in_single_quote)) {
+        // Handle the case where a space is inside quotes
+        result = append_to_string(result, " ");
+        cursor++;
+    } else {
+        // Handle normal characters
+        char append[2] = {*cursor, '\0'};
+        result = append_to_string(result, append);
+        cursor++;
     }
-    free(*input);
-    *input = result;
+}
+
+free(*input);
+*input = result;
 }
 
 int	handle_lexer(int lexer_status, t_token **tokens, char **input)
