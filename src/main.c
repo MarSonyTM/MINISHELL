@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/18 17:10:18 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/18 17:53:56 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,25 @@ void expand_env_varss(char **input, t_env *env) {
     result[0] = '\0';
 
     char *cursor = *input;
+    int in_single_quote = 0;
+    int in_double_quote = 0;
     while (*cursor) {
-        if (*cursor == '$') {
+        if (*cursor == '\"') {
+            // Toggle in_double_quote status on encountering a double quote
+            in_double_quote = !in_double_quote;
+            cursor++;
+            continue;
+        } else if (*cursor == '\'') {
+            // Toggle in_single_quote status on encountering a single quote
+            in_single_quote = !in_single_quote;
+            cursor++;
+            continue;
+        }
+
+        if (*cursor == '$' && !in_single_quote) {
             cursor++; // Skip over the '$'
-            if (*cursor == '\0' || isspace(*cursor) || *cursor == '$') {
-                // Handle the case where $ is the last character or followed by space or another $
+            if (*cursor == '\0' || isspace(*cursor) || *cursor == '$' || (in_double_quote && (!isalnum(*cursor) && *cursor != '_'))) {
+                // Handle the case where $ is the last character or followed by space or another $ or inside double quotes and not followed by a variable name
                 size_t len = ft_strlen(result);
                 result = realloc(result, len + 2);
                 result[len] = '$';
