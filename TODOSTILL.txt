@@ -60,3 +60,4 @@ CTRL+C does nto work
 2. should output ls, then need to press enter as many times as there are cats
 
 Some more protections using funcheck
+isalum needs ft_isalum but not from libft , that one is altered for another function,
