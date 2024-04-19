@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:40:14 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/17 17:17:44 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/19 14:16:04 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 		redirection(cmd, 2, 0);
 	envp = env_to_array(cmd, env);
 	if (execve(cmd->cmd_path, cmd->cmd_arr, envp) == -1)
+	{
+		free_array(envp);
 		exit (cmd->exit_status);
+	}
 }
 
 static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)

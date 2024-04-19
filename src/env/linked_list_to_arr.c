@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:08 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/16 15:51:10 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/19 14:16:07 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	**env_to_array(t_cmd *cmd, t_env **env)
 		if (!envp[i])
 		{
 			clean_up(cmd, *env);
-			free(envp);
+			free_array(envp);
 			return (NULL);
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/18 15:52:24 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/19 14:16:13 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,7 @@ void			close_fds(int *open_fds, int processes);
 void			close_and_free(t_exec *exec);
 void			error(char *msg, char *command, char *argument, int custom);
 void			free_array(char **arr);
+void			free_env(t_env *env);
 
 /* utils */
 
