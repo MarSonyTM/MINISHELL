@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/18 20:25:52 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:56:27 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,5 +282,6 @@ void			handle_dollar(t_expansion *exp,
 void			handle_space(t_expansion *exp,
 					int in_single_quote, int in_double_quote);
 void			handle_normal_char(t_expansion *exp);
+int				ft_isalnum_expansion(int c);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_input.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:50:27 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/04/18 20:30:57 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:56:55 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static void	handle_dollar_special_cases(t_expansion *exp,
 		int in_double_quote)
 {
-	if (**exp->cursor == '\0' || isspace(**exp->cursor)
+	if (**exp->cursor == '\0' || ft_isspace(**exp->cursor)
 		|| **exp->cursor == '$' || (in_double_quote
-			&& (!isalnum(**exp->cursor) && **exp->cursor != '_')))
+			&& (!ft_isalnum_expansion(**exp->cursor) && **exp->cursor != '_')))
 	{
 		*exp->result = append_to_string(*exp->result, "$");
 		if (**exp->cursor != '\0'
@@ -33,7 +33,7 @@ static void	handle_dollar_normal_case(t_expansion *exp, t_env *env)
 	char	*var_value;
 
 	end = *exp->cursor;
-	while (*end && (isalnum(*end) || *end == '_'))
+	while (*end && (ft_isalnum_expansion(*end) || *end == '_'))
 	{
 		end++;
 	}
