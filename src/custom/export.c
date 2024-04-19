@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:43 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/18 15:58:36 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/19 17:11:26 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,20 +74,10 @@ int	add_new_env_var(char *cmd, t_env **env, int j)
 	value = ft_strdup(cmd + j + 1);
 	if (!value)
 		return (1);
-	tmp = *env;
-	while (tmp != NULL)
-	{
-		if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
-		{
-			free(tmp->key);
-			free(tmp->value);
-			tmp->key = key;
-			tmp->value = value;
-			break ;
-		}
-		tmp = tmp->next;
-	}
-	if (!tmp)
+	tmp = find_env_var(*env, key);
+	if (tmp)
+		update_env_var(tmp, key, value);
+	else
 	{
 		*env = add_env_node(env, key, value);
 		if (!*env)
@@ -117,9 +107,7 @@ int	concatenate_env_var(char *cmd, t_env **env, int j)
 	value = get_value_concat(cmd, &j);
 	if (!value)
 		return (1);
-	tmp = *env;
-	while (tmp != NULL && ft_strncmp(tmp->key, key, ft_strlen(key)))
-		tmp = tmp->next;
+	tmp = find_env_var(*env, key);
 	if (tmp)
 	{
 		tmp->value = ft_strjoin(tmp->value, value);

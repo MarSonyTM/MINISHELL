@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/19 14:15:59 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/19 16:33:20 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	handle_lexer(int lexer_status, t_token **tokens, char **input, t_env *env)
 	return (0);
 }
 
-int	handle_parser(int parse_status, t_cmd **cmd, t_token **tokens, char **input, t_env *env)
+int	handle_parser(int parse_status, t_cmd **cmd, t_token **tokens, char **input,
+					t_env *env)
 {
 	if (parse_status == 1)
 	{
@@ -81,7 +82,8 @@ void	main_loop(t_env **env, int *exit_status)
 			continue ;
 		}
 		cmd = NULL;
-		if (handle_parser(parse(tokens, &cmd, *env), &cmd, &tokens, &input, *env))
+		if (handle_parser(parse(tokens, &cmd, *env),
+				&cmd, &tokens, &input, *env))
 		{
 			*exit_status = 127;
 			continue ;

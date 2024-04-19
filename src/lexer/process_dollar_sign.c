@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:29:15 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/18 16:42:38 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/19 16:34:08 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	finalize_buffer_and_add_token(char **buffer,
 	t_lexer *lexer, char *tokenValue)
 {
 	char	*tmp_buffer;
-	char	*tmp_tokenValue;
+	char	*tmp_token_value;
 
 	if (lexer->buf_index > 0)
 	{
@@ -31,12 +31,12 @@ int	finalize_buffer_and_add_token(char **buffer,
 	}
 	if (tokenValue != NULL)
 	{
-		tmp_tokenValue = ft_strdup(tokenValue);
+		tmp_token_value = ft_strdup(tokenValue);
 		if (add_token(*tokens,
 				determine_token_type(tokenValue, lexer),
-				tmp_tokenValue) == 1)
-			return (free(tmp_tokenValue), 1);
-		free(tmp_tokenValue);
+				tmp_token_value) == 1)
+			return (free(tmp_token_value), 1);
+		free(tmp_token_value);
 	}
 	(lexer->token_count)++;
 	return (0);

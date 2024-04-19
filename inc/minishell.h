@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/19 14:16:13 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/19 16:51:51 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,8 @@ int				create_temp_file(char *temp_file_name, int temp_file_num);
 
 /*Functions prototypes for Execution*/
 
-void			custom_exec(t_cmd *cmd, t_env **env, t_exec **exec, int stdout_fd);
+void			custom_exec(t_cmd *cmd, t_env **env, t_exec **exec,
+					int stdout_fd);
 int				executor(t_cmd *cmd, t_env **env, int exit_status);
 t_env			*arr_to_linked_list(char **envp);
 
@@ -261,6 +262,8 @@ void			free_cmds(t_cmd **cmd);
 void			reset_free_cmd(t_cmd **cmd, char *input);
 void			check_args(int argc, char **argv);
 void			init_env_signals(t_env **env, char **envp);
+void			update_env_var(t_env *env_var, char *key, char *value);
+t_env			*find_env_var(t_env *env, char *key);
 
 /* signal management */
 void			handle_sigint(int sig);
