@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/19 17:56:27 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/19 18:51:21 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ typedef enum e_token_type
 	TOKEN_REDIRECT_IN,
 	TOKEN_INPUT,
 	TOKEN_OUTPUT,
-	T_R_OT, //token redirect out 
+	T_R_OT,
 	TOKEN_DOUBLE_REDIRECT_OUT,
 	TOKEN_WHITESPACE,
 	TOKEN_QUOTE,
 	TOKEN_DQUOTE,
 	TOKEN_EXIT_STATUS,
 	TOKEN_HEREDOC,
-	T_R_OUT_A, //token redirect out append
+	T_R_OUT_A,
 	TOKEN_COMMA,
 	TOKEN_ERROR
 }	t_token_type;
@@ -74,7 +74,7 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
-	struct s_token	*next; // For linked list structure
+	struct s_token	*next;
 }	t_token;
 
 /* holds information of each separate environment variable */
@@ -88,13 +88,13 @@ typedef struct s_env
 /* holds information of each separate command / child process */
 typedef struct s_cmd
 {
-	char			*cmd_path; //for execve, else NULL
-	char			**cmd_arr; //holds flags and arguments
-	char			**env_vars; //for env var expansion, else NULL
-	char			*exit_status_token; //for exit status expansion, else NULL
-	char			*input; //for input redirection, else NULL
-	char			*output; //for output redirection, else NULL
-	char			*redirection_append; //for output rdrction append,else NULL
+	char			*cmd_path;
+	char			**cmd_arr;
+	char			**env_vars;
+	char			*exit_status_token;
+	char			*input;
+	char			*output;
+	char			*redirection_append;
 	int				exit_status;
 	int				prev_exit_status;
 	int				parse_status;
@@ -135,6 +135,16 @@ typedef struct s_lexer
 	bool	quote_error;
 	bool	lexer_error;
 }	t_lexer;
+
+typedef struct s_main_loop {
+	char		*input;
+	char		*cursor;
+	char		*result;
+	t_token		*tokens;
+	t_cmd		*cmd;
+	t_lexer		lexer_instance;
+	t_expansion	exp;
+}	t_main_loop;
 
 /*Functions prototypes for Lexer*/
 
@@ -221,7 +231,8 @@ int				create_temp_file(char *temp_file_name, int temp_file_num);
 
 /*Functions prototypes for Execution*/
 
-void			custom_exec(t_cmd *cmd, t_env **env, t_exec **exec, int stdout_fd);
+void			custom_exec(t_cmd *cmd,
+					t_env **env, t_exec **exec, int stdout_fd);
 int				executor(t_cmd *cmd, t_env **env, int exit_status);
 t_env			*arr_to_linked_list(char **envp);
 

@@ -3,50 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/18 20:36:48 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/19 18:49:10 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-int	handle_lexer(int lexer_status, t_token **tokens, char **input)
-{
-	if (lexer_status == 1)
-	{
-		free_tokens(tokens);
-		free(*input);
-		exit(1);
-	}
-	else if (lexer_status == 2)
-	{
-		free_tokens(tokens);
-		free(*input);
-		return (1);
-	}
-	return (0);
-}
-
-int	handle_parser(int parse_status, t_cmd **cmd, t_token **tokens, char **input)
-{
-	if (parse_status == 1)
-	{
-		free_cmds(cmd);
-		free_tokens(tokens);
-		free(*input);
-		exit(1);
-	}
-	else if (parse_status == 2)
-	{
-		free_cmds(cmd);
-		free_tokens(tokens);
-		free(*input);
-		return (1);
-	}
-	return (0);
-}
 
 void	main_handle_input(char **input)
 {
@@ -61,37 +25,47 @@ void	main_handle_input(char **input)
 	add_history(*input);
 }
 
+void	handle_input_and_expansion(t_env **env, t_main_loop *loop)
+{
+	main_handle_input(&loop->input);
+	loop->cursor = loop->input;
+	loop->result = NULL;
+	loop->exp.cursor = &loop->cursor;
+	loop->exp.result = &loop->result;
+	expand_env_varss(*env, &loop->exp, &loop->input);
+}
+
+int	handle_lexer_and_parser(t_env **env, t_main_loop *loop)
+{
+	loop->tokens = NULL;
+	if (handle_lexer(lexer(loop->input,
+				&loop->tokens, &loop->lexer_instance),
+			&loop->tokens, &loop->input))
+		return (1);
+	loop->cmd = NULL;
+	if (handle_parser(parse(loop->tokens,
+				&loop->cmd, *env), &loop->cmd, &loop->tokens, &loop->input))
+	{
+		return (1);
+	}
+	return (0);
+}
+
 void	main_loop(t_env **env, int *exit_status)
 {
-	char		*input;
-	char		*cursor;
-	char		*result;
-	t_token		*tokens;
-	t_cmd		*cmd;
-	t_lexer		lexer_instance;
-	t_expansion	exp;
+	t_main_loop	loop;
 
 	while (1)
 	{
-		main_handle_input(&input);
-		cursor = input;
-		result = NULL;
-		exp.cursor = &cursor;
-		exp.result = &result;
-		expand_env_varss(*env, &exp, &input);
-		tokens = NULL;
-		if (handle_lexer(lexer(input, &tokens,
-					&lexer_instance), &tokens, &input))
-			continue ;
-		cmd = NULL;
-		if (handle_parser(parse(tokens, &cmd, *env), &cmd, &tokens, &input))
+		handle_input_and_expansion(env, &loop);
+		if (handle_lexer_and_parser(env, &loop))
 		{
 			*exit_status = 127;
 			continue ;
 		}
-		free_tokens(&tokens);
-		*exit_status = executor(cmd, env, *exit_status);
-		reset_free_cmd(&cmd, input);
+		free_tokens(&loop.tokens);
+		*exit_status = executor(loop.cmd, env, *exit_status);
+		reset_free_cmd(&loop.cmd, loop.input);
 	}
 }
 
