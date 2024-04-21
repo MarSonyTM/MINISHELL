@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:40:04 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/17 16:34:04 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/21 08:38:43 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,21 @@ int	process_pipe(char *buffer, t_token ***tokens, t_lexer *lexer)
 }
 
 void	process_quotes(char currentChar,
-		char **buffer, t_lexer *lexer)
+        char **buffer, t_lexer *lexer)
 {
-	if (lexer->in_quote == 0)
-	{
-		if (currentChar == '\'')
-			lexer->in_quote = 1;
-		else
-			lexer->in_quote = 2;
-	}
-	else if ((lexer->in_quote == 1 && currentChar == '\'')
-		|| (lexer->in_quote == 2 && currentChar == '\"'))
-		lexer->in_quote = 0;
-	else
-		(*buffer)[lexer->buf_index++] = currentChar;
+    if (lexer->in_quote == 0)
+    {
+        if (currentChar == '\'')
+            lexer->in_quote = 1;
+        else
+            lexer->in_quote = 2;
+    }
+    else if ((lexer->in_quote == 1 && currentChar == '\'')
+        || (lexer->in_quote == 2 && currentChar == '\"'))
+    {
+        lexer->in_quote = 0;
+        (*buffer)[lexer->buf_index++] = ' '; // Add null terminator when closing quote is found
+    }
+    else
+        (*buffer)[lexer->buf_index++] = currentChar;
 }
