@@ -6,11 +6,12 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/22 14:36:14 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:20:57 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+#include <stdio.h>
 
 void	print_commands(t_cmd *cmd)
 {
@@ -58,7 +59,7 @@ void	handle_input_and_expansion(t_env **env, t_main_loop *loop)
 	printf("input: %s\n", loop->input);
 }
 
-int	handle_lexer_and_parser(t_env **env, t_main_loop *loop, int *exit_status)
+int	handle_lexer_and_parser(t_env **env, t_main_loop *loop)
 {
 	loop->tokens = NULL;
 	if (handle_lexer(lexer(loop->input,
@@ -132,7 +133,7 @@ int	main_loop(t_env **env, int *exit_status)
 	while (1)
 	{
 		handle_input_and_expansion(env, &loop);
-		if (handle_lexer_and_parser(env, &loop, exit_status))
+		if (handle_lexer_and_parser(env, &loop))
 		{
 			*exit_status = 127;
 			continue ;
