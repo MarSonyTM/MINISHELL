@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:45:34 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 13:40:50 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:45:30 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	lexer(char *input, t_token **tokens, t_lexer *lexer)
 	lexer->in_quote = 0;
 	lexer->quote_error = false;
 	lexer->lexer_error = false;
+	if(input == NULL)
+		return (2);
 	lexer->buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
 	if (lexer->buffer == NULL)
 		return (1);
@@ -30,4 +32,4 @@ int	lexer(char *input, t_token **tokens, t_lexer *lexer)
 	return (finalize_lexer(&lexer->buffer,
 			&tokens, lexer,
 			lexer->quote_error));
-}
+ }
