@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:36:50 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 13:41:01 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:17:09 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*get_var_name(const char **input)
 
 	(*input)++;
 	start = *input;
-	while (**input && **input != ' ')
+	while (**input && (isalnum(**input) || **input == '_'))
 		(*input)++;
 	return (ft_substr(start, 0, *input - start));
 }

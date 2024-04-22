@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/22 14:32:57 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:17:55 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,6 @@ typedef struct s_main_loop
 int				handle_lexer(int lexer_status, t_token **tokens, char **input);
 int				handle_parser(int parse_status,
 					t_cmd **cmd, t_token **tokens, char **input);
-
 
 /*Functions prototypes for Lexer*/
 

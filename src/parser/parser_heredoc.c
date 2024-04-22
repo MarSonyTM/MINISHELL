@@ -6,12 +6,11 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/22 14:59:03 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:59:08 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-#include <readline/readline.h>
 
 char	*handle_input_buffer(char *input_buffer,
 		char *heredoc_input, t_command *command, int fd)
