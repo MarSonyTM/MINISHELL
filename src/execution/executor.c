@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:40:14 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/19 14:16:04 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/22 21:55:51 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	init_exec(t_exec *exec, t_cmd *cmd, t_env **env)
 	exec->fd[1] = -1;
 	exec->old_fd[0] = -1;
 	exec->old_fd[1] = -1;
-	if (allocate_memory(exec, cmd, env) == 1)
+	if (allocate_memory(exec) == 1)
 	{
 		clean_up(cmd, *env);
 		close_and_free(exec);

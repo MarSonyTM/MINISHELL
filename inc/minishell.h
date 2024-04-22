@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/19 16:51:51 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/22 21:56:09 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,7 @@ int				add_new_env_var(char *cmd, t_env **env, int j);
 int				concatenate_env_var(char *cmd, t_env **env, int j);
 void			handle_export_args(t_cmd *cmd, t_env **env, int i);
 int				get_last_exit_status(t_cmd *cmd, t_exec *exec);
-int				allocate_memory(t_exec *exec, t_cmd *cmd, t_env **env);
+int				allocate_memory(t_exec *exec);
 void			handle_fds(t_exec *exec, int i);
 void			free_cmds(t_cmd **cmd);
 void			reset_free_cmd(t_cmd **cmd, char *input);

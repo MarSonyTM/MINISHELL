@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:43 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/19 17:11:26 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/22 22:44:35 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,18 @@ int	add_new_env_var(char *cmd, t_env **env, int j)
 	return (0);
 }
 
+int	no_colon(char *cmd, t_env **env, int j)
+{
+	char	*key;
+
+	key = get_key(cmd, &j);
+	if (!key)
+		return (1);
+	if (add_empty_env_var(key, env) == 1)
+		return (1);
+	return (0);
+}
+
 int	concatenate_env_var(char *cmd, t_env **env, int j)
 {
 	t_env	*tmp;
@@ -93,20 +105,13 @@ int	concatenate_env_var(char *cmd, t_env **env, int j)
 	char	*value;
 
 	if (ft_strchr(cmd, ':') == NULL)
-	{
-		key = get_key(cmd, &j);
-		if (!key)
-			return (1);
-		if (add_empty_env_var(key, env) == 1)
-			return (1);
-		return (0);
-	}
+		return (no_colon(cmd, env, j) == 1);
 	key = get_key(cmd, &j);
 	if (!key)
 		return (1);
 	value = get_value_concat(cmd, &j);
 	if (!value)
-		return (1);
+		return (free(key), 1);
 	tmp = find_env_var(*env, key);
 	if (tmp)
 	{
@@ -139,18 +144,14 @@ int	export_cmd(t_cmd *cmd, t_env **env)
 	{
 		if (ft_strchr(cmd->cmd_arr[i], '='))
 		{
-			if (ft_strchr(cmd->cmd_arr[i], '$'))
-			{
-				if (concatenate_env_var(cmd->cmd_arr[i], env, 0) == 1)
-					return (-1);
-			}
-			else
-				if (add_new_env_var(cmd->cmd_arr[i], env, 0) == 1)
-					return (-1);
-		}
-		else
-			if (add_empty_env_var(cmd->cmd_arr[i], env) == 1)
+			if (ft_strchr(cmd->cmd_arr[i], '$')
+				&& concatenate_env_var(cmd->cmd_arr[i], env, 0))
 				return (-1);
+			else if (add_new_env_var(cmd->cmd_arr[i], env, 0) == 1)
+				return (-1);
+		}
+		else if (add_empty_env_var(cmd->cmd_arr[i], env) == 1)
+			return (-1);
 		i++;
 	}
 	return (0);
