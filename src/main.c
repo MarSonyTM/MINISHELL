@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/22 13:04:03 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:01:00 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	main_handle_input(char **input)
 	sleep(0);
 	if (!*input)
 	{
-		free(*input);
 		ft_putendl_fd("exit", 1);
 		exit(0);
 	}
