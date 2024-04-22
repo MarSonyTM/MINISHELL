@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 18:11:46 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/22 12:54:20 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,34 @@ char	*handle_input_buffer(char *input_buffer,
 }
 
 char	*read_and_write_heredoc(int fd, char *delimiter,
-		char *heredoc_input, t_command *command)
+        char *heredoc_input, t_command *command)
 {
-	char	*input_buffer;
+    char	*input_buffer;
 
-	g_signal_caught = 0;
-	while (1)
-	{
-		if (g_signal_caught == 1)
-			break ;
-		input_buffer = prompt_and_read_line();
-		if (!input_buffer)
-			return (close(fd), free(heredoc_input), NULL);
-		if (ft_strcmp(input_buffer, delimiter) == 0)
-		{
-			free(input_buffer);
-			break ;
-		}
-		heredoc_input = handle_input_buffer(input_buffer,
-				heredoc_input, command, fd);
-	}
-	return (heredoc_input);
+    g_signal_caught = 0;
+    signal(SIGINT, handle_sigint);  // Set up the signal handler for SIGINT
+
+    while (1)
+    {
+        if (g_signal_caught == 1)
+        {
+            g_signal_caught = 0;
+            close(fd);
+            free(heredoc_input);
+            return NULL;  // Exit the heredoc and return NULL
+        }
+        input_buffer = prompt_and_read_line();
+        if (!input_buffer)
+            return (close(fd), free(heredoc_input), NULL);
+        if (ft_strcmp(input_buffer, delimiter) == 0)
+        {
+            free(input_buffer);
+            break ;
+        }
+        heredoc_input = handle_input_buffer(input_buffer,
+                heredoc_input, command, fd);
+    }
+    return (heredoc_input);
 }
 
 char	*handle_heredoc(t_token **current, t_command *command)

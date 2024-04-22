@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/22 11:23:54 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 12:37:16 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,6 +288,7 @@ void			init_env_signals(t_env **env, char **envp);
 void			handle_sigint(int sig);
 void			handle_sigquit(int sig);
 void			check_blocked_signals(void);
+void			setup_signals();
 
 /* expansion */
 void			process_env_var(char *var_start, t_cmd *cmd, t_env *env);

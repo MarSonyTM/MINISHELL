@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/22 12:17:34 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 13:04:03 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int	handle_lexer_and_parser(t_env **env, t_main_loop *loop, int *exit_status)
 	return (0);
 }
 
-void	main_loop(t_env **env, int *exit_status)
+int	main_loop(t_env **env, int *exit_status)
 {
 	t_main_loop	loop;
 
@@ -142,6 +142,7 @@ void	main_loop(t_env **env, int *exit_status)
 		*exit_status = executor(loop.cmd, env, *exit_status);
 		reset_free_cmd(&loop.cmd, loop.input);
 	}
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)

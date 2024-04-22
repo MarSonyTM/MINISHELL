@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:59 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/17 17:55:35 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/22 12:37:17 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,5 @@ void	init_env_signals(t_env **env, char **envp)
 	if (!*env)
 		exit(1);
 	check_blocked_signals();
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
+	setup_signals();
 }
