@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_input.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:50:27 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/04/19 17:56:55 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/22 11:33:13 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,24 @@ static void	handle_dollar_normal_case(t_expansion *exp, t_env *env)
 }
 
 void	handle_dollar(t_expansion *exp,
-		int in_single_quote, int in_double_quote, t_env *env)
+        int in_single_quote, int in_double_quote, t_env *env)
 {
-	if (**exp->cursor == '$' && !in_single_quote)
-	{
-		(*exp->cursor)++;
-		handle_dollar_special_cases(exp, in_double_quote);
-		handle_dollar_normal_case(exp, env);
-	}
+    if (**exp->cursor == '$')
+    {
+        if (!in_single_quote) {
+            (*exp->cursor)++;
+            if (**exp->cursor == '?') {
+                *exp->result = append_to_string(*exp->result, "$?");
+                (*exp->cursor)++;
+            } else {
+                handle_dollar_special_cases(exp, in_double_quote);
+                handle_dollar_normal_case(exp, env);
+            }
+        } else {
+            *exp->result = append_to_string(*exp->result, "$");
+            (*exp->cursor)++;
+        }
+    }
 }
 
 void	handle_space(t_expansion *exp,
