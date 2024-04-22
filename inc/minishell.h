@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/22 12:37:16 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:32:57 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,8 @@ typedef struct s_lexer
 	bool	lexer_error;
 }	t_lexer;
 
-typedef struct s_main_loop {
+typedef struct s_main_loop
+{
 	char		*input;
 	char		*cursor;
 	char		*result;
@@ -148,8 +149,9 @@ typedef struct s_main_loop {
 
 /*Functions prototypes for Main*/
 
-int	handle_lexer(int lexer_status, t_token **tokens, char **input);
-int	handle_parser(int parse_status, t_cmd **cmd, t_token **tokens, char **input);
+int				handle_lexer(int lexer_status, t_token **tokens, char **input);
+int				handle_parser(int parse_status,
+					t_cmd **cmd, t_token **tokens, char **input);
 
 
 /*Functions prototypes for Lexer*/
@@ -288,7 +290,7 @@ void			init_env_signals(t_env **env, char **envp);
 void			handle_sigint(int sig);
 void			handle_sigquit(int sig);
 void			check_blocked_signals(void);
-void			setup_signals();
+void			setup_signals(void);
 
 /* expansion */
 void			process_env_var(char *var_start, t_cmd *cmd, t_env *env);

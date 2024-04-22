@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   finalize_lexer.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:56:21 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/21 08:43:33 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/22 14:31:14 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,22 @@ int	handle_quote_error(char **buffer, t_lexer *lexer, bool quote_error)
 
 int	handle_token(char **buffer, t_token ***tokens, t_lexer *lexer)
 {
-    char	*dup_buffer;
+	char	*dup_buffer;
 
-    if ((*buffer)[lexer->buf_index] != '\0') {
-        (*buffer)[lexer->buf_index] = '\0';
-    }
-    dup_buffer = ft_strdup(*buffer);
-    if (add_token(*tokens,
-            determine_token_type(*buffer, lexer), dup_buffer) == 1)
-    {
-        free(dup_buffer);
-        return (free(*buffer), free(lexer), 1);
-    }
-    free(dup_buffer);
-    (lexer->token_count)++;
-    return (0);
+	if ((*buffer)[lexer->buf_index] != '\0')
+	{
+		(*buffer)[lexer->buf_index] = '\0';
+	}
+	dup_buffer = ft_strdup(*buffer);
+	if (add_token(*tokens,
+			determine_token_type(*buffer, lexer), dup_buffer) == 1)
+	{
+		free(dup_buffer);
+		return (free(*buffer), free(lexer), 1);
+	}
+	free(dup_buffer);
+	(lexer->token_count)++;
+	return (0);
 }
 
 int	finalize_lexer(char **buffer,

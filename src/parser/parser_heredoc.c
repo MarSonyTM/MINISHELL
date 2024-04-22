@@ -6,11 +6,12 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/22 14:02:45 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:59:03 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+#include <readline/readline.h>
 
 char	*handle_input_buffer(char *input_buffer,
 		char *heredoc_input, t_command *command, int fd)
@@ -37,7 +38,9 @@ char	*read_and_write_heredoc(int fd, char *delimiter,
 	while (1)
 	{
 		if (g_signal_caught == 1)
-			break ;
+		{
+			return (NULL);
+		}
 		input_buffer = prompt_and_read_line();
 		if (!input_buffer)
 			return (close(fd), free(heredoc_input), NULL);
