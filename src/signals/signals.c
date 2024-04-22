@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/22 13:55:43 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:09:31 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 sig_atomic_t	g_signal_caught = 0;
 
-void handle_sigint(int sig)
+void	handle_sigint(int sig)
 {
     (void)sig;
     g_signal_caught = 1;
@@ -31,7 +31,7 @@ void handle_sigint(int sig)
 
 void handle_sigquit(int sig) {
     (void)sig;
-    // Do nothing
+    
 }
 
 void handle_eof() 
