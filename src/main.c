@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/19 18:49:10 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/22 10:25:53 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	handle_input_and_expansion(t_env **env, t_main_loop *loop)
 	expand_env_varss(*env, &loop->exp, &loop->input);
 }
 
-int	handle_lexer_and_parser(t_env **env, t_main_loop *loop)
+int	handle_lexer_and_parser(t_env **env, t_main_loop *loop, int *exit_status)
 {
 	loop->tokens = NULL;
 	if (handle_lexer(lexer(loop->input,
@@ -58,7 +58,7 @@ void	main_loop(t_env **env, int *exit_status)
 	while (1)
 	{
 		handle_input_and_expansion(env, &loop);
-		if (handle_lexer_and_parser(env, &loop))
+		if (handle_lexer_and_parser(env, &loop, exit_status))
 		{
 			*exit_status = 127;
 			continue ;

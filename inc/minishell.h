@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/19 18:51:21 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/22 10:23:04 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,12 @@ typedef struct s_main_loop {
 	t_lexer		lexer_instance;
 	t_expansion	exp;
 }	t_main_loop;
+
+/*Functions prototypes for Main*/
+
+int	handle_lexer(int lexer_status, t_token **tokens, char **input);
+int	handle_parser(int parse_status, t_cmd **cmd, t_token **tokens, char **input);
+
 
 /*Functions prototypes for Lexer*/
 
