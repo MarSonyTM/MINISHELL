@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:50:27 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/04/23 17:30:40 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/23 21:46:14 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	handle_dollar_normal_case(t_expansion *exp, t_env *env)
 		handle_dollar(exp, 0, 0, env);
 }
 
-void handle_dollar(t_expansion *exp, int in_single_quote, int in_double_quote, t_env *env)
+int handle_dollar(t_expansion *exp, int in_single_quote, int in_double_quote, t_env *env)
 {
     if (**exp->cursor == '$')
     {
@@ -61,32 +61,35 @@ void handle_dollar(t_expansion *exp, int in_single_quote, int in_double_quote, t
             {
                 *exp->result = append_to_string(*exp->result, "$?");
                 (*exp->cursor)++;
+				return (1);
             }
-            else
-            {
-                if (**exp->cursor != '\0')
-                {
-                    handle_dollar_special_cases(exp, in_double_quote);
-                    handle_dollar_normal_case(exp, env);
-                }
-            }
+            else if (**exp->cursor != '\0')
+			{
+				handle_dollar_special_cases(exp, in_double_quote);
+				handle_dollar_normal_case(exp, env);
+				return (1);
+			}
         }
         else
         {
             *exp->result = append_to_string(*exp->result, "$");
             (*exp->cursor)++;
+			return (1);
         }
     }
+	return (0);
 }
 
-void	handle_space(t_expansion *exp,
+int	handle_space(t_expansion *exp,
 			int in_single_quote, int in_double_quote)
 {
 	if (**exp->cursor == ' ' && (in_double_quote || in_single_quote))
 	{
 		*exp->result = append_to_string(*exp->result, " ");
 		(*exp->cursor)++;
+		return (1);
 	}
+	return (0);
 }
 
 void	handle_normal_char(t_expansion *exp)
