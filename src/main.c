@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/23 15:44:25 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/23 16:22:09 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	handle_lexer_and_parser(t_env **env, t_main_loop *loop)
 		}
 	loop->cmd = NULL;
 	if (handle_parser(parse(loop->tokens,
-				&loop->cmd, *env), &loop->cmd, &loop->tokens, &loop->input, *env))
+				&loop->cmd, *env), loop, *env))
 	{
 		return (1);
 	}

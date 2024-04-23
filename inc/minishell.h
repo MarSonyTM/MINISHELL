@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/23 15:43:50 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/23 16:21:40 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ typedef struct s_main_loop
 /*Functions prototypes for Main*/
 
 int				handle_lexer(int lexer_status, t_token **tokens, char **input, t_env *env);
-int				handle_parser(int parse_status, t_cmd **cmd, t_token **tokens, char **input, t_env *env);
+int				handle_parser(int parse_status, t_main_loop *loop, t_env *env);
 /*Functions prototypes for Lexer*/
 
 int				lexer(char *input, t_token **tokens, t_lexer *lexer);
