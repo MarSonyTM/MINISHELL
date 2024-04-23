@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:29 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/17 15:36:56 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/18 16:50:36 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,14 @@ int	execute_custom(t_cmd *cmd, t_env **env, t_exec **exec, int stdout_fd)
 
 void	custom_exec(t_cmd *cmd, t_env **env, t_exec **exec, int stdout_fd)
 {
-	cmd->exit_status = execute_custom(cmd, env, exec, stdout_fd);
+	int	result;
+
+	result = execute_custom(cmd, env, exec, stdout_fd);
+	if (result == -1)
+	{
+		clean_up(cmd, *env);
+		close_and_free(*exec);
+		exit (1);
+	}
+	cmd->exit_status = result;
 }

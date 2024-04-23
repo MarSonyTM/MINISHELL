@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:43 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/16 16:03:01 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/22 22:44:35 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ t_env	*add_env_node(t_env **env, char *key, char *value)
 	t_env	*tmp;
 
 	new = malloc(sizeof(t_env));
+	if (!new)
+		return (NULL);
 	new->key = key;
 	new->value = value;
 	new->next = NULL;
@@ -30,7 +32,7 @@ t_env	*add_env_node(t_env **env, char *key, char *value)
 	return (*env);
 }
 
-void	add_empty_env_var(char *cmd, t_env **env)
+int	add_empty_env_var(char *cmd, t_env **env)
 {
 	t_env	*tmp;
 	char	*key;
@@ -50,10 +52,15 @@ void	add_empty_env_var(char *cmd, t_env **env)
 		tmp = tmp->next;
 	}
 	if (!tmp)
+	{
 		*env = add_env_node(env, key, value);
+		if (!*env)
+			return (1);
+	}
+	return (0);
 }
 
-void	add_new_env_var(char *cmd, t_env **env, int j)
+int	add_new_env_var(char *cmd, t_env **env, int j)
 {
 	t_env	*tmp;
 	char	*key;
@@ -62,41 +69,50 @@ void	add_new_env_var(char *cmd, t_env **env, int j)
 	while (cmd[j] && cmd[j] != '=')
 		j++;
 	key = ft_substr(cmd, 0, j);
+	if (!key)
+		return (1);
 	value = ft_strdup(cmd + j + 1);
-	tmp = *env;
-	while (tmp != NULL)
+	if (!value)
+		return (1);
+	tmp = find_env_var(*env, key);
+	if (tmp)
+		update_env_var(tmp, key, value);
+	else
 	{
-		if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
-		{
-			free(tmp->key);
-			free(tmp->value);
-			tmp->key = key;
-			tmp->value = value;
-			break ;
-		}
-		tmp = tmp->next;
-	}
-	if (!tmp)
 		*env = add_env_node(env, key, value);
+		if (!*env)
+			return (1);
+	}
+	return (0);
 }
 
-void	concatenate_env_var(char *cmd, t_env **env, int j)
+int	no_colon(char *cmd, t_env **env, int j)
+{
+	char	*key;
+
+	key = get_key(cmd, &j);
+	if (!key)
+		return (1);
+	if (add_empty_env_var(key, env) == 1)
+		return (1);
+	return (0);
+}
+
+int	concatenate_env_var(char *cmd, t_env **env, int j)
 {
 	t_env	*tmp;
 	char	*key;
 	char	*value;
 
 	if (ft_strchr(cmd, ':') == NULL)
-	{
-		key = get_key(cmd, &j);
-		add_empty_env_var(key, env);
-		return ;
-	}
+		return (no_colon(cmd, env, j) == 1);
 	key = get_key(cmd, &j);
+	if (!key)
+		return (1);
 	value = get_value_concat(cmd, &j);
-	tmp = *env;
-	while (tmp != NULL && ft_strncmp(tmp->key, key, ft_strlen(key)))
-		tmp = tmp->next;
+	if (!value)
+		return (free(key), 1);
+	tmp = find_env_var(*env, key);
 	if (tmp)
 	{
 		tmp->value = ft_strjoin(tmp->value, value);
@@ -104,7 +120,12 @@ void	concatenate_env_var(char *cmd, t_env **env, int j)
 		free(value);
 	}
 	else
+	{
 		*env = add_env_node(env, key, value);
+		if (!*env)
+			return (1);
+	}
+	return (0);
 }
 
 int	export_cmd(t_cmd *cmd, t_env **env)
@@ -123,13 +144,14 @@ int	export_cmd(t_cmd *cmd, t_env **env)
 	{
 		if (ft_strchr(cmd->cmd_arr[i], '='))
 		{
-			if (ft_strchr(cmd->cmd_arr[i], '$'))
-				concatenate_env_var(cmd->cmd_arr[i], env, 0);
-			else
-				add_new_env_var(cmd->cmd_arr[i], env, 0);
+			if (ft_strchr(cmd->cmd_arr[i], '$')
+				&& concatenate_env_var(cmd->cmd_arr[i], env, 0))
+				return (-1);
+			else if (add_new_env_var(cmd->cmd_arr[i], env, 0) == 1)
+				return (-1);
 		}
-		else
-			add_empty_env_var(cmd->cmd_arr[i], env);
+		else if (add_empty_env_var(cmd->cmd_arr[i], env) == 1)
+			return (-1);
 		i++;
 	}
 	return (0);

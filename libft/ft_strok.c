@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strok.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:24:27 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 14:36:22 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/22 21:53:52 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@ static char	*get_next_token(char *str, const char *delim)
 {
 	int		i;
 	int		j;
-	char	*token;
 
 	i = 0;
 	while (str[i] != '\0' && ft_strchr(delim, str[i]) != NULL)
 		i++;
-	token = &str[i];
 	j = i;
 	while (str[j] != '\0' && ft_strchr(delim, str[j]) == NULL)
 		j++;

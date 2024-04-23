@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/22 15:42:26 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:44:25 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,17 @@ void	print_commands(t_cmd *cmd)
         if (current_cmd->redirection_append != NULL)
             printf("PARSER: Output Redirection Append: %s\n", current_cmd->redirection_append);
         current_cmd = current_cmd->next; // Move to the next commandr
-        i = 1; // Reset argument index for the next command
+        i = 1; // Reset argument index for the next comman<<<<<<< HEADd
     }
 }
 
-void	main_handle_input(char **input)
+void	main_handle_input(char **input, t_env *env)
 {
 	*input = readline(PROMPT);
 	sleep(0);
 	if (!*input)
 	{
+		free_env(env);
 		free(*input);
 		ft_putendl_fd("exit", 1);
 		exit(0);
@@ -51,7 +52,7 @@ void	main_handle_input(char **input)
 
 void	handle_input_and_expansion(t_env **env, t_main_loop *loop)
 {
-	main_handle_input(&loop->input);
+	main_handle_input(&loop->input, *env);
 	loop->cursor = loop->input;
 	loop->result = NULL;
 	loop->exp.cursor = &loop->cursor;
@@ -65,7 +66,7 @@ int	handle_lexer_and_parser(t_env **env, t_main_loop *loop)
 	loop->tokens = NULL;
 	if (handle_lexer(lexer(loop->input,
 				&loop->tokens, &loop->lexer_instance),
-			&loop->tokens, &loop->input))
+			&loop->tokens, &loop->input, *env))
 		return (1);
 	t_token *current;
 		current = loop->tokens;
@@ -119,7 +120,7 @@ int	handle_lexer_and_parser(t_env **env, t_main_loop *loop)
 		}
 	loop->cmd = NULL;
 	if (handle_parser(parse(loop->tokens,
-				&loop->cmd, *env), &loop->cmd, &loop->tokens, &loop->input))
+				&loop->cmd, *env), &loop->cmd, &loop->tokens, &loop->input, *env))
 	{
 		return (1);
 	}

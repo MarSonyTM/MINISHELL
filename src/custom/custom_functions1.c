@@ -6,16 +6,32 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:08 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/16 15:52:48 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/19 16:41:59 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+void	print_echo(t_cmd *cmd, int i)
+{
+	char	*tmp;
+
+	if (ft_strncmp(cmd->cmd_arr[i], "$?", 3) == 0)
+	{
+		tmp = ft_itoa(cmd->prev_exit_status);
+		ft_putstr_fd(ft_itoa(cmd->prev_exit_status), 1);
+		free(tmp);
+	}
+	else
+		ft_putstr_fd(cmd->cmd_arr[i], 1);
+	if (cmd->cmd_arr[i + 1] != NULL)
+		ft_putchar_fd(' ', 1);
+}
+
 void	echo_cmd(t_cmd *cmd)
 {
-	int	i;
-	int	newline;
+	int		i;
+	int		newline;
 
 	newline = 1;
 	i = 1;
@@ -26,12 +42,7 @@ void	echo_cmd(t_cmd *cmd)
 	}
 	while (cmd->cmd_arr[i] != NULL)
 	{
-		if (ft_strncmp(cmd->cmd_arr[i], "$?", 3) == 0)
-			ft_putstr_fd(ft_itoa(cmd->prev_exit_status), 1);
-		else
-			ft_putstr_fd(cmd->cmd_arr[i], 1);
-		if (cmd->cmd_arr[i + 1] != NULL)
-			ft_putchar_fd(' ', 1);
+		print_echo(cmd, i);
 		i++;
 	}
 	if (newline == 1)
