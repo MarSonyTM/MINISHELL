@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:59 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/22 12:37:17 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/23 21:58:47 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,14 @@ void	check_args(int argc, char **argv)
 
 void	init_env_signals(t_env **env, char **envp)
 {
-	*env = arr_to_linked_list(envp);
-	if (!*env)
-		exit(1);
+	if (envp == NULL || *envp == NULL)
+		*env = NULL;
+	else
+	{
+		*env = arr_to_linked_list(envp);
+		if (!*env)
+			exit(1);
+	}
 	check_blocked_signals();
 	setup_signals();
 }
