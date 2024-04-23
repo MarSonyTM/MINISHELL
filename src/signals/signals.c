@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/22 14:34:58 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/23 12:39:26 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,18 @@
 
 sig_atomic_t	g_signal_caught = 0;
 
-void	handle_sigint(int sig)
+void handle_sigint(int sig)
 {
-	char	*line;
-
-	(void)sig;
-	g_signal_caught = 1;
-	line = rl_copy_text(0, rl_end);
-	if (line && *line)
-	{
-		add_history(line);
-	}
-	free(line);
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+    (void)sig;
+    g_signal_caught = 1;
+    if (rl_end > 0)
+    {
+        add_history(rl_line_buffer);
+    }
+    write(STDOUT_FILENO, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
 }
 
 void	handle_sigquit(int sig)
