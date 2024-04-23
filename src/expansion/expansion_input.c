@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:50:27 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/04/22 14:30:23 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:11:52 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,31 +50,33 @@ static void	handle_dollar_normal_case(t_expansion *exp, t_env *env)
 		handle_dollar(exp, 0, 0, env);
 }
 
-void	handle_dollar(t_expansion *exp,
-			int in_single_quote, int in_double_quote, t_env *env)
+void handle_dollar(t_expansion *exp, int in_single_quote, int in_double_quote, t_env *env)
 {
-	if (**exp->cursor == '$')
-	{
-		if (!in_single_quote)
-		{
-			(*exp->cursor)++;
-			if (**exp->cursor == '?')
-			{
-				*exp->result = append_to_string(*exp->result, "$?");
-				(*exp->cursor)++;
-			}
-			else
-			{
-				handle_dollar_special_cases(exp, in_double_quote);
-				handle_dollar_normal_case(exp, env);
-			}
-		}
-		else
-		{
-			*exp->result = append_to_string(*exp->result, "$");
-			(*exp->cursor)++;
-		}
-	}
+    if (**exp->cursor == '$')
+    {
+        if (!in_single_quote)
+        {
+            (*exp->cursor)++;
+            if (**exp->cursor == '?')
+            {
+                *exp->result = append_to_string(*exp->result, "$?");
+                (*exp->cursor)++;
+            }
+            else
+            {
+                if (**exp->cursor != '\0')
+                {
+                    handle_dollar_special_cases(exp, in_double_quote);
+                    handle_dollar_normal_case(exp, env);
+                }
+            }
+        }
+        else
+        {
+            *exp->result = append_to_string(*exp->result, "$");
+            (*exp->cursor)++;
+        }
+    }
 }
 
 void	handle_space(t_expansion *exp,
