@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:43 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/22 22:44:35 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/23 15:12:10 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,18 +98,16 @@ int	no_colon(char *cmd, t_env **env, int j)
 	return (0);
 }
 
-int	concatenate_env_var(char *cmd, t_env **env, int j)
+int	colon(char *cmd, t_env **env, int j)
 {
 	t_env	*tmp;
 	char	*key;
 	char	*value;
 
-	if (ft_strchr(cmd, ':') == NULL)
-		return (no_colon(cmd, env, j) == 1);
 	key = get_key(cmd, &j);
 	if (!key)
 		return (1);
-	value = get_value_concat(cmd, &j);
+	value = get_value(cmd, &j);
 	if (!value)
 		return (free(key), 1);
 	tmp = find_env_var(*env, key);
@@ -118,6 +116,8 @@ int	concatenate_env_var(char *cmd, t_env **env, int j)
 		tmp->value = ft_strjoin(tmp->value, value);
 		free(key);
 		free(value);
+		if (!tmp->value)
+			return (1);
 	}
 	else
 	{
@@ -126,6 +126,14 @@ int	concatenate_env_var(char *cmd, t_env **env, int j)
 			return (1);
 	}
 	return (0);
+}
+
+int	concatenate_env_var(char *cmd, t_env **env, int j)
+{
+	if (ft_strchr(cmd, ':') == NULL)
+		return (no_colon(cmd, env, j) == 1);
+	else
+		return (colon(cmd, env, j));
 }
 
 int	export_cmd(t_cmd *cmd, t_env **env)
