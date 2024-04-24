@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:44 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/23 17:15:52 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/24 16:41:04 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ char	*resolve_command_path(char *command, t_env *env, int *err_code)
 	size_t	command_len;
 	char	*full_path;
 
+	if (is_command_found(command))
+		return (ft_strdup(command));
 	path = ft_getenv("PATH", env);
 	if (!path)
 	{

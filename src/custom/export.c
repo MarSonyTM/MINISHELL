@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:43 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/22 22:44:35 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/24 16:06:39 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ t_env	*add_env_node(t_env **env, char *key, char *value)
 	new->value = value;
 	new->next = NULL;
 	if (env == NULL)
-		return (new);
+	{
+		*env = new;
+		return (*env);
+	}
 	tmp = *env;
 	while (tmp->next != NULL)
 		tmp = tmp->next;

@@ -1,8 +1,8 @@
-1. `unset PATH`
+x 1. `unset PATH`
 2. Run command
 3. Segfault
 
-1. mkdir tmp
+x 1. mkdir tmp
 2. cd tmp
 3. cp /bin/ls .
 4. unset PATH (now minishell should look for commands in the current working directory)
@@ -10,11 +10,11 @@
 6. ./ls => should work
 7. cat => command not found
 
-Relative / Absolute path should be working too. eg
+x Relative / Absolute path should be working too. eg
 1. ./ls
 2. /bin/ls
 
-1. "" (literally execute "")
+x 1. "" (literally execute "")
 2. should be command not found
 
 1. mkdir foo
@@ -38,18 +38,18 @@ cat << EOF > test
 2. CTRL+C
 3. Prompt should not be printed twice
 
-1. echo "$USER$USER"
+x 1. echo "$USER$USER"
 2. should be one argument like `mafurnicmafurnic` not two separates, so not `mafurnic mafurnic`
 
-1. echo "$USER $"
+x 1. echo "$USER $"
 
-1. echo "$USER $PWD $USER"
+x 1. echo "$USER $PWD $USER"
 
-1. echo $"USER"
+x 1. echo $"USER"
 
-1. echo $ "USER"
+1. echo $ "USER" --> one space missing
 
-1. No expansion should happen in single quotes
+x 1. No expansion should happen in single quotes
 2. echo '$USER'
 3. Should print: $USER
 
