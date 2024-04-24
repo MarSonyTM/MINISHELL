@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_input.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:50:27 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/04/23 21:46:14 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/24 11:31:47 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,33 +50,43 @@ static void	handle_dollar_normal_case(t_expansion *exp, t_env *env)
 		handle_dollar(exp, 0, 0, env);
 }
 
-int handle_dollar(t_expansion *exp, int in_single_quote, int in_double_quote, t_env *env)
+void	handle_dollar_cases(t_expansion *exp, int in_double_quote, t_env *env)
 {
-    if (**exp->cursor == '$')
-    {
-        if (!in_single_quote)
-        {
-            (*exp->cursor)++;
-            if (**exp->cursor == '?')
-            {
-                *exp->result = append_to_string(*exp->result, "$?");
-                (*exp->cursor)++;
-				return (1);
-            }
-            else if (**exp->cursor != '\0')
-			{
-				handle_dollar_special_cases(exp, in_double_quote);
-				handle_dollar_normal_case(exp, env);
-				return (1);
-			}
-        }
-        else
-        {
-            *exp->result = append_to_string(*exp->result, "$");
-            (*exp->cursor)++;
+	(*exp->cursor)++;
+	if (**exp->cursor == '?')
+	{
+		*exp->result = append_to_string(*exp->result, "$?");
+		(*exp->cursor)++;
+	}
+	else if (**exp->cursor == ' ')
+	{
+		*exp->result = append_to_string(*exp->result, "$ ");
+		(*exp->cursor)++;
+	}
+	else if (**exp->cursor != '\0')
+	{
+		handle_dollar_special_cases(exp, in_double_quote);
+		handle_dollar_normal_case(exp, env);
+	}
+}
+
+int	handle_dollar(t_expansion *exp,
+		int in_single_quote, int in_double_quote, t_env *env)
+{
+	if (**exp->cursor == '$')
+	{
+		if (!in_single_quote)
+		{
+			handle_dollar_cases(exp, in_double_quote, env);
 			return (1);
-        }
-    }
+		}
+		else
+		{
+			*exp->result = append_to_string(*exp->result, "$");
+			(*exp->cursor)++;
+			return (1);
+		}
+	}
 	return (0);
 }
 
@@ -90,14 +100,4 @@ int	handle_space(t_expansion *exp,
 		return (1);
 	}
 	return (0);
-}
-
-void	handle_normal_char(t_expansion *exp)
-{
-	char	append[2];
-
-	append[0] = **exp->cursor;
-	append[1] = '\0';
-	*exp->result = append_to_string(*exp->result, append);
-	(*exp->cursor)++;
 }
