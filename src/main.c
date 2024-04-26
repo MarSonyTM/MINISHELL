@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/23 16:22:09 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/26 09:21:49 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,8 @@ int	main(int argc, char **argv, char **envp)
 	exit_status = 0;
 	check_args(argc, argv);
 	init_env_signals(&env, envp);
+	rl_bind_key('\034', rl_insert);
+    signal(SIGQUIT, SIG_IGN); 
 	main_loop(&env, &exit_status);
 	return (0);
 }
