@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:50 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/23 21:56:48 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/24 17:28:19 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,21 @@ t_env	*create_env_node(char *envp, int *j)
 	return (new);
 }
 
+static void	check_for_shlvl(t_env *env)
+{
+	char	*old_value;
+
+	if (ft_strncmp(env->key, "SHLVL", 6) == 0)
+	{
+		old_value = env->value;
+		if (ft_atoi(env->value) < 0)
+			env->value = ft_strdup("0");
+		else
+			env->value = ft_itoa(ft_atoi(env->value) + 1);
+		free(old_value);
+	}
+}
+
 t_env	*arr_to_linked_list(char **envp)
 {
 	t_env	*env;
@@ -72,6 +87,7 @@ t_env	*arr_to_linked_list(char **envp)
 			free_env(env);
 			exit (1);
 		}
+		check_for_shlvl(tmp->next);
 		tmp = tmp->next;
 		i++;
 	}
