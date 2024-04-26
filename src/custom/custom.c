@@ -6,11 +6,48 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:29 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/18 16:50:36 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/26 13:28:43 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static void	free_env_node(t_env **env, t_env *tmp, t_env *prev)
+{
+	if (prev == NULL)
+		*env = tmp->next;
+	else
+		prev->next = tmp->next;
+	free(tmp->key);
+	free(tmp->value);
+	free(tmp);
+}
+
+void	unset_cmd(t_cmd *cmd, t_env **env)
+{
+	t_env	*tmp;
+	t_env	*prev;
+	int		i;
+
+	i = 1;
+	while (cmd->cmd_arr[i] != NULL)
+	{
+		tmp = *env;
+		prev = NULL;
+		while (tmp != NULL)
+		{
+			if (ft_strncmp(tmp->key, cmd->cmd_arr[i],
+					ft_strlen(cmd->cmd_arr[i]) + 1) == 0)
+			{
+				free_env_node(env, tmp, prev);
+				break ;
+			}
+			prev = tmp;
+			tmp = tmp->next;
+		}
+		i++;
+	}
+}
 
 int	execute_custom(t_cmd *cmd, t_env **env, t_exec **exec, int stdout_fd)
 {

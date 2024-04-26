@@ -31,7 +31,7 @@ cat << EOF > test
 3. execve should return an error which you need to handle:
 4. bash: ./test: /bin/does-not-exist: bad interpreter: No such file or directory
 
-1. env -i ./minishell
+x 1. env -i ./minishell
 2. should work, no segfault
 
 1. cat
