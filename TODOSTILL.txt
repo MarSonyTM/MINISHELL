@@ -1,5 +1,67 @@
  "<" "|" should not work 
 
+<<<<<<< HEAD
  signals need work
  heredoc Should work like bash
  
+=======
+x 1. mkdir tmp
+2. cd tmp
+3. cp /bin/ls .
+4. unset PATH (now minishell should look for commands in the current working directory)
+5. ls => should work
+6. ./ls => should work
+7. cat => command not found
+
+x Relative / Absolute path should be working too. eg
+1. ./ls
+2. /bin/ls
+
+x 1. "" (literally execute "")
+2. should be command not found
+
+1. mkdir foo
+2. ./foo
+3. minishell: ./foo: Is a directory
+4. Exit code is 126
+
+1.
+cat << EOF > test
+> #!/bin/does-not-exist
+> some code
+> EOF
+2. ./test
+3. execve should return an error which you need to handle:
+4. bash: ./test: /bin/does-not-exist: bad interpreter: No such file or directory
+
+x 1. env -i ./minishell
+2. should work, no segfault
+
+1. cat
+2. CTRL+C
+3. Prompt should not be printed twice
+
+x 1. echo "$USER$USER"
+2. should be one argument like `mafurnicmafurnic` not two separates, so not `mafurnic mafurnic`
+
+x 1. echo "$USER $"
+
+x 1. echo "$USER $PWD $USER"
+
+x 1. echo $"USER"
+
+1. echo $ "USER" --> one space missing
+
+x 1. No expansion should happen in single quotes
+2. echo '$USER'
+3. Should print: $USER
+
+
+CTRL+C does nto work
+
+1. cat | cat | ls
+2. should output ls, then need to press enter as many times as there are cats
+
+Some more protections using funcheck
+isalum needs ft_isalum but not from libft , that one is altered for another function,
+>>>>>>> origin/carlas_quotes
