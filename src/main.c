@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/26 09:21:49 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/27 08:20:35 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,6 @@ int	main(int argc, char **argv, char **envp)
 	exit_status = 0;
 	check_args(argc, argv);
 	init_env_signals(&env, envp);
-	rl_bind_key('\034', rl_insert);
     signal(SIGQUIT, SIG_IGN); 
 	main_loop(&env, &exit_status);
 	return (0);
