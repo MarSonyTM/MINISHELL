@@ -6,12 +6,11 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/28 12:35:00 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/28 12:37:36 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <stdio.h>
 
 void	print_commands(t_cmd *cmd)
 {
