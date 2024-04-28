@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/28 09:18:08 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/28 12:14:58 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@ char	*handle_input_buffer(char *input_buffer,
 	return (new_heredoc_input);
 }
 
-char	*read_and_write_heredoc(int fd, char *delimiter,
-        char *heredoc_input, t_command *command)
+char	*read_and_write_heredoc(int fd, char *delimiter, char *heredoc_input, t_command *command)
 {
     char	*input_buffer;
 
+    signal(SIGINT, heredoc_sigint_handler);  // Set the signal handler
     g_signal_caught = 0;
     while (1)
     {
-        if (g_signal_caught == 1)
+        if (g_signal_caught == SIGINT)
         {
             printf("signal caught\n");
             g_signal_caught = 0;  // Reset the flag
@@ -51,8 +51,7 @@ char	*read_and_write_heredoc(int fd, char *delimiter,
             free(input_buffer);
             break ;
         }
-        heredoc_input = handle_input_buffer(input_buffer,
-                heredoc_input, command, fd);
+        heredoc_input = handle_input_buffer(input_buffer, heredoc_input, command, fd);
     }
     return (heredoc_input);
 }

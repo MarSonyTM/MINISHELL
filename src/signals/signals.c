@@ -6,13 +6,22 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/26 09:18:57 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/28 12:16:55 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 sig_atomic_t	g_signal_caught = 0;
+
+void	heredoc_sigint_handler(int sig)
+{
+	(void)sig;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	g_signal_caught = SIGINT;
+	rl_replace_line("", 0);
+	rl_on_new_line();
+}
 
 void	handle_sigint(int sig)
 {

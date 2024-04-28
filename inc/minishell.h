@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/24 11:29:40 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/28 12:13:43 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,6 +292,7 @@ void			handle_sigint(int sig);
 void			handle_sigquit(int sig);
 void			check_blocked_signals(void);
 void			setup_signals(void);
+void			heredoc_sigint_handler(int sig);
 
 /* expansion */
 void			process_env_var(char *var_start, t_cmd *cmd, t_env *env);
