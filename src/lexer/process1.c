@@ -6,12 +6,11 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:40:04 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/28 07:21:23 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/28 08:55:21 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
 
 bool	is_whitespace(char c)
 {
@@ -44,28 +43,28 @@ int	process_pipe(char *buffer, t_token ***tokens, t_lexer *lexer)
 
 void	process_quotes(char currentChar, char **buffer, t_lexer *lexer)
 {
-    static int quote_start_index = 0;
+	static int	quote_start_index = 0;
 
-    if (lexer->in_quote == 0)
-    {
-        if (currentChar == '\'')
-        {
-            lexer->in_quote = 1;
-            quote_start_index = lexer->buf_index;
-        }
-        else
-        {
-            lexer->in_quote = 2;
-            quote_start_index = lexer->buf_index;
-        }
-    }
-    else if ((lexer->in_quote == 1 && currentChar == '\'')
-        || (lexer->in_quote == 2 && currentChar == '\"'))
-    {
-        lexer->in_quote = 0;
-        if (lexer->buf_index == quote_start_index)
-            (*buffer)[lexer->buf_index++] = ' ';
-    }
-    else
-        (*buffer)[lexer->buf_index++] = currentChar;
+	if (lexer->in_quote == 0)
+	{
+		if (currentChar == '\'')
+		{
+			lexer->in_quote = 1;
+			quote_start_index = lexer->buf_index;
+		}
+		else
+		{
+			lexer->in_quote = 2;
+			quote_start_index = lexer->buf_index;
+		}
+	}
+	else if ((lexer->in_quote == 1 && currentChar == '\'')
+		|| (lexer->in_quote == 2 && currentChar == '\"'))
+	{
+		lexer->in_quote = 0;
+		if (lexer->buf_index == quote_start_index)
+			(*buffer)[lexer->buf_index++] = ' ';
+	}
+	else
+		(*buffer)[lexer->buf_index++] = currentChar;
 }

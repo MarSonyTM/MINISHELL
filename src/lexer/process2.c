@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/28 07:19:59 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/28 08:47:51 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,29 +69,30 @@ int	process_double_redirects(char current_char,
 }
 
 int	process_character(char current_char, char *input,
-        t_token ***tokens, t_lexer *lexer)
+		t_token ***tokens, t_lexer *lexer)
 {
-    lexer->lexer_error = false;
-    if (is_whitespace(current_char) && lexer->in_quote == 0)
-        process_whitespace(lexer->buffer, tokens, lexer);
-    else if (current_char == '|' && lexer->in_quote == 0)
-        process_pipe(lexer->buffer, tokens, lexer);
-    else if (current_char == '\'' || current_char == '\"')
-        process_quotes(current_char, &(lexer->buffer), lexer);
-    else if ((current_char == '<' || current_char == '>') && lexer->in_quote == 0)
-    {
-        if (process_redirects(current_char,
-                input, tokens, lexer) == 2)
-            return (2);
-        if (process_double_redirects(current_char,
-                input, tokens, lexer) == 2)
-            return (2);
-    }
-    else if (current_char == '$')
-        process_dollar_conditions(input, &(lexer->buffer), tokens, lexer);
-    else
-        lexer->buffer[(lexer->buf_index)++] = current_char;
-    return (0);
+	lexer->lexer_error = false;
+	if (is_whitespace(current_char) && lexer->in_quote == 0)
+		process_whitespace(lexer->buffer, tokens, lexer);
+	else if (current_char == '|' && lexer->in_quote == 0)
+		process_pipe(lexer->buffer, tokens, lexer);
+	else if (current_char == '\'' || current_char == '\"')
+		process_quotes(current_char, &(lexer->buffer), lexer);
+	else if ((current_char == '<'
+			|| current_char == '>') && lexer->in_quote == 0)
+	{
+		if (process_redirects(current_char,
+				input, tokens, lexer) == 2)
+			return (2);
+		if (process_double_redirects(current_char,
+				input, tokens, lexer) == 2)
+			return (2);
+	}
+	else if (current_char == '$')
+		process_dollar_conditions(input, &(lexer->buffer), tokens, lexer);
+	else
+		lexer->buffer[(lexer->buf_index)++] = current_char;
+	return (0);
 }
 
 int	process_input_loop(char *input, t_token ***tokens, t_lexer *lexer,

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_heredoc_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:36:50 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/22 16:17:09 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/28 08:05:08 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*get_var_name(const char **input)
 
 	(*input)++;
 	start = *input;
-	while (**input && (isalnum(**input) || **input == '_'))
+	while (**input && (ft_isalnum(**input) || **input == '_'))
 		(*input)++;
 	return (ft_substr(start, 0, *input - start));
 }
