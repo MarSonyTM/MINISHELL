@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/28 12:14:58 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/28 12:27:04 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,32 +28,32 @@ char	*handle_input_buffer(char *input_buffer,
 	return (new_heredoc_input);
 }
 
-char	*read_and_write_heredoc(int fd, char *delimiter, char *heredoc_input, t_command *command)
+char	*read_and_write_heredoc(int fd, char *delimiter,
+			char *heredoc_input, t_command *command)
 {
-    char	*input_buffer;
+	char	*input_buffer;
 
-    signal(SIGINT, heredoc_sigint_handler);  // Set the signal handler
-    g_signal_caught = 0;
-    while (1)
-    {
-        if (g_signal_caught == SIGINT)
-        {
-            printf("signal caught\n");
-            g_signal_caught = 0;  // Reset the flag
-            // Return to the main shell prompt
-            return (close(fd), free(heredoc_input), NULL);
-        }
-        input_buffer = prompt_and_read_line();
-        if (!input_buffer)
-            return (close(fd), free(heredoc_input), NULL);
-        if (ft_strcmp(input_buffer, delimiter) == 0)
-        {
-            free(input_buffer);
-            break ;
-        }
-        heredoc_input = handle_input_buffer(input_buffer, heredoc_input, command, fd);
-    }
-    return (heredoc_input);
+	signal(SIGINT, heredoc_sigint_handler);
+	g_signal_caught = 0;
+	while (1)
+	{
+		if (g_signal_caught == SIGINT)
+		{
+			g_signal_caught = 0;
+			return (close(fd), free(heredoc_input), NULL);
+		}
+		input_buffer = prompt_and_read_line();
+		if (!input_buffer)
+			return (close(fd), free(heredoc_input), NULL);
+		if (ft_strcmp(input_buffer, delimiter) == 0)
+		{
+			free(input_buffer);
+			break ;
+		}
+		heredoc_input = handle_input_buffer(input_buffer,
+				heredoc_input, command, fd);
+	}
+	return (heredoc_input);
 }
 
 char	*handle_heredoc(t_token **current, t_command *command)

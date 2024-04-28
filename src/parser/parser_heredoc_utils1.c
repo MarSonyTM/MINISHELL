@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_heredoc_utils1.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 11:05:53 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 13:37:20 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/28 12:27:37 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,13 @@ int	create_temp_file(char *temp_file_name, int temp_file_num)
 		break ;
 	}
 	return (fd);
+}
+
+void	heredoc_sigint_handler(int sig)
+{
+	(void)sig;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	g_signal_caught = SIGINT;
+	rl_replace_line("", 0);
+	rl_on_new_line();
 }
