@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   finalize_lexer.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:56:21 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/22 14:31:14 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/28 07:10:31 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
