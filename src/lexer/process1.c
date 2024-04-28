@@ -6,31 +6,12 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:40:04 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/28 07:15:00 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/28 07:21:23 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	process_whitespace(char *buffer,
-	t_token ***tokens, t_lexer *lexer)
-{
-	char	*tmp;
-
-	if (lexer->buf_index > 0)
-	{
-		lexer->in_quote = 0;
-		buffer[lexer->buf_index] = '\0';
-		tmp = ft_strdup(buffer);
-		if (add_token(*tokens, determine_token_type(buffer,
-					lexer), tmp) == 1)
-			return (free(tmp), 1);
-		lexer->buf_index = 0;
-		lexer->token_count++;
-		free(tmp);
-	}
-	return (0);
-}
 
 bool	is_whitespace(char c)
 {
@@ -82,14 +63,9 @@ void	process_quotes(char currentChar, char **buffer, t_lexer *lexer)
         || (lexer->in_quote == 2 && currentChar == '\"'))
     {
         lexer->in_quote = 0;
-        // Check if the quotes are empty before adding a space
         if (lexer->buf_index == quote_start_index)
-        {
             (*buffer)[lexer->buf_index++] = ' ';
-        }
     }
     else
-    {
         (*buffer)[lexer->buf_index++] = currentChar;
-    }
 }

@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:29:07 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/26 07:10:38 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/28 07:19:59 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,4 +115,24 @@ int	process_input_loop(char *input, t_token ***tokens, t_lexer *lexer,
 		*quote_error = true;
 	}
 	return (result);
+}
+
+int	process_whitespace(char *buffer,
+	t_token ***tokens, t_lexer *lexer)
+{
+	char	*tmp;
+
+	if (lexer->buf_index > 0)
+	{
+		lexer->in_quote = 0;
+		buffer[lexer->buf_index] = '\0';
+		tmp = ft_strdup(buffer);
+		if (add_token(*tokens, determine_token_type(buffer,
+					lexer), tmp) == 1)
+			return (free(tmp), 1);
+		lexer->buf_index = 0;
+		lexer->token_count++;
+		free(tmp);
+	}
+	return (0);
 }
