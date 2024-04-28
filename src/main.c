@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/27 08:41:27 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/28 12:35:00 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	handle_input_and_expansion(t_env **env, t_main_loop *loop)
 	loop->exp.cursor = &loop->cursor;
 	loop->exp.result = &loop->result;
 	expand_env_varss(*env, &loop->exp, &loop->input);
-	printf("input: %s\n", loop->input);
 }
 
 int	handle_lexer_and_parser(t_env **env, t_main_loop *loop)
