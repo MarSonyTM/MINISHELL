@@ -1,10 +1,9 @@
  "<" "|" should not work 
 
-<<<<<<< HEAD
  signals need work
  heredoc Should work like bash
  
-=======
+
 x 1. mkdir tmp
 2. cd tmp
 3. cp /bin/ls .
@@ -20,11 +19,14 @@ x Relative / Absolute path should be working too. eg
 x 1. "" (literally execute "")
 2. should be command not found
 
+
+--> implement check for command token with ./ at beginning (if it is an executable program)
 1. mkdir foo
 2. ./foo
 3. minishell: ./foo: Is a directory
 4. Exit code is 126
 
+????????????????????????????
 1.
 cat << EOF > test
 > #!/bin/does-not-exist
@@ -37,7 +39,7 @@ cat << EOF > test
 x 1. env -i ./minishell
 2. should work, no segfault
 
-1. cat
+x 1. cat
 2. CTRL+C
 3. Prompt should not be printed twice
 
@@ -50,18 +52,17 @@ x 1. echo "$USER $PWD $USER"
 
 x 1. echo $"USER"
 
-1. echo $ "USER" --> one space missing
+x 1. echo $ "USER" --> one space missing
 
 x 1. No expansion should happen in single quotes
 2. echo '$USER'
 3. Should print: $USER
 
 
-CTRL+C does nto work
+x CTRL+C does nto work
 
 1. cat | cat | ls
 2. should output ls, then need to press enter as many times as there are cats
 
 Some more protections using funcheck
 isalum needs ft_isalum but not from libft , that one is altered for another function,
->>>>>>> origin/carlas_quotes
