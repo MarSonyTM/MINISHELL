@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/28 12:13:43 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/29 08:54:56 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,6 +286,9 @@ void			check_args(int argc, char **argv);
 void			init_env_signals(t_env **env, char **envp);
 void			update_env_var(t_env *env_var, char *key, char *value);
 t_env			*find_env_var(t_env *env, char *key);
+int				no_colon(char *cmd, t_env **env, int j);
+int				handle_existing_var(t_env *tmp, char *key, char *value);
+int				handle_new_var(t_env **env, char *key, char *value);
 
 /* signal management */
 void			handle_sigint(int sig);
