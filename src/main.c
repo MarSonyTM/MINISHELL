@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/30 18:40:41 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/30 19:22:39 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,11 @@ int	main_loop(t_env **env)
             loop.exit_status = 127;
             continue ;
         }
-        else
+        else if (g_signal_caught)
         {
             g_signal_caught = 0;
             loop.exit_status = 130;
+			continue ;
         }
         free_tokens(&loop.tokens);
         loop.exit_status = executor(loop.cmd, env, loop.exit_status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:49:41 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/28 12:27:04 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/30 19:21:40 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ char	*read_and_write_heredoc(int fd, char *delimiter,
 	{
 		if (g_signal_caught == SIGINT)
 		{
-			g_signal_caught = 0;
 			return (close(fd), free(heredoc_input), NULL);
 		}
 		input_buffer = prompt_and_read_line();
