@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/30 15:31:03 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:11:27 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ int	main_loop(t_env **env, int *exit_status)
 	while (1)
 	{
 		handle_input_and_expansion(env, &loop);
-		if (handle_lexer_and_parser(env, &loop))
+		if (handle_lexer_and_parser(env, &loop) && !g_signal_caught)
 		{
 			*exit_status = 127;
 			continue ;
 		}
-		if (g_signal_caught)
+		else
 		{
 			g_signal_caught = 0;
 			*exit_status = 130;
