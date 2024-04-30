@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/30 12:59:14 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:13:47 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ int	main_loop(t_env **env, int *exit_status)
 		{
 			*exit_status = 127;
 			continue ;
+		}
+		if (g_signal_caught)
+		{
+			g_signal_caught = 0;
+			*exit_status = 130;
 		}
 		free_tokens(&loop.tokens);
 		*exit_status = executor(loop.cmd, env, *exit_status);
