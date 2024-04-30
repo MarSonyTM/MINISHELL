@@ -2,7 +2,7 @@
 # Project Name and Compiler Settings
 NAME := minishell
 COMPILER := cc 
-# FLAGS := -Wall -Wextra -Werror
+FLAGS := -Wall -Wextra -Werror
 CLEANUP_CMD := rm -rf
 
 # Directory Paths
