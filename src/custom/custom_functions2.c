@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   custom_functions2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:20 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/28 12:33:47 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/30 12:59:46 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static int	check_for_digit(char *str)
 	{
 		if (!ft_isdigit(str[i]))
 		{
-			// error(ERR_NUM, "exit", str, 1);
 			return (0);
 		}
 		i++;

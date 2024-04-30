@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   resolve_command_path.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:44 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/24 16:41:04 by csturm           ###   ########.fr       */
+/*   Updated: 2024/04/30 12:59:56 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,7 @@ char	*resolve_command_path(char *command, t_env *env, int *err_code)
 	}
 	path_copy = ft_strdup(path);
 	if (!path_copy)
-	{
 		return (NULL);
-	}
 	command_len = ft_strlen(command);
 	full_path = find_command_in_path(command, path_copy, command_len, err_code);
 	free(path_copy);
