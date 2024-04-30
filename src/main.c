@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/30 17:42:18 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:53:52 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,16 @@ int	main_loop(t_env **env)
     while (1)
     {
         handle_input_and_expansion(env, &loop);
-        if (handle_lexer_and_parser(env, &loop))
+        if (handle_lexer_and_parser(env, &loop) && !g_signal_caught)
         {
             loop.exit_status = 127;
             continue ;
         }
-        if (g_signal_caught)
+        else if (g_signal_caught)
         {
             g_signal_caught = 0;
             loop.exit_status = 130;
+			continue ;
         }
         free_tokens(&loop.tokens);
         loop.exit_status = executor(loop.cmd, env, loop.exit_status);
