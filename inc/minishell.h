@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/28 12:13:43 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/04/30 17:51:53 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ extern sig_atomic_t	g_signal_caught;
 
 typedef struct s_expansion
 {
+	int		exit_status;
 	char	**cursor;
 	char	**result;
 }	t_expansion;
@@ -138,6 +139,7 @@ typedef struct s_lexer
 
 typedef struct s_main_loop
 {
+	int			exit_status;
 	char		*input;
 	char		*cursor;
 	char		*result;
@@ -152,6 +154,7 @@ typedef struct s_main_loop
 int				handle_lexer(int lexer_status,
 					t_token **tokens, char **input, t_env *env);
 int				handle_parser(int parse_status, t_main_loop *loop, t_env *env);
+char	*append_to_string(char *str, const char *append);
 /*Functions prototypes for Lexer*/
 
 int				lexer(char *input, t_token **tokens, t_lexer *lexer);
@@ -297,8 +300,7 @@ void			heredoc_sigint_handler(int sig);
 /* expansion */
 void			process_env_var(char *var_start, t_cmd *cmd, t_env *env);
 char			*get_env_value(char *var_name, t_env *env);
-void			expand_env_varss(t_env *env, t_expansion *exp, char **input);
-char			*append_to_string(char *str, const char *append);
+void			expand_env_vars(t_env *env, t_expansion *exp, char **input, t_main_loop *loop);
 int				handle_dollar(t_expansion *exp,
 					int in_single_quote, int in_double_quote, t_env *env);
 int				handle_space(t_expansion *exp,

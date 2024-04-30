@@ -1,7 +1,7 @@
 
 # Project Name and Compiler Settings
 NAME := minishell
-COMPILER := cc 
+COMPILER := cc -g
 FLAGS := -Wall -Wextra -Werror
 CLEANUP_CMD := rm -rf
 
