@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/30 15:13:47 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:31:03 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	main_handle_input(char **input, t_env *env)
 {
 	*input = readline(PROMPT);
-	sleep(0);
 	if (!*input)
 	{
 		free_env(env);
