@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:50:27 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/04/24 11:31:47 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:36:21 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ void	handle_dollar_cases(t_expansion *exp, int in_double_quote, t_env *env)
 		*exp->result = append_to_string(*exp->result, "$?");
 		(*exp->cursor)++;
 	}
-	else if (**exp->cursor == ' ')
+	else if (**exp->cursor == ' ' || **exp->cursor == '\0')
 	{
-		*exp->result = append_to_string(*exp->result, "$ ");
+		*exp->result = append_to_string(*exp->result, "$");
 		(*exp->cursor)++;
 	}
-	else if (**exp->cursor != '\0')
+	else
 	{
 		handle_dollar_special_cases(exp, in_double_quote);
 		handle_dollar_normal_case(exp, env);
