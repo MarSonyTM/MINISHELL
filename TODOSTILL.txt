@@ -1,5 +1,6 @@
- "<" "|" should not work 
+cntrl-c  
 
+<<<<<<< HEAD
  signals need work
  heredoc Should work like bash
  
@@ -60,9 +61,19 @@ x 1. No expansion should happen in single quotes
 
 
 x CTRL+C does nto work
+=======
+should promt and be ready to execute right away.
 
-1. cat | cat | ls
-2. should output ls, then need to press enter as many times as there are cats
 
+>>>>>>> Quotes
+
+enter empty command -> exit code should be 0
+
+
+leaks
+
+<<<<<<< HEAD
 Some more protections using funcheck
 isalum needs ft_isalum but not from libft , that one is altered for another function,
+=======
+>>>>>>> Quotes

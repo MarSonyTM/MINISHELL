@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/28 12:28:39 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/05/01 11:11:16 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ sig_atomic_t	g_signal_caught = 0;
 void	handle_sigint(int sig)
 {
 	(void)sig;
-	g_signal_caught = 1;
+	g_signal_caught = 130;
 	if (rl_end > 0)
 	{
 		add_history(rl_line_buffer);
