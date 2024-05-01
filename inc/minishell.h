@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/01 12:06:33 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 12:36:49 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,6 +301,7 @@ void			handle_sigquit(int sig);
 void			check_blocked_signals(void);
 void			setup_signals(void);
 void			heredoc_sigint_handler(int sig);
+void			child_setup_signal(void);
 
 /* expansion */
 void			process_env_var(char *var_start, t_cmd *cmd, t_env *env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:39:18 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/22 21:55:37 by csturm           ###   ########.fr       */
+/*   Updated: 2024/05/01 13:07:43 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	get_last_exit_status(t_cmd *cmd, t_exec *exec)
 			waitpid(exec->pid[i], &exec->status[i], 0);
 			if (WIFEXITED(exec->status[i]) && WEXITSTATUS(exec->status[i]) != 0)
 				last_exit_status = WEXITSTATUS(exec->status[i]);
+			else if (WIFSIGNALED(exec->status[i]))
+				last_exit_status = WTERMSIG(exec->status[i]) + 128;
 			else
 				last_exit_status = 0;
 		}
@@ -81,6 +83,10 @@ int	get_last_exit_status(t_cmd *cmd, t_exec *exec)
 		tmp = tmp->next;
 		i++;
 	}
+	if (last_exit_status == 131)
+		write (1, "Quit: (core dumped)\n", 20);
+	else if (last_exit_status == 130)
+		write (1, "\n", 1);
 	return (last_exit_status);
 }
 

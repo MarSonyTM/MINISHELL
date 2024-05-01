@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/01 11:11:16 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:15:28 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@ void	handle_sigint(int sig)
 {
 	(void)sig;
 	g_signal_caught = 130;
-	if (rl_end > 0)
-	{
-		add_history(rl_line_buffer);
-	}
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -38,6 +34,19 @@ void	handle_eof(void)
 {
 	exit(0);
 }
+void 	child_s_handler(int sig)
+{
+	(void)sig;
+	rl_on_new_line();
+	rl_replace_line("", 0);
+}
+
+void	child_setup_signal(void)
+{
+	signal(SIGINT, &child_s_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 
 void	setup_signals(void)
 {
@@ -45,14 +54,4 @@ void	setup_signals(void)
 	signal(SIGQUIT, handle_sigquit);
 }
 
-void	check_blocked_signals(void)
-{
-	sigset_t	blocked;
 
-	sigemptyset(&blocked);
-	if (sigprocmask(SIG_BLOCK, NULL, &blocked) < 0)
-	{
-		perror("sigprocmask");
-		return ;
-	}
-}

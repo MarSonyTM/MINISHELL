@@ -6,15 +6,18 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/05/01 12:07:14 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:23:20 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+
 void	main_handle_input(char **input, t_env *env)
 {
 	*input = readline(PROMPT);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	if (!*input)
 	{
 		free_env(env);
@@ -60,7 +63,10 @@ int	main_loop(t_env **env)
 	loop.exit_status = exit_status;
 	while (1)
 	{
+		setup_signals();
+		signal(SIGQUIT, SIG_IGN);
 		handle_input_and_expansion(env, &loop);
+		g_signal_caught = 0;
 		if (handle_lexer_and_parser(env, &loop) && !g_signal_caught)
 		{
 			loop.exit_status = 127;
@@ -69,6 +75,7 @@ int	main_loop(t_env **env)
 		else if (g_signal_caught)
 		{
 			g_signal_caught = 0;
+			printf("signal caught\n");
 			loop.exit_status = 130;
 			continue ;
 		}
@@ -85,7 +92,6 @@ int	main(int argc, char **argv, char **envp)
 
 	check_args(argc, argv);
 	init_env_signals(&env, envp);
-	signal(SIGQUIT, SIG_IGN);
 	main_loop(&env);
 	return (0);
 }

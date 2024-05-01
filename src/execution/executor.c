@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:40:14 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/22 21:55:51 by csturm           ###   ########.fr       */
+/*   Updated: 2024/05/01 12:49:59 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 	if (cmd->redirection_append)
 		redirection(cmd, 2, 0);
 	envp = env_to_array(cmd, env);
+	signal(SIGQUIT, SIG_DFL);
 	if (execve(cmd->cmd_path, cmd->cmd_arr, envp) == -1)
 	{
 		free_array(envp);
@@ -54,6 +55,7 @@ static void	create_child_process(t_cmd *cmd, int i, t_exec *exec, t_env **env)
 			cmd->exit_status = 1;
 		return ;
 	}
+	child_setup_signal();
 	exec->pid[i] = fork();
 	if (exec->pid[i] == -1)
 		exit(1);
