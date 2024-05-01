@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:50:27 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/05/01 11:35:26 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 12:20:04 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	handle_dollar_cases(t_expansion *exp, int in_double_quote, t_env *env)
 		handle_dollar_special_cases(exp, in_double_quote);
 		handle_dollar_normal_case(exp, env);
 	}
+	g_signal_caught = 0;
 }
 
 int	handle_dollar(t_expansion *exp,
