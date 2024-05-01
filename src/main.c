@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/05/01 11:06:49 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:29:40 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,30 +53,30 @@ int	handle_lexer_and_parser(t_env **env, t_main_loop *loop)
 
 int	main_loop(t_env **env)
 {
-    t_main_loop	loop;
+	t_main_loop	loop;
+	int			exit_status;
 
-	int exit_status = 0; // Initialize exit_status
-    loop.exit_status = exit_status; // Initialize exit_status
-    while (1)
-    {
-        handle_input_and_expansion(env, &loop);
-        if (handle_lexer_and_parser(env, &loop) && !g_signal_caught)
-        {
-            loop.exit_status = 127;
-            continue ;
-        }
-        else if (g_signal_caught)
-        {
-            g_signal_caught = 0;
-            loop.exit_status = 130;
+	exit_status = 0;
+	loop.exit_status = exit_status;
+	while (1)
+	{
+		handle_input_and_expansion(env, &loop);
+		if (handle_lexer_and_parser(env, &loop) && !g_signal_caught)
+		{
+			loop.exit_status = 127;
 			continue ;
-        }
-        free_tokens(&loop.tokens);
-        loop.exit_status = executor(loop.cmd, env, loop.exit_status);
-        reset_free_cmd(&loop.cmd, loop.input);
-    }
-
-    return (loop.exit_status);
+		}
+		else if (g_signal_caught)
+		{
+			g_signal_caught = 0;
+			loop.exit_status = 130;
+			continue ;
+		}
+		free_tokens(&loop.tokens);
+		loop.exit_status = executor(loop.cmd, env, loop.exit_status);
+		reset_free_cmd(&loop.cmd, loop.input);
+	}
+	return (loop.exit_status);
 }
 
 int	main(int argc, char **argv, char **envp)

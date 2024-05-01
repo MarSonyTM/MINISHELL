@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:43 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/24 17:20:19 by csturm           ###   ########.fr       */
+/*   Updated: 2024/05/01 11:41:25 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,35 +124,6 @@ int	concatenate_env_var(char *cmd, t_env **env, int j)
 		*env = add_env_node(env, key, value);
 		if (!*env)
 			return (1);
-	}
-	return (0);
-}
-
-int	export_cmd(t_cmd *cmd, t_env **env)
-{
-	int	i;
-
-	i = 1;
-	if (!cmd->cmd_arr[1])
-		return (env_cmd(cmd, *env), 0);
-	if (cmd->cmd_arr[1][0] == '=' || ft_isdigit(cmd->cmd_arr[1][0]))
-	{
-		error(ERR_ARG, "export", cmd->cmd_arr[1], 1);
-		return (1);
-	}
-	while (cmd->cmd_arr[i])
-	{
-		if (ft_strchr(cmd->cmd_arr[i], '='))
-		{
-			if (ft_strchr(cmd->cmd_arr[i], '$')
-				&& concatenate_env_var(cmd->cmd_arr[i], env, 0))
-				return (-1);
-			else if (add_new_env_var(cmd->cmd_arr[i], env, 0) == 1)
-				return (-1);
-		}
-		else if (add_empty_env_var(cmd->cmd_arr[i], env) == 1)
-			return (-1);
-		i++;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 19:34:47 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/30 17:51:57 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:31:44 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ static int	handle_quotes(t_expansion *exp,
 	return (0);
 }
 
-void	expand_env_vars(t_env *env, t_expansion *exp, char **input, t_main_loop *loop)
+void	expand_env_vars(t_env *env,
+			t_expansion *exp, char **input, t_main_loop *loop)
 {
 	int		in_single_quote;
 	int		in_double_quote;
 
-	
 	*exp->result = NULL;
 	*exp->cursor = *input;
 	in_single_quote = 0;

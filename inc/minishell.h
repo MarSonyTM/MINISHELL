@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/30 17:51:53 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:39:35 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ typedef struct s_main_loop
 int				handle_lexer(int lexer_status,
 					t_token **tokens, char **input, t_env *env);
 int				handle_parser(int parse_status, t_main_loop *loop, t_env *env);
-char	*append_to_string(char *str, const char *append);
+char			*append_to_string(char *str, const char *append);
 /*Functions prototypes for Lexer*/
 
 int				lexer(char *input, t_token **tokens, t_lexer *lexer);
@@ -300,7 +300,8 @@ void			heredoc_sigint_handler(int sig);
 /* expansion */
 void			process_env_var(char *var_start, t_cmd *cmd, t_env *env);
 char			*get_env_value(char *var_name, t_env *env);
-void			expand_env_vars(t_env *env, t_expansion *exp, char **input, t_main_loop *loop);
+void			expand_env_vars(t_env *env, t_expansion *exp,
+					char **input, t_main_loop *loop);
 int				handle_dollar(t_expansion *exp,
 					int in_single_quote, int in_double_quote, t_env *env);
 int				handle_space(t_expansion *exp,
