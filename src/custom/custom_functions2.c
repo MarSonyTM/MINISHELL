@@ -6,7 +6,7 @@
 /*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:20 by csturm            #+#    #+#             */
-/*   Updated: 2024/04/30 15:36:57 by csturm           ###   ########.fr       */
+/*   Updated: 2024/05/01 23:13:09 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	handle_arg(char *str, int *exit_code)
 	if (!overflow)
 	{
 		*exit_code = ft_atoi(str);
-		while (exit_code < 0)
+		while (*exit_code < 0)
 			*exit_code = 256 + *exit_code;
 		if (*exit_code > 255)
 			*exit_code = *exit_code % 256;
