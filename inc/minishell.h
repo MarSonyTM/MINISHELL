@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/01 11:39:35 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:52:16 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,6 +289,8 @@ void			check_args(int argc, char **argv);
 void			init_env_signals(t_env **env, char **envp);
 void			update_env_var(t_env *env_var, char *key, char *value);
 t_env			*find_env_var(t_env *env, char *key);
+int				handle_existing_env_var(t_env *tmp, char *key, char *value);
+int				handle_new_env_var(t_env **env, char *key, char *value);
 
 /* signal management */
 void			handle_sigint(int sig);

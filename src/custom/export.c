@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:43 by csturm            #+#    #+#             */
-/*   Updated: 2024/05/01 11:41:25 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:52:00 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,16 +114,7 @@ int	concatenate_env_var(char *cmd, t_env **env, int j)
 		return (free(key), 1);
 	tmp = find_env_var(*env, key);
 	if (tmp)
-	{
-		tmp->value = ft_strjoin(tmp->value, value);
-		free(key);
-		free(value);
-	}
+		return (handle_existing_env_var(tmp, key, value));
 	else
-	{
-		*env = add_env_node(env, key, value);
-		if (!*env)
-			return (1);
-	}
-	return (0);
+		return (handle_new_env_var(env, key, value));
 }

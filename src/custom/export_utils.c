@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 16:50:42 by csturm            #+#    #+#             */
-/*   Updated: 2024/05/01 11:41:01 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:49:09 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,13 @@ int	export_cmd(t_cmd *cmd, t_env **env)
 			return (-1);
 		i++;
 	}
+	return (0);
+}
+
+int	handle_existing_env_var(t_env *tmp, char *key, char *value)
+{
+	tmp->value = ft_strjoin(tmp->value, value);
+	free(key);
+	free(value);
 	return (0);
 }
