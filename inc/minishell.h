@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:16:13 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/01 12:36:49 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:39:39 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,12 @@ int				handle_lexer(int lexer_status,
 					t_token **tokens, char **input, t_env *env);
 int				handle_parser(int parse_status, t_main_loop *loop, t_env *env);
 char			*append_to_string(char *str, const char *append);
+void			setup_and_handle_input(t_env **env, t_main_loop *loop);
+int				execute_and_cleanup(t_env **env, t_main_loop *loop);
+int				main_loop(t_env **env);
+int				handle_lexer_and_parser(t_env **env, t_main_loop *loop);
+void			handle_input_and_expansion(t_env **env, t_main_loop *loop);
+
 /*Functions prototypes for Lexer*/
 
 int				lexer(char *input, t_token **tokens, t_lexer *lexer);

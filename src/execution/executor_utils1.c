@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:39:18 by csturm            #+#    #+#             */
-/*   Updated: 2024/05/01 13:07:43 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:49:30 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,21 @@ int	redirection(t_cmd *cmd, int mode, int custom)
 	return (0);
 }
 
+int	process_wait_and_status(t_exec *exec, int i, int last_exit_status)
+{
+	if (exec->pid[i] != -1)
+	{
+		waitpid(exec->pid[i], &exec->status[i], 0);
+		if (WIFEXITED(exec->status[i]) && WEXITSTATUS(exec->status[i]) != 0)
+			last_exit_status = WEXITSTATUS(exec->status[i]);
+		else if (WIFSIGNALED(exec->status[i]))
+			last_exit_status = WTERMSIG(exec->status[i]) + 128;
+		else
+			last_exit_status = 0;
+	}
+	return (last_exit_status);
+}
+
 int	get_last_exit_status(t_cmd *cmd, t_exec *exec)
 {
 	t_cmd	*tmp;
@@ -68,16 +83,7 @@ int	get_last_exit_status(t_cmd *cmd, t_exec *exec)
 	tmp = cmd;
 	while (i < exec->processes)
 	{
-		if (exec->pid[i] != -1)
-		{
-			waitpid(exec->pid[i], &exec->status[i], 0);
-			if (WIFEXITED(exec->status[i]) && WEXITSTATUS(exec->status[i]) != 0)
-				last_exit_status = WEXITSTATUS(exec->status[i]);
-			else if (WIFSIGNALED(exec->status[i]))
-				last_exit_status = WTERMSIG(exec->status[i]) + 128;
-			else
-				last_exit_status = 0;
-		}
+		last_exit_status = process_wait_and_status(exec, i, last_exit_status);
 		if (tmp->exit_status != 0)
 			last_exit_status = tmp->exit_status;
 		tmp = tmp->next;
@@ -88,27 +94,6 @@ int	get_last_exit_status(t_cmd *cmd, t_exec *exec)
 	else if (last_exit_status == 130)
 		write (1, "\n", 1);
 	return (last_exit_status);
-}
-
-int	allocate_memory(t_exec *exec)
-{
-	exec->pid = (int *)malloc(sizeof(int) * exec->processes);
-	if (!exec->pid)
-		return (1);
-	exec->status = (int *)malloc(sizeof(int) * exec->processes);
-	if (!exec->status)
-	{
-		free(exec->pid);
-		return (1);
-	}
-	exec->open_fds = (int *)malloc(sizeof(int) * exec->processes * 2);
-	if (!exec->open_fds)
-	{
-		free(exec->pid);
-		free(exec->status);
-		return (1);
-	}
-	return (0);
 }
 
 void	handle_fds(t_exec *exec, int i)

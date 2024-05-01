@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:00 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/01 13:15:28 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:33:45 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,7 @@ void	handle_sigquit(int sig)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	handle_eof(void)
-{
-	exit(0);
-}
-void 	child_s_handler(int sig)
+void	child_s_handler(int sig)
 {
 	(void)sig;
 	rl_on_new_line();
@@ -47,11 +43,8 @@ void	child_setup_signal(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-
 void	setup_signals(void)
 {
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 }
-
-

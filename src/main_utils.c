@@ -6,7 +6,7 @@
 /*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 13:31:59 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/01 12:59:45 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:34:05 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,4 @@ void	init_env_signals(t_env **env, char **envp)
 		if (!*env)
 			exit(1);
 	}
-
 }

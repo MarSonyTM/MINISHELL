@@ -17,7 +17,7 @@ SOURCE_FILES := main.c /main_utils.c /main_cleaners.c lexer/lexer.c lexer/lexer_
 				lexer/finalize_lexer.c parser/parser.c parser/resolve_command_path.c  parser/parser_utils.c parser/parser_utils2.c  custom/custom_functions1.c custom/custom_functions2.c \
 				custom/custom.c expansion/ft_isalnum_expansion.c parser/handlers1.c parser/handlers2.c parser/parser_heredoc.c execution/executor_utils2.c /signals/signals.c  expansion/append_to_input_string.c  \
 				expansion/expansion_input.c expansion/expand_env_vars.c parser/initialize_command_structure.c parser/parser_heredoc_utils.c env/arr_to_linked_list.c env/env_utils.c env/linked_list_to_arr.c \
-				parser/parser_heredoc_utils1.c \
+				parser/parser_heredoc_utils1.c main_utils1.c execution/alocate_memory.c\
 
 
 OBJECTS := $(SOURCE_FILES:%.c=$(OBJECTS_PATH)%.o)
