@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:51:56 by csturm            #+#    #+#             */
-/*   Updated: 2024/05/01 13:40:25 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 23:29:06 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	handle_input_and_expansion(t_env **env, t_main_loop *loop)
 
 int	handle_lexer_and_parser(t_env **env, t_main_loop *loop)
 {
+	if (loop->input == NULL || loop->input[0] == '\0')
+		return (2);
 	loop->tokens = NULL;
 	if (handle_lexer(lexer(loop->input,
 				&loop->tokens, &loop->lexer_instance),

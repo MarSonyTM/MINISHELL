@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 13:36:46 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/01 13:43:15 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/01 23:30:15 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,25 @@ void	setup_and_handle_input(t_env **env, t_main_loop *loop)
 int	execute_and_cleanup(t_env **env, t_main_loop *loop)
 {
 	int	exit_status;
+	int result;
 
-	if (handle_lexer_and_parser(env, loop) && !g_signal_caught)
-	{
+	result = handle_lexer_and_parser(env, loop);
+	if (result == 1 && !g_signal_caught)
 		exit_status = 127;
-	}
 	else if (g_signal_caught)
 	{
 		g_signal_caught = 0;
 		printf("signal caught\n");
 		exit_status = 130;
 	}
-	else
+	else if (!result)
 	{
 		free_tokens(&loop->tokens);
 		exit_status = executor(loop->cmd, env, loop->exit_status);
 		reset_free_cmd(&loop->cmd, loop->input);
 	}
+	else
+		exit_status = 0;
 	return (exit_status);
 }
 
