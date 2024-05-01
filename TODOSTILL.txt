@@ -1,5 +1,7 @@
 cntrl-c  
 
+leak for $? found
+
 <<<<<<< HEAD
  signals need work
  heredoc Should work like bash
