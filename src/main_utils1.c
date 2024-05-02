@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 13:36:46 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/01 23:30:15 by csturm           ###   ########.fr       */
+/*   Updated: 2024/05/02 20:18:01 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	execute_and_cleanup(t_env **env, t_main_loop *loop)
 	else if (g_signal_caught)
 	{
 		g_signal_caught = 0;
-		printf("signal caught\n");
 		exit_status = 130;
 	}
 	else if (!result)

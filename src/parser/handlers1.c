@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handlers1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:05:23 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/16 14:15:06 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/02 20:18:29 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	hdl_parser_heredoc(t_cmd **current_cmd,
 	}
 	*current = (*current)->next;
 	heredoc_input = handle_heredoc(current, command);
-	ft_printf("heredoc_input: %s\n", heredoc_input);
 	if (!heredoc_input)
 		return (2);
 	if (*current_cmd)
