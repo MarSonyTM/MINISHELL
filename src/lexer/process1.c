@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:40:04 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/04/28 08:55:21 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/05/02 15:50:17 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ void	process_quotes(char currentChar, char **buffer, t_lexer *lexer)
 		|| (lexer->in_quote == 2 && currentChar == '\"'))
 	{
 		lexer->in_quote = 0;
-		if (lexer->buf_index == quote_start_index)
-			(*buffer)[lexer->buf_index++] = ' ';
+		(*buffer)[lexer->buf_index++] = ' ';
 	}
 	else
 		(*buffer)[lexer->buf_index++] = currentChar;

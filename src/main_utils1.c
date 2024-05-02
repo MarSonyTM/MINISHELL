@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 13:36:46 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/01 23:30:15 by csturm           ###   ########.fr       */
+/*   Updated: 2024/05/02 15:50:29 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	setup_and_handle_input(t_env **env, t_main_loop *loop)
 int	execute_and_cleanup(t_env **env, t_main_loop *loop)
 {
 	int	exit_status;
-	int result;
+	int	result;
 
 	result = handle_lexer_and_parser(env, loop);
 	if (result == 1 && !g_signal_caught)
