@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_input.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
+/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:50:27 by marianfurni       #+#    #+#             */
-/*   Updated: 2024/05/02 09:50:01 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/05/02 13:59:32 by mafurnic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,27 +52,29 @@ static void	handle_dollar_normal_case(t_expansion *exp, t_env *env)
 
 void	handle_dollar_cases(t_expansion *exp, int in_double_quote, t_env *env)
 {
-    (*exp->cursor)++;
-    if (**exp->cursor == '?')
-    {
-        if (g_signal_caught)
-            exp->exit_status = g_signal_caught;
-        char *exit_status_str = ft_itoa(exp->exit_status);
-        *exp->result = append_to_string(*exp->result, exit_status_str);
-        free(exit_status_str);  // Free the memory allocated by ft_itoa
-        (*exp->cursor)++;
-    }
-    else if (**exp->cursor == ' ' || **exp->cursor == '\0')
-    {
-        *exp->result = append_to_string(*exp->result, "$");
-        (*exp->cursor)++;
-    }
-    else
-    {
-        handle_dollar_special_cases(exp, in_double_quote);
-        handle_dollar_normal_case(exp, env);
-    }
-    g_signal_caught = 0;
+	char	*exit_status_str;
+
+	(*exp->cursor)++;
+	if (**exp->cursor == '?')
+	{
+		if (g_signal_caught)
+			exp->exit_status = g_signal_caught;
+		exit_status_str = ft_itoa(exp->exit_status);
+		*exp->result = append_to_string(*exp->result, exit_status_str);
+		free(exit_status_str);
+		(*exp->cursor)++;
+	}
+	else if (**exp->cursor == ' ' || **exp->cursor == '\0')
+	{
+		*exp->result = append_to_string(*exp->result, "$");
+		(*exp->cursor)++;
+	}
+	else
+	{
+		handle_dollar_special_cases(exp, in_double_quote);
+		handle_dollar_normal_case(exp, env);
+	}
+	g_signal_caught = 0;
 }
 
 int	handle_dollar(t_expansion *exp,
