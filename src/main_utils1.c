@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 13:36:46 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/02 20:18:01 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/05/02 20:19:42 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	setup_and_handle_input(t_env **env, t_main_loop *loop)
 int	execute_and_cleanup(t_env **env, t_main_loop *loop)
 {
 	int	exit_status;
-	int result;
+	int	result;
 
 	result = handle_lexer_and_parser(env, loop);
 	if (result == 1 && !g_signal_caught)

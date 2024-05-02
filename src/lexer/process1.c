@@ -6,7 +6,7 @@
 /*   By: marianfurnica <marianfurnica@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:40:04 by mafurnic          #+#    #+#             */
-/*   Updated: 2024/05/02 15:46:27 by marianfurni      ###   ########.fr       */
+/*   Updated: 2024/05/02 20:21:18 by marianfurni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	process_quotes(char currentChar, char **buffer, t_lexer *lexer)
 		|| (lexer->in_quote == 2 && currentChar == '\"'))
 	{
 		lexer->in_quote = 0;
-		// if (lexer->buf_index == quote_start_index)
-			(*buffer)[lexer->buf_index++] = ' ';
+		(*buffer)[lexer->buf_index++] = ' ';
+
 	}
 	else
 		(*buffer)[lexer->buf_index++] = currentChar;
