@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafurnic <mafurnic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: csturm <csturm@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:50:43 by csturm            #+#    #+#             */
-/*   Updated: 2024/05/01 12:07:58 by mafurnic         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:42:24 by csturm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	add_empty_env_var(char *cmd, t_env **env)
 		{
 			free(tmp->value);
 			tmp->value = value;
+			free(key);
 			break ;
 		}
 		tmp = tmp->next;
